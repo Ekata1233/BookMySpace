@@ -12,7 +12,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Conference Hall Rental",
+  title: "BookMySpace",
   description: "This is hall/meeting room rental management",
 };
 
