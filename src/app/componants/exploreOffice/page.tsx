@@ -28,7 +28,7 @@ const ExploreOffice = () => {
   return (
     <div>
       <div className="mx-auto px-4">
-        <p className="text-gray-500 font-bold text-center pt-12">
+        <p className="text-gray-500 text-lg sm:text-lg md:text-xl lg:text-2xl font-bold text-center pt-12">
           Explore Beyond Borders With Our Locations
         </p>
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
@@ -36,6 +36,8 @@ const ExploreOffice = () => {
         </h1>
         <div className="border-b-4 border-[#6BB7BE] w-full sm:w-3/4 md:w-2/3 lg:w-4/7 xl:w-3/9 mt-2 mb-10 mx-auto"></div>
       </div>
+
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
         {officeImages.map((office, index) => (
           <div

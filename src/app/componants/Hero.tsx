@@ -23,7 +23,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="w-full h-[80vh] flex items-center justify-center relative overflow-hidden">
+    <div className="w-full h-[77vh] flex items-center justify-center relative overflow-hidden">
       {images.map((image, index) => (
         <div
           key={index}
