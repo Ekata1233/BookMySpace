@@ -8,14 +8,31 @@ import image4 from '../../../../public/tourroom4.png'
 
 const OfficeTour = () => {
     const imageData = [
-        { src: image1, text: "Enterprise" },
-        { src: image2, text: "Coworking" },
-        { src: image3, text: "Flexible" },
-        { src: image4, text: "Serviced" },
+        {
+            src: image1,
+            title: "Spacious Workspaces",
+            text: "Experience the convenience and flexibility of our large office spaces. Ideal for growing teams, fostering creativity, and enhancing productivity."
+        },
+        {
+            src: image2,
+            title: "Modern Coworking",
+            text: "Our coworking spaces are designed for collaboration, innovation, and networking. Work efficiently in a professional yet vibrant environment."
+        },
+        {
+            src: image3,
+            title: "Private Office Suites",
+            text: "Enjoy the privacy of fully serviced office suites tailored to meet your business needs. A quiet, distraction-free workspace for peak performance."
+        },
+        {
+            src: image4,
+            title: "Luxury Conference Rooms",
+            text: "Host your meetings in premium conference rooms equipped with state-of-the-art facilities for a seamless professional experience."
+        },
     ];
+
     return (
         <div>
-            <div className=" mx-auto px-4">
+            <div className="mx-auto px-4">
                 <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center pt-12">
                     Top-Tier Business Offices & Coworking Hubs in <span className="blue">Pune</span>
                 </h1>
@@ -26,20 +43,26 @@ const OfficeTour = () => {
                     <Button className="text-base sm:text-lg md:text-xl lg:text-2xl text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-6 py-6 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none my-4">
                         Book Office Tour Now
                     </Button>
-
                 </div>
             </div>
             <div className="container mx-auto px-4 my-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     {imageData.map((item, index) => (
-                        <div key={index} className="relative bg-gray-200 text-center">
+                        <div
+                            key={index}
+                            className="image-container shadow-lg hover:shadow-2xl transition-shadow duration-300"
+                        >
                             {/* Image */}
-                            <Image src={item.src} alt={item.text} className="w-full h-80 object-cover" />
+                            <Image src={item.src} alt={item.title} className="w-full h-80 object-cover" />
+                            <div className="absolute inset-0 bg-black/50"></div>
+                            {/* Title (Visible by Default, Hidden on Hover) */}
+                            <h2 className="title-overlay">{item.title}</h2>
 
-                            {/* Overlay Text */}
-                            <h2 className="absolute inset-0 flex items-center justify-center text-white font-bold bg-black/50 text-xl sm:text-2xl md:text-3xl lg:text-4xl">
-                                <span className="border-2 border-[#6BB7BE] px-4 py-2">{item.text}</span>
-                            </h2>
+                            {/* Hover Description */}
+                            <div className="hover-text text-base md:text-lg lg:text-xl xl:text-xl text-center px-4 md:px-6">
+    <p>{item.text}</p>
+</div>
+
 
                         </div>
                     ))}
@@ -48,9 +71,8 @@ const OfficeTour = () => {
 
 
 
-
         </div>
-    )
-}
+    );
+};
 
-export default OfficeTour
+export default OfficeTour;

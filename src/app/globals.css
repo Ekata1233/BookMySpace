@@ -123,3 +123,59 @@
 .blue{
   color:#6BB7BE ;
 }
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-container img {
+  
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Title (Visible by Default, Hidden on Hover) */
+.title-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+ 
+  color: white;
+  padding: 10px 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 2;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Hide title on hover */
+.image-container:hover .title-overlay {
+  opacity: 0;
+}
+
+/* Hidden Hover Text */
+.hover-text {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:#6BB7BE;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  opacity: 0;
+  transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+/* Show Text on Hover */
+.image-container:hover .hover-text {
+  top: 0;
+  opacity: 1;
+}
