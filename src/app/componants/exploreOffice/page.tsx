@@ -34,11 +34,14 @@ const ExploreOffice = () => {
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
           Step Into Our Office Spaces
         </h1>
-        <div className="border-b-4 border-[#6BB7BE] w-full sm:w-3/4 md:w-2/3 lg:w-4/7 xl:w-3/8 mt-2 mb-10 mx-auto"></div>
+        <div className="border-b-4 border-[#6BB7BE] w-full sm:w-3/4 md:w-2/3 lg:w-4/7 xl:w-3/9 mt-2 mb-10 mx-auto"></div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
         {officeImages.map((office, index) => (
-          <div key={index} className="relative bg-gray-200 group overflow-hidden">
+          <div
+            key={index}
+            className="relative bg-gray-200 group overflow-hidden"
+          >
             <Image
               src={office.src}
               alt={office.alt}
