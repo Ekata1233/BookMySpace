@@ -9,7 +9,7 @@ import { IoWomanOutline } from "react-icons/io5";
 import { FaUsersViewfinder } from "react-icons/fa6";
 import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
-import { GiVacuumCleaner } from "react-icons/gi";
+import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
 
 const OurAmenites = () => {
@@ -27,10 +27,7 @@ const OurAmenites = () => {
       <div className="px-8 sm:px-12 md:px-22 lg:px-32 xl:px-60">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            <div className="flex flex-col items-center text-center my-3">
-              <FaWifi  className="text-6xl text-[#6BB7BE]" />
-              <p className="font-semibold my-2">High Speed Internet</p>
-            </div>
+            
 
             <div className="flex flex-col items-center text-center my-3">
               <PiOfficeChair  className="text-6xl text-[#6BB7BE]" />
@@ -45,6 +42,11 @@ const OurAmenites = () => {
             <div className="flex flex-col items-center text-center my-3">
               <LuAlarmClock className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">24 x 7 Availability</p>
+            </div>
+
+            <div className="flex flex-col items-center text-center my-3">
+              <FaWifi  className="text-6xl text-[#6BB7BE]" />
+              <p className="font-semibold my-2">High Speed Internet</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
@@ -73,18 +75,18 @@ const OurAmenites = () => {
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <TbToolsKitchen2  className="text-6xl text-[#6BB7BE]" />
-              <p className="font-semibold my-2">Pantry</p>
-            </div>
-
-            <div className="flex flex-col items-center text-center my-3">
               <GrShieldSecurity  className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Security</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <GiVacuumCleaner  className="text-6xl text-[#6BB7BE]" />
+              <LiaBroomSolid   className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Housekeeping</p>
+            </div>
+
+            <div className="flex flex-col items-center text-center my-3">
+              <TbToolsKitchen2  className="text-6xl text-[#6BB7BE]" />
+              <p className="font-semibold my-2">Pantry</p>
             </div>
           </div>
         </div>
