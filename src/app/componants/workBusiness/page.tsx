@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const WorkBusiness = () => {
@@ -10,14 +11,19 @@ const WorkBusiness = () => {
           <div className="absolute w-50 h-50 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-gray-300 rounded-lg transform translate-x-8 sm:translate-x-12 md:translate-x-10 lg:translate-x-10 translate-y-4 sm:translate-y-6 md:-translate-y-10 lg:translate-y-0"></div>
 
           {/* Top Image */}
-          <img
+          <Image
+          width={100}
+          height={100}
+
             src="/business_1.png"
             alt="Top Image"
             className="w-50 sm:w-40 md:w-55 lg:w-60 xl:w-64 shadow-lg transform translate-x-24 sm:translate-x-20 md:translate-x-24 lg:translate-x-32 xl:translate-x-40 -translate-y-4 sm:-translate-y-6 md:-translate-y-35 lg:-translate-y-27 absolute z-0"
           />
 
           {/* Bottom Image */}
-          <img
+          <Image
+          width={100}
+          height={100}
             src="/business_2.png"
             alt="Bottom Image"
             className="w-70 sm:w-56 md:w-75 lg:w-80 xl:w-80 shadow-lg transform -translate-x-14 sm:translate-x-4 md:-translate-x-7 lg:-translate-x-20 xl:-translate-x-10 translate-y-30 sm:translate-y-20 md:translate-y-20 lg:translate-y-28 xl:translate-y-28 z-10"
@@ -25,7 +31,7 @@ const WorkBusiness = () => {
         </div>
 
         {/* Text Section */}
-        <div className="px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start">
+        <div className="px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start mt-32 sm:mt-0 md:mt-0 lg:mt-0 ">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal">
             Work wherever business takes you.
           </h1>
