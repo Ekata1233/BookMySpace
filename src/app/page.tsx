@@ -4,8 +4,8 @@ export default function Home() {
   return (
     <main className="mt-16">
       <Hero/>
-      <h1>Home</h1>
-      <h2>Home</h2>
+      <h1>kam kr</h1>
+      <h2>gp</h2>
     </main>
   );
 }
