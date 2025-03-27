@@ -10,17 +10,17 @@ import {
 
 const Offices = () => {
   return (
-    <div className="container my-12">
+    <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between ">
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
-          Office Spaces
+          OFFICE SPACES
         </h1>
         <div>
           <DropdownMenu>
             <DropdownMenuTrigger className="border border-gray-300 rounded-none px-5 py-2">
               Sort By :
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="border border-gray-300 rounded-none">
+            <DropdownMenuContent  className="border border-gray-300 rounded-none">
               <DropdownMenuItem>
                 Distance : Nearest to Furthest
               </DropdownMenuItem>
@@ -34,11 +34,11 @@ const Offices = () => {
         </div>
       </div>
       <div className="mx-auto">
-        <div className="border-b-4 border-gray-300 w-full my-5"></div>
+        <div className="border-b-2 border-gray-300 w-full my-5"></div>
       </div>
-      <div className="flex mx-3">
-        <div className="w-1/3 bg-gray-200">Column 1</div>
-        <div className="w-2/3 bg-gray-300">Column 2</div>
+      <div className="flex flex-col lg:flex-row">
+        <div className="w-full lg:w-1/4 bg-gray-200 p-4">Column 1</div>
+        <div className="w-full lg:w-3/4 bg-gray-300 p-4">Column 2</div>
       </div>
     </div>
   );
