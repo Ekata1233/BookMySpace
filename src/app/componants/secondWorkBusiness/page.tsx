@@ -6,7 +6,7 @@ import { FaArrowRight } from "react-icons/fa";
 
 const SecondWorkBusiness = () => {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12  my-28 sm:my-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* Text Section */}
         <div
