@@ -186,6 +186,7 @@ const Header = () => {
                             <div className="flex-1 overflow-hidden">
                                 <Swiper
                                     slidesPerView={'auto'}
+                                    spaceBetween={8}
                                     loop={false}
                                     onSwiper={(swiper) => {
                                         swiperRef.current = swiper;
@@ -201,7 +202,7 @@ const Header = () => {
                                     breakpoints={{
                                         320: {
                                             slidesPerView: 2,
-                                            spaceBetween: 4
+                                            spaceBetween: 8
                                         },
                                         640: {
                                             slidesPerView: 3,
