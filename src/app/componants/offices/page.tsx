@@ -1,36 +1,28 @@
-import React from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+"use client"
+import React, { useState } from "react";
 
 const Offices = () => {
+  const [selected, setSelected] = useState("");
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between ">
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
           OFFICE SPACES
         </h1>
-        <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="border border-gray-300 rounded-none px-5 py-2">
+        <div className="text-gray-700">
+          <select
+            className="border border-gray-300 rounded-none px-5 py-2"
+            value={selected}
+            onChange={(e) => setSelected(e.target.value)}
+          >
+            <option value="" disabled hidden>
               Sort By :
-            </DropdownMenuTrigger>
-            <DropdownMenuContent  className="border border-gray-300 rounded-none">
-              <DropdownMenuItem>
-                Distance : Nearest to Furthest
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                Distance : Furthest to Nearest
-              </DropdownMenuItem>
-              <DropdownMenuItem>Price : Low to High</DropdownMenuItem>
-              <DropdownMenuItem>Price : High to Low</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            </option>
+            <option value="nearest">Distance : Nearest to Furthest</option>
+            <option value="furthest">Distance : Furthest to Nearest</option>
+            <option value="lowToHigh">Price : Low to High</option>
+            <option value="highToLow">Price : High to Low</option>
+          </select>
         </div>
       </div>
       <div className="mx-auto">
