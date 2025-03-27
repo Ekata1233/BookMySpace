@@ -32,10 +32,9 @@ const Header = () => {
         }
     };
 
-    const handleLinkClick = (index, path) => {
+    const handleLinkClick = (index) => {
         setActiveIndex(index);
         localStorage.setItem("activeIndex", index);
-        router.push(path);
     };
 
     const links = [
@@ -106,15 +105,17 @@ const Header = () => {
                                     const path = `/${item.toLowerCase().replace(/\s+/g, "")}`;
                                     return (
                                         <SwiperSlide key={index} className="flex justify-center mb-5">
-                                            <span
-                                                className={`cursor-pointer text-gray-600 hover:text-gray-900 font-medium whitespace-nowrap px-8 mb-5 relative ${pathname === path ? 'text-gray-900' : ''}`}
-                                                onClick={() => handleLinkClick(index, path)}
-                                            >
-                                                {item}
-                                                {pathname === path && (
-                                                    <span className="absolute bottom-[-12px] left-0 w-full h-[3px] bg-[#6BB7BE]"></span>
-                                                )}
-                                            </span>
+                                            <Link href={path} legacyBehavior>
+                                                <a
+                                                    className={`cursor-pointer text-gray-600 hover:text-gray-900 font-medium whitespace-nowrap px-8 mb-5 relative ${pathname === path ? 'text-gray-900' : ''}`}
+                                                    onClick={() => handleLinkClick(index)}
+                                                >
+                                                    {item}
+                                                    {pathname === path && (
+                                                        <span className="absolute bottom-[-12px] left-0 w-full h-[3px] bg-[#6BB7BE]"></span>
+                                                    )}
+                                                </a>
+                                            </Link>
                                         </SwiperSlide>
                                     );
                                 })}
