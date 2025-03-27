@@ -4,31 +4,30 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { LuLaptopMinimalCheck } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
 
-const WorkBusiness = () => {
-  return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+const ThirdWorkBusiness = () => {
+  return ( 
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-28 sm:mb-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-
         {/* Text Section */}
         <div className="block max-[425px]:block sm:hidden md:hidden lg:hidden xl:hidden px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start  sm:mt-0 md:mt-0 lg:mt-0 ">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal">
-            Your office is wherever you make it
+            Wherever you work, we make it work
             <span className="text-[#6BB7BE] font-extrabold">.</span>
           </h1>
 
           <div className="flex text-4xl md:text-7xl lg:text-4xl mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 text-gray-600">
             <IoCalendarOutline className="my-2 me-3" />
             <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
-              Your perfect workspace is never far away—over 12 locations
-              worldwide in cities, towns, and transport hubs
+              A smarter, greener, and more efficient way to work—hybrid work
+              puts flexibility at the center of success.
             </p>
           </div>
 
           <div className="flex text-4xl md:text-7xl lg:text-4xl mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 text-gray-600">
             <LuLaptopMinimalCheck className="my-2 me-3" />
             <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
-              Work solo or scale big—our powerful network keeps you seamlessly
-              connected and thriving.
+              Whatever your work style, we have the space—hourly meeting rooms,
+              daily offices, or flexible coworking options, all on your terms.
             </p>
           </div>
 
@@ -67,23 +66,23 @@ const WorkBusiness = () => {
         {/* Text Section */}
         <div className="hidden max-[425px]:hidden sm:block px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start mt-32 sm:mt-0 md:mt-0 lg:mt-0 ">
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal">
-            Your office is wherever you make it
+            Wherever you work, we make it work
             <span className="text-[#6BB7BE] font-extrabold">.</span>
           </h1>
 
           <div className="flex text-4xl md:text-7xl lg:text-4xl mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 text-gray-600">
             <IoCalendarOutline className="my-2 me-3" />
             <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
-              Your perfect workspace is never far away—over 12 locations
-              worldwide in cities, towns, and transport hubs
+              A smarter, greener, and more efficient way to work—hybrid work
+              puts flexibility at the center of success.
             </p>
           </div>
 
           <div className="flex text-4xl md:text-7xl lg:text-4xl mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 text-gray-600">
             <LuLaptopMinimalCheck className="my-2 me-3" />
             <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
-              Work solo or scale big—our powerful network keeps you seamlessly
-              connected and thriving.
+              Whatever your work style, we have the space—hourly meeting rooms,
+              daily offices, or flexible coworking options, all on your terms.
             </p>
           </div>
 
@@ -99,4 +98,4 @@ const WorkBusiness = () => {
   );
 };
 
-export default WorkBusiness;
+export default ThirdWorkBusiness;
