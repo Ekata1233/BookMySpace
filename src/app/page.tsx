@@ -14,9 +14,9 @@ export default function Home() {
       <Hero/>
       <Offices />
       <OfficeTour/>  
-      <WorkBusiness />    
+      {/* <WorkBusiness />    
       <SecondWorkBusiness />
-      <ThirdWorkBusiness />
+      <ThirdWorkBusiness /> */}
       <ExploreOffice />
       <OurAmenites />
       
