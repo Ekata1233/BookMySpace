@@ -44,11 +44,8 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-<<<<<<< HEAD
 import { toast } from 'sonner';
-=======
 import { Label } from '@/components/ui/label';
->>>>>>> 662aa2abc89c5a5e00aac64e8dbc6d3f70d67b0b
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -201,14 +198,14 @@ const Header = () => {
     };
 
     const links = [
-        { name: "Office Space", icon: <Home size={18} className='blue '/> },
-        { name: "Coworking", icon: <Users size={18} className='blue'/> },
-        { name: "Virtual Space", icon: <Monitor size={18} className='blue'/> },
-        { name: "Meeting Rooms", icon: <Library size={18} className='blue'/> },
-        { name: "Private Office", icon: <DoorClosed size={18} className='blue'/> },
-        { name: "Day Office", icon: <CalendarDays size={18} className='blue'/> },
-        { name: "Hot Desks", icon: <Sofa size={18} /> },
-        { name: "Dedicated Desks", icon: <Clock size={18} className='blue'/> }
+        { name: "Office Space", icon: <Home size={28} className='blue '/> },
+        { name: "Coworking", icon: <Users size={28} className='blue'/> },
+        { name: "Virtual Space", icon: <Monitor size={28} className='blue'/> },
+        { name: "Meeting Rooms", icon: <Library size={28} className='blue'/> },
+        { name: "Private Office", icon: <DoorClosed size={28} className='blue'/> },
+        { name: "Day Office", icon: <CalendarDays size={28} className='blue'/> },
+        { name: "Hot Desks", icon: <Sofa size={28} className='blue'/> },
+        { name: "Dedicated Desks", icon: <Clock size={28} className='blue'/> }
     ];
 
     return (
@@ -271,7 +268,7 @@ const Header = () => {
                     </div>
 
                     {/* Navigation Swiper - Visible on all screens */}
-                    <div className="relative w-full py-2">
+                    <div className="relative w-full py-5">
                         <div className="flex items-center">
                             {/* Left Navigation Button */}
                             <button
@@ -391,7 +388,7 @@ const Header = () => {
                                         onClick={handleSearch}
                                         className="absolute right-0 top-0 h-10 flex items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-4 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
                                     >
-                                        <Search size={18} />
+                                        <Search size={28} />
                                     </button>
                                 </div>
 
