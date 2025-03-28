@@ -2,7 +2,22 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, Search, ChevronLeft, ChevronRight, User } from 'lucide-react';
+import { 
+    Menu, 
+    X, 
+    Search, 
+    ChevronLeft, 
+    ChevronRight, 
+    User,
+    Home,
+    Users,
+    Monitor,
+    Clock,
+    DoorClosed,
+    CalendarDays,
+    Sofa,
+    Library
+} from 'lucide-react';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -10,31 +25,34 @@ import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
 } from "@/components/ui/tabs";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from 'sonner';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState('signup'); // Default to signup tab
     const [signupData, setSignupData] = useState({
         name: '',
         email: '',
@@ -44,6 +62,7 @@ const Header = () => {
         email: '',
         password: ''
     });
+    const [errors, setErrors] = useState({});
     const swiperRef = useRef(null);
     const [isBeginning, setIsBeginning] = useState(true);
     const [isEnd, setIsEnd] = useState(false);
@@ -56,11 +75,17 @@ const Header = () => {
         if (storedIndex !== null) {
             setActiveIndex(parseInt(storedIndex));
         }
+
+        // Check auth status on mount
+        const token = localStorage.getItem('authToken');
+        if (token) {
+            setIsLoggedIn(true);
+        }
     }, []);
 
     const handleSearch = () => {
         if (searchQuery.trim()) {
-            console.log("Searching for:", searchQuery);
+            router.push(`/search?q=${encodeURIComponent(searchQuery)}`);
         }
     };
 
@@ -69,27 +94,118 @@ const Header = () => {
         localStorage.setItem("activeIndex", index);
     };
 
-    const handleSignupSubmit = (e) => {
-        e.preventDefault();
-        console.log("Signup data:", signupData);
-        setIsLoggedIn(true);
-        setSignupData({ name: '', email: '', password: '' });
+    const validateSignup = () => {
+        const newErrors = {};
+        if (!signupData.name.trim()) newErrors.name = 'Name is required';
+        if (!signupData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signupData.email)) {
+            newErrors.email = 'Invalid email format';
+        }
+        if (!signupData.password) {
+            newErrors.password = 'Password is required';
+        } else if (signupData.password.length < 6) {
+            newErrors.password = 'Password must be at least 6 characters';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
     };
 
-    const handleLoginSubmit = (e) => {
+    const validateLogin = () => {
+        const newErrors = {};
+        if (!loginData.email.trim()) {
+            newErrors.email = 'Email is required';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) {
+            newErrors.email = 'Invalid email format';
+        }
+        if (!loginData.password) {
+            newErrors.password = 'Password is required';
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSignupSubmit = async (e) => {
         e.preventDefault();
-        console.log("Login data:", loginData);
-        setIsLoggedIn(true);
-        setLoginData({ email: '', password: '' });
+        if (!validateSignup()) return;
+
+        setIsLoading(true);
+        try {
+            // Replace with your actual API call
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(signupData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Signup failed');
+            }
+
+            localStorage.setItem('authToken', data.token);
+            setIsLoggedIn(true);
+            toast.success('Account created successfully!');
+            setSignupData({ name: '', email: '', password: '' });
+            setActiveTab('login');
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleLoginSubmit = async (e) => {
+        e.preventDefault();
+        if (!validateLogin()) return;
+
+        setIsLoading(true);
+        try {
+            // Replace with your actual API call
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
+            }
+
+            localStorage.setItem('authToken', data.token);
+            setIsLoggedIn(true);
+            toast.success('Logged in successfully!');
+            setLoginData({ email: '', password: '' });
+        } catch (error) {
+            toast.error(error.message);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleLogout = () => {
+        localStorage.removeItem('authToken');
         setIsLoggedIn(false);
+        toast.success('Logged out successfully!');
+        router.push('/');
     };
 
     const links = [
-        "Office Space", "Coworking", "Virtual Space", "Meeting Rooms",
-        "Private Office", "Day Office", "Hot Desks", "Dedicated Desks"
+        { name: "Office Space", icon: <Home size={18} className='blue '/> },
+        { name: "Coworking", icon: <Users size={18} className='blue'/> },
+        { name: "Virtual Space", icon: <Monitor size={18} className='blue'/> },
+        { name: "Meeting Rooms", icon: <Library size={18} className='blue'/> },
+        { name: "Private Office", icon: <DoorClosed size={18} className='blue'/> },
+        { name: "Day Office", icon: <CalendarDays size={18} className='blue'/> },
+        { name: "Hot Desks", icon: <Sofa size={18} /> },
+        { name: "Dedicated Desks", icon: <Clock size={18} className='blue'/> }
     ];
 
     return (
@@ -102,20 +218,24 @@ const Header = () => {
                             <button
                                 className="md:hidden text-gray-800 mr-2"
                                 onClick={() => setIsOpen(!isOpen)}
+                                aria-label="Toggle menu"
                             >
                                 {!isOpen ? <Menu size={24} /> : <X size={24} />}
                             </button>
-                            <Link href="/" className="text-xl font-semibold text-gray-800">Conference</Link>
+                            <Link href="/" className="text-xl font-semibold text-gray-800">
+                                Conference
+                            </Link>
                         </div>
 
                         {/* Search Bar - Hidden on mobile */}
-                        <div className="hidden md:flex flex-1 justify-center mx-4">
-                            <div className="relative flex items-center w-full max-w-md">
+                        <div className="hidden md:flex flex-1 mx-4 max-w-md">
+                            <div className="relative flex items-center w-full">
                                 <input
                                     type="text"
                                     placeholder="Search..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                     className="px-4 h-10 border w-full focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
                                 />
                                 <button
@@ -135,125 +255,16 @@ const Header = () => {
                             >
                                 Contact
                             </Link>
-                            
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" size="icon" className="rounded-full">
-                                        <User className="h-5 w-5" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-96 p-0" align="end">
-                                    {isLoggedIn ? (
-                                        <Card>
-                                            <CardHeader>
-                                                <CardTitle>Account</CardTitle>
-                                                <CardDescription>
-                                                    You are currently logged in.
-                                                </CardDescription>
-                                            </CardHeader>
-                                            <CardFooter>
-                                                <Button 
-                                                    onClick={handleLogout}
-                                                    className="w-full"
-                                                >
-                                                    Logout
-                                                </Button>
-                                            </CardFooter>
-                                        </Card>
-                                    ) : (
-                                        <Tabs defaultValue="login" className="w-full">
-                                            <TabsList className="grid w-full grid-cols-2">
-                                                <TabsTrigger value="login">Login</TabsTrigger>
-                                                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                                            </TabsList>
-                                            <TabsContent value="login">
-                                                <Card>
-                                                    <CardHeader>
-                                                        <CardTitle>Login</CardTitle>
-                                                        <CardDescription>
-                                                            Enter your credentials to access your account.
-                                                        </CardDescription>
-                                                    </CardHeader>
-                                                    <CardContent className="space-y-4">
-                                                        <form onSubmit={handleLoginSubmit}>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="login-email">Email</Label>
-                                                                <Input 
-                                                                    id="login-email" 
-                                                                    type="email" 
-                                                                    value={loginData.email}
-                                                                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="login-password">Password</Label>
-                                                                <Input 
-                                                                    id="login-password" 
-                                                                    type="password" 
-                                                                    value={loginData.password}
-                                                                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <Button type="submit" className="w-full mt-4">
-                                                                Login
-                                                            </Button>
-                                                        </form>
-                                                    </CardContent>
-                                                </Card>
-                                            </TabsContent>
-                                            <TabsContent value="signup">
-                                                <Card>
-                                                    <CardHeader>
-                                                        <CardTitle>Sign Up</CardTitle>
-                                                        <CardDescription>
-                                                            Create a new account to get started.
-                                                        </CardDescription>
-                                                    </CardHeader>
-                                                    <CardContent className="space-y-4">
-                                                        <form onSubmit={handleSignupSubmit}>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="name">Name</Label>
-                                                                <Input 
-                                                                    id="name" 
-                                                                    value={signupData.name}
-                                                                    onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="email">Email</Label>
-                                                                <Input 
-                                                                    id="email" 
-                                                                    type="email" 
-                                                                    value={signupData.email}
-                                                                    onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="password">Password</Label>
-                                                                <Input 
-                                                                    id="password" 
-                                                                    type="password" 
-                                                                    value={signupData.password}
-                                                                    onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <Button type="submit" className="w-full mt-4">
-                                                                Sign Up
-                                                            </Button>
-                                                        </form>
-                                                    </CardContent>
-                                                </Card>
-                                            </TabsContent>
-                                        </Tabs>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+
+                            <Link href="/auth">
+                                <User className="h-10 w-10 blue ms-6" />
+                            </Link>
                         </div>
+
+                        {/* Mobile-only auth link */}
+                        <Link href="/auth" className="md:hidden text-gray-800 ml-2">
+                            <User className="h-5 w-5" />
+                        </Link>
                     </div>
 
                     {/* Navigation Swiper - Visible on all screens */}
@@ -264,6 +275,7 @@ const Header = () => {
                                 className={`hidden sm:flex items-center justify-center w-8 h-8 mr-1 rounded-full ${isBeginning ? 'text-gray-300 cursor-default' : 'text-gray-700 hover:bg-gray-100'}`}
                                 onClick={() => !isBeginning && swiperRef.current?.slidePrev()}
                                 disabled={isBeginning}
+                                aria-label="Previous navigation"
                             >
                                 <ChevronLeft size={20} />
                             </button>
@@ -304,7 +316,7 @@ const Header = () => {
                                     }}
                                 >
                                     {links.map((item, index) => {
-                                        const path = `/${item.toLowerCase().replace(/\s+/g, "-")}`;
+                                        const path = `/${item.name.toLowerCase().replace(/\s+/g, "-")}`;
                                         return (
                                             <SwiperSlide
                                                 key={index}
@@ -318,18 +330,23 @@ const Header = () => {
                                                     <a
                                                         className={`
                                                             cursor-pointer 
-                                                            text-xs sm:text-sm md:text-base 
                                                             text-gray-600 hover:text-gray-900 
                                                             font-medium 
                                                             whitespace-nowrap 
                                                             px-1 sm:px-2 py-1
                                                             relative 
                                                             transition-colors 
+                                                            flex flex-col items-center
                                                             ${pathname === path ? 'text-gray-900 font-semibold' : ''}
                                                         `}
                                                         onClick={() => handleLinkClick(index)}
                                                     >
-                                                        {item}
+                                                        <div className="mb-1 ">
+                                                            {item.icon}
+                                                        </div>
+                                                        <span className="text-xs sm:text-sm md:text-base">
+                                                            {item.name}
+                                                        </span>
                                                         {pathname === path && (
                                                             <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4/5 h-[2px] bg-[#6BB7BE] rounded-full"></span>
                                                         )}
@@ -346,6 +363,7 @@ const Header = () => {
                                 className={`hidden sm:flex items-center justify-center w-8 h-8 ml-1 rounded-full ${isEnd ? 'text-gray-300 cursor-default' : 'text-gray-700 hover:bg-gray-100'}`}
                                 onClick={() => !isEnd && swiperRef.current?.slideNext()}
                                 disabled={isEnd}
+                                aria-label="Next navigation"
                             >
                                 <ChevronRight size={20} />
                             </button>
@@ -363,6 +381,7 @@ const Header = () => {
                                         placeholder="Search..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                                         className="px-3 h-10 border w-full focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
                                     />
                                     <button
@@ -382,96 +401,6 @@ const Header = () => {
                                     >
                                         Contact
                                     </Link>
-                                    
-                                    {!isLoggedIn ? (
-                                        <Tabs defaultValue="login" className="w-full">
-                                            <TabsList className="grid w-full grid-cols-2">
-                                                <TabsTrigger value="login">Login</TabsTrigger>
-                                                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-                                            </TabsList>
-                                            <TabsContent value="login">
-                                                <Card>
-                                                    <CardContent className="space-y-4 pt-4">
-                                                        <form onSubmit={handleLoginSubmit}>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="mobile-login-email">Email</Label>
-                                                                <Input 
-                                                                    id="mobile-login-email" 
-                                                                    type="email" 
-                                                                    value={loginData.email}
-                                                                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="mobile-login-password">Password</Label>
-                                                                <Input 
-                                                                    id="mobile-login-password" 
-                                                                    type="password" 
-                                                                    value={loginData.password}
-                                                                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <Button type="submit" className="w-full mt-4">
-                                                                Login
-                                                            </Button>
-                                                        </form>
-                                                    </CardContent>
-                                                </Card>
-                                            </TabsContent>
-                                            <TabsContent value="signup">
-                                                <Card>
-                                                    <CardContent className="space-y-4 pt-4">
-                                                        <form onSubmit={handleSignupSubmit}>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="mobile-name">Name</Label>
-                                                                <Input 
-                                                                    id="mobile-name" 
-                                                                    value={signupData.name}
-                                                                    onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="mobile-email">Email</Label>
-                                                                <Input 
-                                                                    id="mobile-email" 
-                                                                    type="email" 
-                                                                    value={signupData.email}
-                                                                    onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <div className="space-y-2">
-                                                                <Label htmlFor="mobile-password">Password</Label>
-                                                                <Input 
-                                                                    id="mobile-password" 
-                                                                    type="password" 
-                                                                    value={signupData.password}
-                                                                    onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            <Button type="submit" className="w-full mt-4">
-                                                                Sign Up
-                                                            </Button>
-                                                        </form>
-                                                    </CardContent>
-                                                </Card>
-                                            </TabsContent>
-                                        </Tabs>
-                                    ) : (
-                                        <Button
-                                            onClick={() => {
-                                                handleLogout();
-                                                setIsOpen(false);
-                                            }}
-                                            className="w-full"
-                                        >
-                                            Logout
-                                        </Button>
-                                    )}
                                 </div>
                             </div>
                         </div>

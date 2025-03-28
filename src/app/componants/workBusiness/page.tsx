@@ -26,7 +26,7 @@ const WorkBusiness = () => {
 
           <div className="flex text-4xl md:text-7xl lg:text-4xl mt-4 sm:mt-6 md:mt-8 mb-4 sm:mb-6 text-gray-600">
             <LuLaptopMinimalCheck className="my-2 me-3" />
-            <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
+            <p className=" text-sm sm:text-base md:text-lg   leading-relaxed">
               Work solo or scale big—our powerful network keeps you seamlessly
               connected and thriving.
             </p>
