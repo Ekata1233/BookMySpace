@@ -133,7 +133,7 @@ const Offices = () => {
           {cardData.map((card, index) => (
             <Card
               key={index}
-              className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-2"
+              className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
             >
               <div className="w-full md:w-1/3 flex-shrink-0 h-full md:h-auto flex">
                 <Image
