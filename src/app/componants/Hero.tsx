@@ -66,18 +66,22 @@ const Hero = () => {
         </div>
 
         {/* Dropdown menu for smaller screens */}
-        <div className="sm:hidden p-4 bg-white border-b">
+        <div className="sm:hidden p-4 bg-white border-b relative">
           <select
             value={activeTab}
             onChange={(e) => setActiveTab(e.target.value)}
-            className="w-full p-2 focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
+            className="w-[70%] p-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#6BB7BE] appearance-none"
           >
             {tabs.map((tab) => (
               <option key={tab} value={tab}>
-                {tab}
+                {tab.length > 15 ? `${tab.substring(0, 12)}...` : tab}
               </option>
             ))}
           </select>
+          {/* Custom dropdown arrow */}
+          <div className="absolute top-1/2 right-3 transform -translate-y-1/2 pointer-events-none">
+            ▼
+          </div>
         </div>
 
         {/* Search Box */}
