@@ -13,7 +13,7 @@ const Offices = () => {
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
           OFFICE SPACES
         </h1>
-        <div className="text-gray-700">
+        {/* <div className="text-gray-700">
           <select
             className="border border-gray-300 rounded-none px-5 py-2"
             value={selected}
@@ -27,7 +27,7 @@ const Offices = () => {
             <option value="lowToHigh">Price : Low to High</option>
             <option value="highToLow">Price : High to Low</option>
           </select>
-        </div>
+        </div> */}
       </div>
       <div className="mx-auto">
         <div className="border-b-2 border-gray-300 w-full my-5"></div>

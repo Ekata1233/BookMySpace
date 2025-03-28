@@ -12,11 +12,11 @@ export default function Home() {
   return (
     <main className="mt-16">
       <Hero/>
-      <Offices />
-      <OfficeTour/>  
-      {/* <WorkBusiness />    
+      {/* <Offices />
+      <OfficeTour/>   */}
+      <WorkBusiness />    
       <SecondWorkBusiness />
-      <ThirdWorkBusiness /> */}
+      <ThirdWorkBusiness />
       <ExploreOffice />
       <OurAmenites />
       
