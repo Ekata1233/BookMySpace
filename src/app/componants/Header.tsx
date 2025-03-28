@@ -8,13 +8,32 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-    const [isSignupFormOpen, setIsSignupFormOpen] = useState(false);
-    const [isLoginFormOpen, setIsLoginFormOpen] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [signupData, setSignupData] = useState({
         name: '',
@@ -50,16 +69,10 @@ const Header = () => {
         localStorage.setItem("activeIndex", index);
     };
 
-    const toggleUserDropdown = () => {
-        setIsUserDropdownOpen(!isUserDropdownOpen);
-    };
-
     const handleSignupSubmit = (e) => {
         e.preventDefault();
         console.log("Signup data:", signupData);
         setIsLoggedIn(true);
-        setIsSignupFormOpen(false);
-        setIsUserDropdownOpen(false);
         setSignupData({ name: '', email: '', password: '' });
     };
 
@@ -67,14 +80,11 @@ const Header = () => {
         e.preventDefault();
         console.log("Login data:", loginData);
         setIsLoggedIn(true);
-        setIsLoginFormOpen(false);
-        setIsUserDropdownOpen(false);
         setLoginData({ email: '', password: '' });
     };
 
     const handleLogout = () => {
         setIsLoggedIn(false);
-        setIsUserDropdownOpen(false);
     };
 
     const links = [
@@ -126,48 +136,123 @@ const Header = () => {
                                 Contact
                             </Link>
                             
-                            <div className="relative">
-                                <button
-                                    onClick={toggleUserDropdown}
-                                    className="p-2 rounded-full hover:bg-gray-100"
-                                >
-                                    <User size={24} className="text-gray-700" />
-                                </button>
-                                
-                                {isUserDropdownOpen && (
-                                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                                        {!isLoggedIn ? (
-                                            <>
-                                                <button
-                                                    onClick={() => {
-                                                        setIsSignupFormOpen(true);
-                                                        setIsLoginFormOpen(false);
-                                                    }}
-                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="icon" className="rounded-full">
+                                        <User className="h-5 w-5" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="w-96 p-0" align="end">
+                                    {isLoggedIn ? (
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle>Account</CardTitle>
+                                                <CardDescription>
+                                                    You are currently logged in.
+                                                </CardDescription>
+                                            </CardHeader>
+                                            <CardFooter>
+                                                <Button 
+                                                    onClick={handleLogout}
+                                                    className="w-full"
                                                 >
-                                                    Sign Up
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        setIsLoginFormOpen(true);
-                                                        setIsSignupFormOpen(false);
-                                                    }}
-                                                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                                >
-                                                    Login
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <button
-                                                onClick={handleLogout}
-                                                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                            >
-                                                Logout
-                                            </button>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                                                    Logout
+                                                </Button>
+                                            </CardFooter>
+                                        </Card>
+                                    ) : (
+                                        <Tabs defaultValue="login" className="w-full">
+                                            <TabsList className="grid w-full grid-cols-2">
+                                                <TabsTrigger value="login">Login</TabsTrigger>
+                                                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="login">
+                                                <Card>
+                                                    <CardHeader>
+                                                        <CardTitle>Login</CardTitle>
+                                                        <CardDescription>
+                                                            Enter your credentials to access your account.
+                                                        </CardDescription>
+                                                    </CardHeader>
+                                                    <CardContent className="space-y-4">
+                                                        <form onSubmit={handleLoginSubmit}>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="login-email">Email</Label>
+                                                                <Input 
+                                                                    id="login-email" 
+                                                                    type="email" 
+                                                                    value={loginData.email}
+                                                                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="login-password">Password</Label>
+                                                                <Input 
+                                                                    id="login-password" 
+                                                                    type="password" 
+                                                                    value={loginData.password}
+                                                                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <Button type="submit" className="w-full mt-4">
+                                                                Login
+                                                            </Button>
+                                                        </form>
+                                                    </CardContent>
+                                                </Card>
+                                            </TabsContent>
+                                            <TabsContent value="signup">
+                                                <Card>
+                                                    <CardHeader>
+                                                        <CardTitle>Sign Up</CardTitle>
+                                                        <CardDescription>
+                                                            Create a new account to get started.
+                                                        </CardDescription>
+                                                    </CardHeader>
+                                                    <CardContent className="space-y-4">
+                                                        <form onSubmit={handleSignupSubmit}>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="name">Name</Label>
+                                                                <Input 
+                                                                    id="name" 
+                                                                    value={signupData.name}
+                                                                    onChange={(e) => setSignupData({...signupData, name: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="email">Email</Label>
+                                                                <Input 
+                                                                    id="email" 
+                                                                    type="email" 
+                                                                    value={signupData.email}
+                                                                    onChange={(e) => setSignupData({...signupData, email: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="password">Password</Label>
+                                                                <Input 
+                                                                    id="password" 
+                                                                    type="password" 
+                                                                    value={signupData.password}
+                                                                    onChange={(e) => setSignupData({...signupData, password: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <Button type="submit" className="w-full mt-4">
+                                                                Sign Up
+                                                            </Button>
+                                                        </form>
+                                                    </CardContent>
+                                                </Card>
+                                            </TabsContent>
+                                        </Tabs>
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     </div>
 
@@ -201,7 +286,7 @@ const Header = () => {
                                     className="!px-0"
                                     breakpoints={{
                                         320: {
-                                            slidesPerView: 2,
+                                            slidesPerView: 3,
                                             spaceBetween: 8
                                         },
                                         640: {
@@ -299,36 +384,93 @@ const Header = () => {
                                     </Link>
                                     
                                     {!isLoggedIn ? (
-                                        <>
-                                            <button
-                                                onClick={() => {
-                                                    setIsSignupFormOpen(true);
-                                                    setIsOpen(false);
-                                                }}
-                                                className="block w-full text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-4 py-2 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium text-center text-sm"
-                                            >
-                                                Sign Up
-                                            </button>
-                                            <button
-                                                onClick={() => {
-                                                    setIsLoginFormOpen(true);
-                                                    setIsOpen(false);
-                                                }}
-                                                className="block w-full text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-4 py-2 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium text-center text-sm"
-                                            >
-                                                Login
-                                            </button>
-                                        </>
+                                        <Tabs defaultValue="login" className="w-full">
+                                            <TabsList className="grid w-full grid-cols-2">
+                                                <TabsTrigger value="login">Login</TabsTrigger>
+                                                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="login">
+                                                <Card>
+                                                    <CardContent className="space-y-4 pt-4">
+                                                        <form onSubmit={handleLoginSubmit}>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="mobile-login-email">Email</Label>
+                                                                <Input 
+                                                                    id="mobile-login-email" 
+                                                                    type="email" 
+                                                                    value={loginData.email}
+                                                                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="mobile-login-password">Password</Label>
+                                                                <Input 
+                                                                    id="mobile-login-password" 
+                                                                    type="password" 
+                                                                    value={loginData.password}
+                                                                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <Button type="submit" className="w-full mt-4">
+                                                                Login
+                                                            </Button>
+                                                        </form>
+                                                    </CardContent>
+                                                </Card>
+                                            </TabsContent>
+                                            <TabsContent value="signup">
+                                                <Card>
+                                                    <CardContent className="space-y-4 pt-4">
+                                                        <form onSubmit={handleSignupSubmit}>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="mobile-name">Name</Label>
+                                                                <Input 
+                                                                    id="mobile-name" 
+                                                                    value={signupData.name}
+                                                                    onChange={(e) => setSignupData({...signupData, name: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="mobile-email">Email</Label>
+                                                                <Input 
+                                                                    id="mobile-email" 
+                                                                    type="email" 
+                                                                    value={signupData.email}
+                                                                    onChange={(e) => setSignupData({...signupData, email: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <Label htmlFor="mobile-password">Password</Label>
+                                                                <Input 
+                                                                    id="mobile-password" 
+                                                                    type="password" 
+                                                                    value={signupData.password}
+                                                                    onChange={(e) => setSignupData({...signupData, password: e.target.value})}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <Button type="submit" className="w-full mt-4">
+                                                                Sign Up
+                                                            </Button>
+                                                        </form>
+                                                    </CardContent>
+                                                </Card>
+                                            </TabsContent>
+                                        </Tabs>
                                     ) : (
-                                        <button
+                                        <Button
                                             onClick={() => {
                                                 handleLogout();
                                                 setIsOpen(false);
                                             }}
-                                            className="block w-full text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-4 py-2 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium text-center text-sm"
+                                            className="w-full"
                                         >
                                             Logout
-                                        </button>
+                                        </Button>
                                     )}
                                 </div>
                             </div>
@@ -336,123 +478,6 @@ const Header = () => {
                     )}
                 </div>
             </nav>
-
-            {/* Signup Form Modal */}
-            {isSignupFormOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-xs sm:max-w-md mx-2">
-                        <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Sign Up</h2>
-                        <form onSubmit={handleSignupSubmit}>
-                            <div className="mb-3 sm:mb-4">
-                                <label className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base" htmlFor="name">
-                                    Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    className="w-full px-3 py-2 border rounded text-sm sm:text-base"
-                                    value={signupData.name}
-                                    onChange={(e) => setSignupData({...signupData, name: e.target.value})}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-3 sm:mb-4">
-                                <label className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base" htmlFor="email">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    className="w-full px-3 py-2 border rounded text-sm sm:text-base"
-                                    value={signupData.email}
-                                    onChange={(e) => setSignupData({...signupData, email: e.target.value})}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4 sm:mb-5">
-                                <label className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base" htmlFor="password">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    className="w-full px-3 py-2 border rounded text-sm sm:text-base"
-                                    value={signupData.password}
-                                    onChange={(e) => setSignupData({...signupData, password: e.target.value})}
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsSignupFormOpen(false)}
-                                    className="px-3 sm:px-4 py-1 sm:py-2 text-gray-700 border rounded hover:bg-gray-100 text-sm sm:text-base"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-3 sm:px-4 py-1 sm:py-2 bg-[#6BB7BE] text-white rounded hover:bg-[#5aa5ac] text-sm sm:text-base"
-                                >
-                                    Sign Up
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* Login Form Modal */}
-            {isLoginFormOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-4 sm:p-6 rounded-lg w-full max-w-xs sm:max-w-md mx-2">
-                        <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Login</h2>
-                        <form onSubmit={handleLoginSubmit}>
-                            <div className="mb-3 sm:mb-4">
-                                <label className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base" htmlFor="login-email">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="login-email"
-                                    className="w-full px-3 py-2 border rounded text-sm sm:text-base"
-                                    value={loginData.email}
-                                    onChange={(e) => setLoginData({...loginData, email: e.target.value})}
-                                    required
-                                />
-                            </div>
-                            <div className="mb-4 sm:mb-5">
-                                <label className="block text-gray-700 mb-1 sm:mb-2 text-sm sm:text-base" htmlFor="login-password">
-                                    Password
-                                </label>
-                                <input
-                                    type="password"
-                                    id="login-password"
-                                    className="w-full px-3 py-2 border rounded text-sm sm:text-base"
-                                    value={loginData.password}
-                                    onChange={(e) => setLoginData({...loginData, password: e.target.value})}
-                                    required
-                                />
-                            </div>
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => setIsLoginFormOpen(false)}
-                                    className="px-3 sm:px-4 py-1 sm:py-2 text-gray-700 border rounded hover:bg-gray-100 text-sm sm:text-base"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="px-3 sm:px-4 py-1 sm:py-2 bg-[#6BB7BE] text-white rounded hover:bg-[#5aa5ac] text-sm sm:text-base"
-                                >
-                                    Login
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
