@@ -52,7 +52,7 @@ const Contact = () => {
           services.
         </p>
 
-        <div className="text-gray-700 m-5 w-5/6 mx-auto border shadow-lg">
+        <div className="text-gray-700 m-5 w-5/6 mx-auto border shadow-lg mb-20">
           <form
             onSubmit={handleSubmit}
             className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8"
