@@ -30,11 +30,11 @@ const Officespace = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative w-full h-[70vh] flex items-center justify-center my-24 overflow-hidden">
+    <div className=" w-full h-[70vh] flex items-center justify-center my-24 overflow-hidden">
       {images.map((image, index) => (
         <div
           key={index}
-          className={`absolute w-full h-full flex items-center justify-center transition-opacity duration-1000 ${
+          className={` w-full h-full flex items-center justify-center transition-opacity duration-1000 ${
             index === currentIndex ? "opacity-100" : "opacity-0"
           }`}
         >
@@ -47,7 +47,7 @@ const Officespace = () => {
       ))}
 
       {/* Card Section */}
-      <div className="absolute bottom-[-21vh] md:bottom-[-11vh] lg:bottom-[-9vh] xl:bottom-[10vh] left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%]  shadow-lg overflow-hidden z-1000">
+      <div className=" bottom-[-21vh] md:bottom-[-11vh] lg:bottom-[-9vh] xl:bottom-[10vh] left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%]  shadow-lg overflow-hidden z-1000">
         {/* Tabs for larger screens */}
         <div className=" justify-around border-b px-10 py-4 bg-white">
           <div className="">

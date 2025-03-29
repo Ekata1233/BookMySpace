@@ -49,7 +49,7 @@ const Hero = () => {
       </div>
 
       {/* Card Section - Positioned above Boxes */}
-      <div className="relative z-10 mx-auto -mt-20 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%] shadow-lg">
+      <div className="relative z-10 mx-auto -mt-21 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%] shadow-lg">
         {/* Tabs for larger screens */}
         <div className="hidden sm:flex justify-around border-b px-4 py-6 bg-white">
           {tabs.map((tab) => (
@@ -86,17 +86,17 @@ const Hero = () => {
         </div>
 
         {/* Search Box */}
-        <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-200 w-full">
+        <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-100 w-full">
           <div className="flex flex-col sm:flex-row items-center w-full gap-3">
-          <input
-  type="text"
-  placeholder="Search..."
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.target.value)}
-  className="px-4 h-12 w-full sm:flex-1 
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 h-12 w-full sm:flex-1 
              border border-[#6BB7BE] rounded 
              focus:border-2 focus:outline-none"
-/>
+            />
             <Button
               onClick={handleSearch}
               className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-5 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
