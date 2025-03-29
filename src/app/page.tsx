@@ -13,24 +13,14 @@ export default function Home() {
   return (
     <main className="mt-16">
       <Hero/>
-    
       <Offices />
       <OfficeTour/>  
-<<<<<<< HEAD
-        
-        
-      
-=======
->>>>>>> 4262ce044fc2d3659ccb6339f6dd84c50b30acf5
       <WorkBusiness />    
       <SecondWorkBusiness />
       <ThirdWorkBusiness />
       <ExploreOffice />
       <OurAmenites />
-<<<<<<< HEAD
       <OurAmenites /> 
-=======
->>>>>>> 4262ce044fc2d3659ccb6339f6dd84c50b30acf5
       
     </main>
   );

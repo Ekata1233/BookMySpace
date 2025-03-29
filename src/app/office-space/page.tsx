@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LuPhoneCall } from "react-icons/lu";
+import Offices from "../componants/offices/page";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
@@ -96,6 +97,8 @@ const Officespace = () => {
           </div>
         </div>
       </div>
+
+      <Offices />
     </div>
   );
 };
