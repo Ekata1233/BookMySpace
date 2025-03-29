@@ -5,8 +5,8 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
-import Offices from "../componants/offices/page";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
@@ -31,46 +31,43 @@ const Officespace = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="relative w-full h-[70vh] flex items-center justify-center my-24 overflow-hidden">
-      {images.map((image, index) => (
-        <div
-          key={index}
-          className={`absolute w-full h-full flex items-center justify-center transition-opacity duration-1000 ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <img
-            src={image}
-            alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ))}
+    <div className="relative">
+      {/* Hero Section with Image Carousel */}
+      <div className="relative w-full h-[83vh] overflow-hidden">
+        {images.map((image, index) => (
+          <div
+            key={index}
+            className={`absolute w-full h-full transition-opacity duration-1000 ${
+              index === currentIndex ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={image}
+              alt={`Slide ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
 
-      {/* Card Section */}
-      <div className="absolute bottom-[-21vh] md:bottom-[-11vh] lg:bottom-[-9vh] xl:bottom-[10vh] left-1/2 transform -translate-x-1/2 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%]  shadow-lg overflow-hidden z-1000">
+      {/* Card Section - Positioned above Boxes */}
+      <div className="relative z-10 mx-auto -mt-30 w-[90%] md:w-[80%] lg:w-[85%] xl:w-[60%] shadow-lg">
         {/* Tabs for larger screens */}
         <div className=" justify-around border-b px-10 py-4 bg-white">
           <div className="">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal text-center">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal text-center">
               Office Space
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-              Looking for a fully-serviced, private office space for rent? A
-              place where you can work with complete focus and privacy? Our
-              office spaces provide a professional, move-in-ready environment
-              tailored to fit teams of any size. Designed for productivity and
-              fully supported, our offices come with access to kitchen
-              facilities, meeting rooms, and a network of premium business
-              lounges.
+            Looking for a fully-serviced private office? Our move-in-ready spaces offer privacy, flexibility, and access to meeting rooms, kitchen facilities, and business lounges—perfect for teams of any size.
             </p>
           </div>
         </div>
-        
 
+        
         {/* Search Box */}
-        <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-200 w-full">
+        <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-100 w-full">
           <div className="flex flex-col sm:flex-row justify-around items-center w-full gap-3">
             <Button
               onClick={handleSearch}
@@ -98,7 +95,10 @@ const Officespace = () => {
         </div>
       </div>
 
-      <Offices />
+      {/* Boxes Component positioned below */}
+      <div className="relative z-0 mt-20">
+        <Boxes />
+      </div>
     </div>
   );
 };
