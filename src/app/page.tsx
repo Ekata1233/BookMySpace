@@ -16,21 +16,11 @@ export default function Home() {
       <Boxes/>
       <Offices />
       <OfficeTour/>  
-<<<<<<< HEAD
-        
-        
-      
-=======
->>>>>>> e58d0e28c6bc227f101d5c3872daca942d7c0b84
       <WorkBusiness />    
       <SecondWorkBusiness />
       <ThirdWorkBusiness />
       <ExploreOffice />
-<<<<<<< HEAD
       <OurAmenites />
-=======
-      <OurAmenites /> 
->>>>>>> e58d0e28c6bc227f101d5c3872daca942d7c0b84
       
     </main>
   );
