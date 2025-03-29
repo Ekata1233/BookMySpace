@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
+import Offices from "../componants/offices/page";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
@@ -97,7 +98,7 @@ const Officespace = () => {
 
       {/* Boxes Component positioned below */}
       <div className="relative z-0 mt-20">
-        <Boxes />
+        <Offices />
       </div>
     </div>
   );
