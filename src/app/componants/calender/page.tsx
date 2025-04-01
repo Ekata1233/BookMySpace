@@ -67,7 +67,7 @@ const TimeCalendar = () => {
           <div className="space-y-4">
             {/* Select Duration */}
             <div className="flex justify-center mb-4">
-              <h2 className="font-semibold mb-3 text-center">Select Duration</h2>
+              {/* <h2 className="font-semibold mb-3 text-center">Select Duration</h2> */}
               <div className="w-full max-w-xs">
                 <Select value={selectedDuration} onValueChange={setSelectedDuration} className="w-full">
                   <SelectTrigger className="h-12 w-full">
