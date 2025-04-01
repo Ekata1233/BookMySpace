@@ -1,72 +1,115 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import React from "react";
+"use client";
 
-const officeImages = [
-  {
-    src: "/office_1.png",
-    alt: "Office 1",
-    name: "ABC Indialand",
-    address: "Hinjewadi",
-  },
-  { src: "/office_2.png", alt: "Office 2", name: "XYZ Tower", address: "Pune" },
-  {
-    src: "/office_3.png",
-    alt: "Office 3",
-    name: "Tech Park",
-    address: "Bangalore",
-  },
-  {
-    src: "/office_4.png",
-    alt: "Office 4",
-    name: "Global Hub",
-    address: "Mumbai",
-  },
-];
+import { Calendar } from "@/components/ui/calendar";
+import { useState } from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const ExploreOffice = () => {
+const TimeCalendar = () => {
+  const currentYear = new Date().getFullYear();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const [date, setDate] = useState<Date | undefined>(today);
+  const [selectedHour, setSelectedHour] = useState("9");
+  const [selectedMinute, setSelectedMinute] = useState("00");
+  const [selectedDuration, setSelectedDuration] = useState("1");
+
+  // Generate time options from 9:00 to 17:30 in 1-hour increments
+  const timeOptions = [];
+  for (let hour = 9; hour <= 17; hour++) {
+    timeOptions.push(`${hour}:00`);
+    if (hour !== 17) {
+      timeOptions.push(`${hour}:30`);
+    }
+  }
+
   return (
-    <div>
-      <div className="mx-auto px-4">
-        <p className="text-gray-500 text-lg sm:text-lg md:text-xl lg:text-2xl font-bold text-center pt-12">
-          Explore Beyond Borders With Our Locations
-        </p>
-        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
-          Step Into Our Office Spaces
-        </h1>
-        <div className="border-b-4 border-[#6BB7BE] w-full sm:w-3/4 md:w-2/3 lg:w-4/7 xl:w-3/9 mt-2 mb-10 mx-auto"></div>
-      </div>
-
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2">
-        {officeImages.map((office, index) => (
-          <div
-            key={index}
-            className="relative bg-gray-200 group overflow-hidden"
-          >
-            <Image
-              src={office.src}
-              alt={office.alt}
-              width={300}
-              height={100}
-              className="w-full h-110 transition-transform duration-300 group-hover:scale-105"
+    <div className="container mx-auto p-4">
+      <div className="flex flex-col lg:flex-row w-full gap-4">
+        {/* Calendar Section */}
+        <div className="bg-white p-4 text-center flex-1 w-full lg:min-w-[600px] rounded-lg shadow">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
+            Calendar - {currentYear}
+          </h1>
+          <div className="w-full">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              disabled={(day) => day < today} // Disable past dates
+              className="rounded-md border shadow mx-auto py-8 w-full"
+              classNames={{
+                month: "w-full",
+                table: "w-full",
+                head_row: "flex justify-between",
+                head_cell: "w-10 h-10 flex items-center justify-center text-sm font-normal text-muted-foreground",
+                row: "flex w-full justify-between",
+                cell: "h-10 w-10 p-0 relative [&:has([aria-selected])]:bg-transparent",
+                day: "h-9 w-9 rounded-full flex items-center justify-center p-0 font-normal text-black",
+                day_selected: "bg-[#6BB7BE] text-white",
+                day_today: "text-black",
+                day_outside: "text-muted-foreground opacity-50",
+                day_disabled: "text-muted-foreground opacity-50",
+                day_range_middle: "bg-accent text-accent-foreground",
+                day_hidden: "invisible",
+              }}
             />
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-center bg-black/50 group-hover:bg-black/70 transition-all duration-300">
-              <h3 className="text-xl sm:text-xl md:text-xl lg:text-2xl font-bold text-white">
-                {office.name}
-              </h3>
-              <h3 className="text-xl sm:text-xl md:text-xl lg:text-2xl font-bold text-white">
-                {office.address}
-              </h3>
-              <Button className="text-base sm:text-md md:text-lg lg:text-lg text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-3 py-5 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none mt-4">
-                Know More
-              </Button>
+          </div>
+        </div>
+
+        {/* Selection Section */}
+        <div className="bg-white p-4 text-center flex-1 w-full lg:min-w-[250px] rounded-lg shadow">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
+            Selected Date
+          </h1>
+          <div className="mb-4 p-2 border rounded-md">
+            {date ? date.toDateString() : "No date selected"}
+          </div>
+
+          <div className="space-y-4">
+            {/* Select Duration */}
+            <div className="flex flex-col items-center mb-4">
+              <h2 className="font-semibold mb-2 text-center">Select Duration</h2>
+              <div className="w-full max-w-xs">
+                <Select value={selectedDuration} onValueChange={setSelectedDuration} className="w-full">
+                  <SelectTrigger className="h-12 w-full">
+                    <SelectValue placeholder="Select duration" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((hour) => (
+                      <SelectItem key={hour} value={hour.toString()} className="text-center">
+                        {hour} {hour === 1 ? "hour" : "hours"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Available Slots */}
+            <div className="mt-4">
+              <h3 className="font-medium mb-2">Available Slots (9:00 - 17:30)</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto">
+                {timeOptions.map((time) => (
+                  <button
+                    key={time}
+                    className="p-2 border rounded hover:bg-gray-100 text-sm w-full"
+                    onClick={() => {
+                      const [hour, minute] = time.split(":");
+                      setSelectedHour(hour);
+                      setSelectedMinute(minute);
+                    }}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
-};
+}
 
-export default ExploreOffice;
+export default TimeCalendar;

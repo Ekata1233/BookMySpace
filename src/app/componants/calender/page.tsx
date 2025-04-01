@@ -6,7 +6,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const TimeCalendar = () => {
   const currentYear = new Date().getFullYear();
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const [date, setDate] = useState<Date | undefined>(today);
   const [selectedHour, setSelectedHour] = useState("9");
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
@@ -23,21 +26,18 @@ const TimeCalendar = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex flex-row w-full gap-4">
-        {/* First Column */}
-        <div className="bg-white p-4 text-center flex-1 min-w-[200px]">
-          <h1 className="text-xl font-bold">First Column</h1>
-          <p>Some content for the first column.</p>
-        </div>
-        
         {/* Calendar Column - Wider */}
         <div className="bg-white p-4 text-center flex-[2] min-w-[600px]">
-          <h1 className="text-xl font-bold mb-4">Calendar - {currentYear}</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
+            Calendar - {currentYear}
+          </h1>
           <div className="w-full">
             <Calendar
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border shadow mx-auto"
+              disabled={(day) => day < today} // Disable past dates
+              className="rounded-md border shadow mx-auto py-8"
               classNames={{
                 month: "w-full",
                 table: "w-full",
@@ -46,7 +46,7 @@ const TimeCalendar = () => {
                 row: "flex w-full justify-between",
                 cell: "h-10 w-10 p-0 relative [&:has([aria-selected])]:bg-transparent",
                 day: "h-9 w-9 rounded-full flex items-center justify-center p-0 font-normal aria-selected:opacity-100",
-                day_selected: "bg-primary text-primary-foreground",
+                day_selected: "bg-[#6BB7BE] text-white",
                 day_today: "bg-accent text-accent-foreground",
                 day_outside: "text-muted-foreground opacity-50",
                 day_disabled: "text-muted-foreground opacity-50",
@@ -56,44 +56,35 @@ const TimeCalendar = () => {
             />
           </div>
         </div>
-        
+
         {/* Third Column - Selected Date and Time Selection */}
         <div className="bg-white p-4 text-center flex-1 min-w-[200px]">
-          <h1 className="text-xl font-bold mb-2">Selected Date</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">Selected Date</h1>
           <div className="mb-4 p-2 border rounded-md">
             {date ? date.toDateString() : "No date selected"}
           </div>
-          
-        
-          <div className="space-y-4">
-            {/* 1-12 Hours Dropdown */}
-            <h2 className="font-semibold mb-3 text-center">Select Duration</h2>
-          <div className="flex justify-center mb-4">
-            <div className="w-full max-w-xs">
-            <Select 
-  value={selectedDuration} 
-  onValueChange={setSelectedDuration}
-  className="w-full"
->
-  <SelectTrigger className="h-12 w-full">
-    <SelectValue placeholder="Select duration" />
-  </SelectTrigger>
-  <SelectContent>
-    {[1, 2, 3, 4, 5, 6, 7, 8].map((hour) => (
-      <SelectItem 
-        key={hour} 
-        value={hour.toString()}
-        className="text-center"
-      >
-        {hour} {hour === 1 ? "hour" : "hours"}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-            </div>
-          </div>
 
-            {/* Display selected time in 24-hour format (9:00 to 17:30) */}
+          <div className="space-y-4">
+            {/* Select Duration */}
+            <div className="flex justify-center mb-4">
+              <h2 className="font-semibold mb-3 text-center">Select Duration</h2>
+              <div className="w-full max-w-xs">
+                <Select value={selectedDuration} onValueChange={setSelectedDuration} className="w-full">
+                  <SelectTrigger className="h-12 w-full">
+                    <SelectValue placeholder="Select duration" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((hour) => (
+                      <SelectItem key={hour} value={hour.toString()} className="text-center">
+                        {hour} {hour === 1 ? "hour" : "hours"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Available Slots */}
             <div className="mt-4">
               <h3 className="font-medium mb-2">Available Slots (9:00 - 17:30)</h3>
               <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
@@ -102,7 +93,7 @@ const TimeCalendar = () => {
                     key={time}
                     className="p-2 border rounded hover:bg-gray-100 text-sm"
                     onClick={() => {
-                      const [hour, minute] = time.split(':');
+                      const [hour, minute] = time.split(":");
                       setSelectedHour(hour);
                       setSelectedMinute(minute);
                     }}
