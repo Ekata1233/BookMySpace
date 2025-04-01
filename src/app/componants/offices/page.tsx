@@ -1,19 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import axios from "axios";
 
 const Offices = () => {
   const [selected, setSelected] = useState("");
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1];
-
-  console.log("Categories : ", pageName);
 
   const cities = [
     "Mumbai",
@@ -69,6 +68,22 @@ const Offices = () => {
     "Hot Desks",
     "Dedicated Desks",
   ];
+
+   const fetchOfficeSpaces = async () => {
+    try {
+      const response = await axios.get("/api/officeSpaces"); // Update path if needed
+
+      console.log("ofice spaces : ", response)
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching office spaces:", error);
+      return { success: false, message: "error.message" };
+    }
+  };
+
+  useEffect(()=>{
+fetchOfficeSpaces()
+  },[])
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between ">
