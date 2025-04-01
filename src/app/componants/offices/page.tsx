@@ -4,9 +4,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams, usePathname } from "next/navigation";
 
 const Offices = () => {
   const [selected, setSelected] = useState("");
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const pageName = pathSegments[pathSegments.length - 1];
+
+  console.log("Categories : ", pageName);
 
   const cities = [
     "Mumbai",
@@ -20,7 +27,7 @@ const Offices = () => {
 
   const cardData = [
     {
-      id : "1",
+      id: "1",
       title: "Meeting Room",
       location: "Kothrud, Pune",
       description:
@@ -31,7 +38,7 @@ const Offices = () => {
       isNewOpen: 1,
     },
     {
-      id : "2",
+      id: "2",
       title: "Private Cabin",
       location: "Hinjewadi, Pune",
       description: "This is a short description about the card content.",
@@ -41,7 +48,7 @@ const Offices = () => {
       isNewOpen: 0,
     },
     {
-      id : "3",
+      id: "3",
       title: "Conference Hall",
       location: "Baner, Pune",
       description: "This is a short description",
@@ -135,7 +142,7 @@ const Offices = () => {
         <div className="w-full lg:w-3/4">
           {cardData.map((card, index) => (
             <Card
-              key={index}
+              key={card.id}
               className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
             >
               <div className="w-full md:w-1/3 flex-shrink-0 h-full md:h-auto flex">
@@ -185,9 +192,12 @@ const Offices = () => {
                     <h4 className="text-lg font-medium">₹</h4>
                     <h5 className="text-lg sm:text-xl">{card.price}</h5>
                   </div>
-                  <Button className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4">
+                  <Link
+                    href={`/${pageName}/${card.id}`}
+                    className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
+                  >
                     View Details
-                  </Button>
+                  </Link>
                 </div>
               </CardContent>
             </Card>
