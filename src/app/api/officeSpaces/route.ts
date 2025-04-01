@@ -1,16 +1,17 @@
 import testConnection from "@/lib/db";
 import officeSpaces from "@/models/officeSpaces";
+import { NextResponse } from "next/server";
 
-export default async function handler(req, res) {
-  await testConnection();
+// Connect to MongoDB
+testConnection();
 
-  if (req.method === "POST") {
-    try {
-      const newOfficeSpace = await officeSpaces.create(req.body);
-      return res.status(201).json({ success: true, data: newOfficeSpace });
-    } catch (error) {
-      return res.status(400).json({ success: false, message: error.message });
-    }
+// POST method for creating an office space
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const newOfficeSpace = await officeSpaces.create(body);
+    return NextResponse.json({ success: true, data: newOfficeSpace }, { status: 201 });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
   }
-  res.status(405).json({ success: false, message: "Method not allowed" });
 }
