@@ -15,3 +15,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, message: error.message }, { status: 400 });
   }
 }
+
+export async function GET() {
+    try {
+      const newOfficeSpace = await officeSpaces.find({});
+      return NextResponse.json({ success: true, data: newOfficeSpace }, { status: 200 });
+    } catch (error: any) {
+      return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+    }
+  }
