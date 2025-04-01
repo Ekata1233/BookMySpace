@@ -15,36 +15,76 @@ const OfficesPage = () => {
   const { data: officeSpaces, status, error, filters } = useSelector((state) => state.officeSpaces);
   const [sortOption, setSortOption] = useState('');
 
-  const cities = ['Mumbai', 'Pune', 'Bangalore', 'Delhi', 'Hyderabad', 'Chennai', 'Kolkata'];
-  const categories = ['Office Space', 'Coworking', 'Virtual Space', 'Meeting Rooms', 'Private Office'];
+  const cities = [
+    "Mumbai",
+    "Pune",
+    "Bangalore",
+    "Delhi",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+  ];
 
-  useEffect(() => {
-    dispatch(fetchOfficeSpaces());
-  }, [dispatch, filters]);
+  const cardData = [
+    {
+      id: "1",
+      title: "Meeting Room",
+      location: "Kothrud, Pune",
+      description:
+        "This is a short description about the card content. It provides details about the item.",
+      price: "2500 / Day",
+      image: "/tourroom1.png",
+      amenities: ["Hi-Speed WiFi", "24 x 7", "Power Backup"],
+      isNewOpen: 1,
+    },
+    {
+      id: "2",
+      title: "Private Cabin",
+      location: "Hinjewadi, Pune",
+      description: "This is a short description about the card content.",
+      price: "2500 / Day",
+      image: "/tourroom2.png",
+      amenities: ["Power Backup"],
+      isNewOpen: 0,
+    },
+    {
+      id: "3",
+      title: "Conference Hall",
+      location: "Baner, Pune",
+      description: "This is a short description",
+      price: "500 / Day",
+      image: "/tourroom3.png",
+      amenities: ["Hi-Speed WiFi", "Power Backup"],
+      isNewOpen: 1,
+    },
+  ];
 
-  const handleCityChange = (city) => {
-    dispatch(setCityFilter(city));
+  const categories = [
+    "Office Space",
+    "Coworking",
+    "Virtual Space",
+    "Meeting Rooms",
+    "Private Office",
+    "Day Office",
+    "Hot Desks",
+    "Dedicated Desks",
+  ];
+
+   const fetchOfficeSpaces = async () => {
+    try {
+      const response = await axios.get("/api/officeSpaces"); // Update path if needed
+
+      console.log("ofice spaces : ", response)
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching office spaces:", error);
+      return { success: false, message: "error.message" };
+    }
   };
 
-  const handleCategoryChange = (category) => {
-    dispatch(setCategoryFilter(category));
-  };
-
-  const filteredSpaces = officeSpaces.filter(space => {
-    const cityMatch = !filters.city || space.address.includes(filters.city);
-    const categoryMatch = !filters.category || space.category === filters.category;
-    return cityMatch && categoryMatch;
-  });
-
-  const sortedSpaces = [...filteredSpaces].sort((a, b) => {
-    if (sortOption === 'lowToHigh') return a.rate - b.rate;
-    if (sortOption === 'highToLow') return b.rate - a.rate;
-    return 0;
-  });
-
-  if (status === 'loading') return <div className="text-center py-8">Loading...</div>;
-  if (status === 'failed') return <div className="text-center py-8 text-red-500">Error: {error}</div>;
-
+  useEffect(()=>{
+fetchOfficeSpaces()
+  },[])
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between">
