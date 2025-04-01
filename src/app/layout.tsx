@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./componants/Header";
 import Footer from "./componants/Footer";
-import { Provider } from "react-redux";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -24,11 +23,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
         {/* Wrap your application with Redux Provider */}
-        <Providers>
+      
           <Header />
           {children}
           <Footer />
-        </Providers>
+       
       </body>
     </html>
   );

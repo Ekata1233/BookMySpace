@@ -9,6 +9,9 @@ const TestConnection = () => {
   useEffect(() => {
     const checkConnection = async () => {
       try {
+
+
+        
         const response = await fetch('/api/route');
 
         if (!response.ok) {
