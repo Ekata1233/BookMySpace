@@ -59,17 +59,17 @@ const TimeCalendar = () => {
 
         {/* Selection Section */}
         <div className="bg-white p-4 text-center flex-1 w-full lg:min-w-[250px] rounded-lg shadow">
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
+          {/* <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-center py-2">
             Selected Date
-          </h1>
+          </h1> */}
           <div className="mb-4 p-2 border rounded-md">
             {date ? date.toDateString() : "No date selected"}
           </div>
-
           <div className="space-y-4">
+            
             {/* Select Duration */}
             <div className="flex flex-col items-center mb-4">
-              <h2 className="font-semibold mb-2 text-center">Select Duration</h2>
+             
               <div className="w-full max-w-xs">
                 <Select value={selectedDuration} onValueChange={setSelectedDuration} className="w-full">
                   <SelectTrigger className="h-12 w-full">
