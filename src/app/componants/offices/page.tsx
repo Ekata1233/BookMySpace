@@ -69,21 +69,24 @@ const Offices = () => {
     "Dedicated Desks",
   ];
 
-   const fetchOfficeSpaces = async () => {
+  const fetchOffices = async () => {
     try {
       const response = await axios.get("/api/officeSpaces"); // Update path if needed
 
-      console.log("ofice spaces : ", response)
+      console.log("ofice : ", response);
       return response.data;
     } catch (error) {
-      console.error("Error fetching office spaces:", error);
+      console.error("Error fetching office:", error);
       return { success: false, message: "error.message" };
     }
   };
 
-  useEffect(()=>{
-fetchOfficeSpaces()
-  },[])
+  useEffect(() => {
+    fetchOffices();
+  }, []);
+  
+
+
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between ">
