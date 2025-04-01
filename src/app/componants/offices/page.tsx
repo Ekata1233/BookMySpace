@@ -20,6 +20,7 @@ const Offices = () => {
 
   const cardData = [
     {
+      id : "1",
       title: "Meeting Room",
       location: "Kothrud, Pune",
       description:
@@ -30,6 +31,7 @@ const Offices = () => {
       isNewOpen: 1,
     },
     {
+      id : "2",
       title: "Private Cabin",
       location: "Hinjewadi, Pune",
       description: "This is a short description about the card content.",
@@ -39,6 +41,7 @@ const Offices = () => {
       isNewOpen: 0,
     },
     {
+      id : "3",
       title: "Conference Hall",
       location: "Baner, Pune",
       description: "This is a short description",

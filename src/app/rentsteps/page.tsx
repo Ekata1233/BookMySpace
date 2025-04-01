@@ -7,31 +7,31 @@ const steps = [
   {
     id: 1,
     image: '/Office_Space_Pricing_Step_1.png',
-    title: '1. Select and set up your office space',
-    description: 'Choose the perfect location, decide how many people will use the space, and pick a layout that suits your team’s workflow.'
+    title: '1. Choose your space',
+    description: 'Select from office spaces, coworking, virtual offices, meeting rooms, or dedicated desks.'
   },
   {
     id: 2,
     image: '/Office_Space_Pricing_Step_2.png',
-    title: '2. Personalise and upgrade it',
-    description: 'Use our Design Your Office service to tailor your space to your needs, or let us handle the specifications for you.'
+    title: '2. Customise your setup',
+    description: 'Personalise your workspace with the right amenities, layout, and services.'
   },
   {
     id: 3,
     image: '/Office_Space_Pricing_Step_3.png',
-    title: '3. Sign up and move in',
-    description: 'Once your contract is signed, you’re ready to start working. Our experts will manage all the details, including any last-minute changes.'
+    title: '3. Sign up and start working',
+    description: 'Move in or activate your space instantly—our team handles the details.'
   }
 ];
 
 const RentSteps = () => {
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 mt-6">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal text-start pt-8">
-        Rent your ideal office in three quick steps
+      Get your ideal workspace in three quick steps.
         <span className="text-[#6BB7BE] font-extrabold">.</span>
       </h1>
-      <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">Browse top spaces, customize your choice, and move in hassle-free. Our offices are affordable, flexible, and designed to fit your business needs. Whether you're a startup, freelancer, or established business, we have the perfect space for you.</p>
+      <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">Browse top spaces, customise your choice, and start working hassle-free. Our solutions are affordable, flexible, and designed to fit your business needs. Whether you need an office, coworking space, virtual office, or meeting room, we have the perfect option for you.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {steps.map((step) => (
