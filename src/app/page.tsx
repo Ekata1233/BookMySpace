@@ -17,12 +17,9 @@ export default function Home() {
       <Hero/>
       <TimeCalender/>
       <OfficeDetails />
-      
       <Offices />
       <OfficeTour/>  
-      
-        
-      
+    
       <WorkBusiness />    
       <SecondWorkBusiness />
       <ThirdWorkBusiness />
