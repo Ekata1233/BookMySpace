@@ -37,7 +37,7 @@ const TimeCalendar = () => {
               selected={date}
               onSelect={setDate}
               disabled={(day) => day < today} // Disable past dates
-              className="rounded-md border shadow mx-auto py-8 w-full"
+              className="rounded-md border shadow mx-auto py-10 w-full"
               classNames={{
                 month: "w-full",
                 table: "w-full",
