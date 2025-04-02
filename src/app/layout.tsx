@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./componants/Header";
 import Footer from "./componants/Footer";
+import { OfficeSpaceProvider } from "./context/OfficeSpaceContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,10 +24,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
         {/* Wrap your application with Redux Provider */}
-      
-          <Header />
+      <OfficeSpaceProvider>
+      <Header />
           {children}
           <Footer />
+      </OfficeSpaceProvider>
+         
        
       </body>
     </html>
