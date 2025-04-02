@@ -34,8 +34,13 @@ const OfficeSpaceSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    image: {
+      type: String, // Image URL
+      default: "",
+    },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.OfficeSpace || mongoose.model("OfficeSpace", OfficeSpaceSchema);
+export default mongoose.models.OfficeSpace ||
+  mongoose.model("OfficeSpace", OfficeSpaceSchema);
