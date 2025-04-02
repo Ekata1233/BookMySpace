@@ -23,14 +23,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        {/* Wrap your application with Redux Provider */}
-      <OfficeSpaceProvider>
-      <Header />
-          {children}
-          <Footer />
-      </OfficeSpaceProvider>
-         
-       
+        <OfficeSpaceProvider>
+        <Header />
+        {children}
+        <Footer />
+        </OfficeSpaceProvider>
       </body>
     </html>
   );

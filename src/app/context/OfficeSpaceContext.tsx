@@ -11,10 +11,20 @@ interface OfficeSpace {
   rate: number;
   amenities: string[];
   isNewlyOpen: boolean;
+  category: string;
+  image?: File | null;
+}
+
+interface ApiResponse {
+  success: boolean;
+  data?: OfficeSpace;
+  error?: string;
 }
 
 interface OfficeSpaceContextType {
   officeSpaces: OfficeSpace[];
+  addOfficeSpace: (newOfficeSpace: FormData) => Promise<void>;
+  refreshOfficeSpaces: () => Promise<void>;
 }
 
 const OfficeSpaceContext = createContext<OfficeSpaceContextType | undefined>(undefined);
@@ -22,6 +32,7 @@ const OfficeSpaceContext = createContext<OfficeSpaceContextType | undefined>(und
 export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
   const [officeSpaces, setOfficeSpaces] = useState<OfficeSpace[]>([]);
 
+  // ✅ Fetch Office Spaces (Using your existing "/api/officeSpaces" route)
   const fetchOfficeSpaces = async () => {
     try {
       const response = await axios.get<{ data: OfficeSpace[] }>("/api/officeSpaces");
@@ -31,12 +42,24 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // ✅ Add Office Space (Using your existing "/api/officeSpaces" route)
+  const addOfficeSpace = async (newOfficeSpace: FormData) => {
+    try {
+      const response = await axios.post<{ data: OfficeSpace }>("/api/officeSpaces", newOfficeSpace, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setOfficeSpaces((prev) => [...prev, response.data.data]);
+    } catch (error) {
+      console.error("Error adding office space:", error);
+    }
+  };
+
   useEffect(() => {
     fetchOfficeSpaces();
   }, []);
 
   return (
-    <OfficeSpaceContext.Provider value={{ officeSpaces }}>
+    <OfficeSpaceContext.Provider value={{ officeSpaces, addOfficeSpace, refreshOfficeSpaces: fetchOfficeSpaces }}>
       {children}
     </OfficeSpaceContext.Provider>
   );

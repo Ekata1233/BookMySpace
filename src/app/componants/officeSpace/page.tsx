@@ -8,20 +8,34 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 
-const Offices: React.FC = () => {
+const OfficeSpaces: React.FC = () => {
   const { officeSpaces } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1];
 
+  console.log("office spaces : ", officeSpaces);
+
   const cities = [
-    "Mumbai", "Pune", "Bangalore", "Delhi", "Hyderabad", "Chennai", "Kolkata",
+    "Mumbai",
+    "Pune",
+    "Bangalore",
+    "Delhi",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
   ];
 
   const categories = [
-    "Office Space", "Coworking", "Virtual Space", "Meeting Rooms",
-    "Private Office", "Day Office", "Hot Desks", "Dedicated Desks",
+    "Office Space",
+    "Coworking",
+    "Virtual Space",
+    "Meeting Rooms",
+    "Private Office",
+    "Day Office",
+    "Hot Desks",
+    "Dedicated Desks",
   ];
 
   return (
@@ -53,7 +67,10 @@ const Offices: React.FC = () => {
           {cities.map((city, index) => (
             <div key={index} className="flex items-center space-x-2 my-2">
               <Checkbox id={city.toLowerCase()} />
-              <label htmlFor={city.toLowerCase()} className="text-sm font-medium">
+              <label
+                htmlFor={city.toLowerCase()}
+                className="text-sm font-medium"
+              >
                 {city}
               </label>
             </div>
@@ -62,7 +79,10 @@ const Offices: React.FC = () => {
           {categories.map((category, index) => (
             <div key={index} className="flex items-center space-x-2 my-2">
               <Checkbox id={category.toLowerCase().replace(/\s+/g, "-")} />
-              <label htmlFor={category.toLowerCase().replace(/\s+/g, "-")} className="text-sm font-medium">
+              <label
+                htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
+                className="text-sm font-medium"
+              >
                 {category}
               </label>
             </div>
@@ -75,9 +95,9 @@ const Offices: React.FC = () => {
                 key={space._id}
                 className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
               >
-                <div className="w-full md:w-1/3 flex-shrink-0 h-full md:h-auto flex">
+                <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                   <Image
-                    src={"/default-office.jpg"} 
+                    src={space.image}
                     alt={space.officeSpaceName}
                     className="w-full h-full object-cover"
                     width={300}
@@ -106,14 +126,22 @@ const Offices: React.FC = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-2 my-3">
-                      {space.amenities.map((feature, idx) => (
-                        <Button
-                          key={idx}
-                          className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 hover:bg-transparent hover:border-[#6BB7BE]"
-                        >
-                          {feature}
-                        </Button>
-                      ))}
+                      {space.amenities && space.amenities.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {space.amenities.map((feature, idx) => (
+                            <button
+                              key={idx}
+                              className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 hover:bg-transparent hover:border-[#6BB7BE]"
+                            >
+                              {feature}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 inline-block">
+                          Work Desk
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -123,7 +151,7 @@ const Offices: React.FC = () => {
                       <h5 className="text-lg sm:text-xl">{space.rate} / Day</h5>
                     </div>
                     <Link
-                      href={`/${pageName}/${space._id}`} 
+                      href={`/${pageName}/${space._id}`}
                       className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                     >
                       View Details
@@ -141,4 +169,4 @@ const Offices: React.FC = () => {
   );
 };
 
-export default Offices;
+export default OfficeSpaces;

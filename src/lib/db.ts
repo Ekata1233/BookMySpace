@@ -26,3 +26,14 @@ export async function connectToDatabase() {
   (global as any).mongoose = cached;
   return cached.conn;
 }
+export default async function testConnection() {
+  try {
+    // Attempt to connect to the database
+    await connectToDatabase();
+    console.log('MongoDB connection successful!');
+    return { success: true, message: 'Connection successful!' };
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    return { success: false, message: 'Connection failed!' };
+  }
+}

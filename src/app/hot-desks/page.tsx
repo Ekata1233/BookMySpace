@@ -7,7 +7,7 @@ import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
-import Offices from "../componants/offices/page";
+import Offices from "../componants/officeSpace/page";
 import RentSteps from "../rentsteps/page";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
