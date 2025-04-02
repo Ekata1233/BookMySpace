@@ -88,21 +88,22 @@ const OfficeSpaces: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="w-full lg:w-3/4">
+        <div className="w-full  lg:w-3/4">
           {officeSpaces.length > 0 ? (
             officeSpaces.map((space) => (
               <Card
                 key={space._id}
-                className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
+                className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
               >
                 <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                   <Image
                     src={space.image}
                     alt={space.officeSpaceName}
-                    className="w-full h-full object-cover"
+                    className="w-[350px] h-[300px] object-cover"
                     width={300}
-                    height={300}
+                    height={200}
                   />
+
                 </div>
 
                 <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
