@@ -5,7 +5,7 @@ import OfficeTour from "./componants/OfficeTour/page";
 import WorkBusiness from "./componants/workBusiness/page";
 import SecondWorkBusiness from "./componants/secondWorkBusiness/page";
 import ThirdWorkBusiness from "./componants/thirdWorkBusiness/page";
-import Offices from "./componants/offices/page";
+import Offices from "./componants/officeSpace/page";
 import Boxes from "./componants/boxes/page";
 import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
@@ -27,7 +27,7 @@ export default function Home() {
 
 
 
-      
+
       <WorkBusiness />
       <SecondWorkBusiness />
       <ThirdWorkBusiness />
