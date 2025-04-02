@@ -10,22 +10,29 @@ import Boxes from "./componants/boxes/page";
 import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
 
-
 export default function Home() {
   return (
     <main className="mt-16">
-      <Hero/>
-      <TimeCalender/>
+      <Hero />
+      <TimeCalender />
       <OfficeDetails />
       <Offices />
-      <OfficeTour/>  
-    
-      <WorkBusiness />    
+      <OfficeTour />
+
+
+
+
+
+
+
+
+
+      
+      <WorkBusiness />
       <SecondWorkBusiness />
       <ThirdWorkBusiness />
       <ExploreOffice />
-      <OurAmenites /> 
-      
+      <OurAmenites />
     </main>
   );
 }
