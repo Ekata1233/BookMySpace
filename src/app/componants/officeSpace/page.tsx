@@ -15,8 +15,6 @@ const OfficeSpaces: React.FC = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1];
 
-  console.log("office spaces : ", officeSpaces);
-
   const cities = [
     "Mumbai",
     "Pune",

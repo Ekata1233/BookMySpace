@@ -31,8 +31,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const login = async (email: string, password: string) => {
-    const res = await fetch("/api/auth", {
-      method: "GET",
+    const res = await fetch("/api/auth/login", { // Use a dedicated login route
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
     const users = await res.json();
     
