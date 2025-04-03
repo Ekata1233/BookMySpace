@@ -66,7 +66,7 @@ const OfficeDetails = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="">
               <Image
-                src={multiImages[1]}
+                src={multiImages[0]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -75,7 +75,7 @@ const OfficeDetails = () => {
             </div>
             <div className="">
               <Image
-                src={multiImages[2]}
+                src={multiImages[1]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -88,7 +88,7 @@ const OfficeDetails = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="">
               <Image
-                src={multiImages[3]}
+                src={multiImages[2]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -97,7 +97,7 @@ const OfficeDetails = () => {
             </div>
             <div className="">
               <Image
-                src={multiImages[4]}
+                src={multiImages[3]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
