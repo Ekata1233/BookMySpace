@@ -33,6 +33,10 @@ const OfficeSpaceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    extraDescription: {
+      type: String,
+      required: true,
+    },
     amenities: {
       type: [String],
       default: [

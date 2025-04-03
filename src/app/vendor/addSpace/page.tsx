@@ -23,6 +23,7 @@ const OfficeSpaceForm = () => {
     state: "",
     pincode: "",
     description: "",
+    extraDescription: "",
     rate: "",
     startTime: "",
     endTime: "",
@@ -75,7 +76,6 @@ const OfficeSpaceForm = () => {
     const files = Array.from(e.target.files || []);
     setFormData((prev) => ({ ...prev, multiImages: files }));
   };
-  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +85,7 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("state", formData.state);
     formDataToSend.append("pincode", formData.pincode);
     formDataToSend.append("description", formData.description);
+    formDataToSend.append("extraDescription", formData.extraDescription);
     formDataToSend.append("rate", formData.rate.toString());
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
@@ -114,6 +115,7 @@ const OfficeSpaceForm = () => {
         state: "",
         pincode: "",
         description: "",
+        extraDescription: "",
         rate: "",
         startTime: "",
         endTime: "",
@@ -143,7 +145,6 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full py-5"
         />
-
         <Select onValueChange={(value) => handleChange("category", value)}>
           <SelectTrigger className="rounded-none w-full py-5">
             <SelectValue placeholder="Select a category" />
@@ -156,7 +157,6 @@ const OfficeSpaceForm = () => {
             ))}
           </SelectContent>
         </Select>
-
         <Input
           type="text"
           name="city"
@@ -166,7 +166,6 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full py-5"
         />
-
         <Input
           type="text"
           name="state"
@@ -176,7 +175,6 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full py-5"
         />
-
         <Input
           type="text"
           name="pincode"
@@ -194,6 +192,16 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full"
         />
+        
+        <Textarea
+          name="extraDescription"
+          value={formData.extraDescription}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
+          placeholder="extraDescription"
+          required
+          className="rounded-none w-full"
+        />
+        
         <div className="text-gray-700 my-5">
           <Label className="block mb-2">Select Amenities</Label>
           <div className="grid grid-cols-2 gap-2">
@@ -218,7 +226,6 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full py-5"
         />
-
         <div className="text-gray-700">
           <Label className="py-2">Office Start From</Label>
           <Input
@@ -240,14 +247,12 @@ const OfficeSpaceForm = () => {
             className="rounded-none w-full py-5"
           />
         </div>
-
         <Input
           type="file"
           name="thumbnailImage"
           onChange={handleFileChange}
           className="rounded-none w-full text-gray-700 mt-3"
         />
-
         <Input
           type="file"
           name="multiImages"
@@ -255,7 +260,6 @@ const OfficeSpaceForm = () => {
           onChange={handleMultiFileChange}
           className="rounded-none w-full text-gray-700 mt-3"
         />
-
         <div className="flex items-center space-x-2 py-2">
           <Checkbox
             id="isNewlyOpen"
@@ -266,7 +270,6 @@ const OfficeSpaceForm = () => {
             Newly Open
           </Label>
         </div>
-
         <Button
           type="submit"
           className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"

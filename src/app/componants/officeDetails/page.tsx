@@ -21,7 +21,7 @@ const OfficeDetails = () => {
     return <div className="text-center text-lg font-semibold mt-10">Office space not found</div>;
   }
 
-  const { officeSpaceName, city, state,pincode, description, amenities,thumbnailImage, multiImages, startTime, endTime } = MatchedOfficeSpace;
+  const { officeSpaceName, city, state,pincode, description,extraDescription, amenities,thumbnailImage, multiImages, startTime, endTime } = MatchedOfficeSpace;
 
   const handleSearch = () => {
     console.log("Searching for:");
@@ -118,14 +118,7 @@ const OfficeDetails = () => {
           </p>
 
           <p className=" text-sm sm:text-base md:text-lg  leading-relaxed text-gray-600 my-2">
-            Grow your brand at ABC Office, a flexible workspace in Pune, one of
-            India’s top business and technology hubs. As a thriving center for
-            IT, manufacturing, and finance, Pune offers endless opportunities
-            for startups and established enterprises alike. Position your brand
-            in a city known for innovation, education, and sustainable growth.
-            With excellent connectivity and Pune International Airport just a
-            short distance away, managing global business relationships has
-            never been easier.
+            {extraDescription}
           </p>
 
           <div className="mt-5">

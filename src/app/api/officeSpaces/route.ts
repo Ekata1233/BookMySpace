@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     const state = formData.get("state") as string;
     const pincode = formData.get("pincode") as string;
     const description = formData.get("description") as string;
+    const extraDescription = formData.get("extraDescription") as string;
     const rate = Number(formData.get("rate"));
     const isNewlyOpen = formData.get("isNewlyOpen") === "true";
     const category = formData.get("category") as string;
@@ -73,6 +74,7 @@ export async function POST(req: Request) {
       state,
       pincode,
       description,
+      extraDescription,
       rate,
       startTime,
       endTime,
