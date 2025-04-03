@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { Textarea } from "@/components/ui/textarea";
 
 const Contact = () => {
   const [activeTab, setActiveTab] = useState("");
@@ -20,6 +21,7 @@ const Contact = () => {
     company: "",
     phone: "",
     requirement: "",
+    inquiry: "",
   });
 
   const handleChange = (e: any) => {
@@ -47,9 +49,8 @@ const Contact = () => {
         <h5 className="text-lg sm:text-lg md:text-xl lg:text-xl font-bold my-3 text-gray-700">
           Hello, please enter your contact details to get started.
         </h5>
-        <p className=" text-sm sm:text-base md:text-lg  leading-relaxed">
-          We will solely use this information to contact you about products and
-          services.
+        <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-700">
+          We will solely use this information to contact you about services.
         </p>
 
         <div className="text-gray-700 m-5 w-5/6 mx-auto border shadow-lg mb-20">
@@ -77,17 +78,6 @@ const Contact = () => {
                   name="email"
                   type="email"
                   value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="py-5 mt-2 rounded-none"
-                />
-              </div>
-              <div>
-                <Label htmlFor="company">Company Name</Label>
-                <Input
-                  id="company"
-                  name="company"
-                  value={formData.company}
                   onChange={handleChange}
                   required
                   className="py-5 mt-2 rounded-none"
@@ -125,6 +115,19 @@ const Contact = () => {
                 </select>
               </div>
             </div>
+
+            <div>
+              <Label htmlFor="company">Any Inquiries</Label>
+              <Textarea
+                id="inquiry"
+                name="inquiry"
+                value={formData.inquiry}
+                onChange={handleChange}
+                required
+                className="py-5 mt-2 rounded-none w-full"
+              />
+            </div>
+
             {/* Submit Button */}
             <div className="col-span-1 md:col-span-2 flex justify-center mt-4">
               <Button

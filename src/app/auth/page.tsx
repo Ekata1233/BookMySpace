@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,8 +16,12 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import { useAuth } from "../context/authContext";
 
 const Auth = () => {
+   const { user } = useAuth();
+   console.log("auth :", user);
+   
   return (
     <div className="flex items-center justify-center py-45 mt-10">
       <Tabs defaultValue="signup" className="w-[800px] rounded-none">

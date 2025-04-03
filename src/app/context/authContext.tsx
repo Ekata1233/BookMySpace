@@ -37,6 +37,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const users = await res.json();
     
     const user = users.find((u: any) => u.email === email);
+  
+    
     
     if (user && (await bcrypt.compare(password, user.password))) {
       setUser(user);
