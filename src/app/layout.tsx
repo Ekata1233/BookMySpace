@@ -4,8 +4,8 @@ import "./globals.css";
 import Header from "./componants/Header";
 import Footer from "./componants/Footer";
 import { OfficeSpaceProvider } from "./context/OfficeSpaceContext";
-import { ContactProvider } from "./context/ContactContex";
 import { AuthProvider } from "./context/authContext";
+import { ContactProvider } from "./context/ContactContex";
 
 const poppins = Poppins({
   subsets: ["latin"],

@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     if (res.ok) {
       setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user)); // Persist user in localStorage
+      localStorage.setItem("user", JSON.stringify(data.user)); 
       alert("Login successful!");
       router.push("/");
     } else {

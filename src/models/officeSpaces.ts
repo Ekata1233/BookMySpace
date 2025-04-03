@@ -16,7 +16,15 @@ const OfficeSpaceSchema = new mongoose.Schema({
       "Private Office"
     ],
   },
-  address: {
+  city: {
+    type: String,
+    required: true,
+  },
+  state: {
+    type: String,
+    required: true,
+  },
+  pincode: {
     type: String,
     required: true,
   },

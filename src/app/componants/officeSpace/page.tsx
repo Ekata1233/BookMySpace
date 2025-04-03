@@ -37,25 +37,6 @@ const OfficeSpaces: React.FC = () => {
     "Dedicated Desks",
   ];
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategories(prev => 
-      prev.includes(category)
-        ? prev.filter(c => c !== category)
-        : [...prev, category]
-    );
-  };
-
-  // Corrected filter logic with proper parentheses
-  const displaySpaces = selectedCategories.length > 0
-    ? officeSpaces.filter(space => 
-        space.category && 
-        selectedCategories.some(cat => space.category.includes(cat))
-      )
-    : officeSpaces;
-    console.log("selcected cate :", selectedCategories);
-    console.log("Office Space :", officeSpaces);
-
-
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between">
@@ -141,7 +122,7 @@ const OfficeSpaces: React.FC = () => {
                       )}
                     </div>
                     <p className="text-sm sm:text-base text-gray-500">
-                      {space.address}
+                      {space.city}{" "}{space.state}{" "}{space.pincode}
                     </p>
                     <p className="text-gray-700 text-sm sm:text-base">
                       {space.description}
