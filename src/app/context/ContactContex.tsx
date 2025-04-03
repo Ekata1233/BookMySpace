@@ -29,17 +29,17 @@ const ContactContext = createContext<ContactContextType | undefined>(undefined);
 export const ContactProvider = ({ children }: { children: ReactNode }) => {
   const [contacts, setContacts] = useState<Contact[]>([]);
 
-  // ✅ Fetch Contacts
+  // Fetch Contacts
   const fetchContacts = async () => {
     try {
-      const response = await axios.get<{ data: Contact[] }>("/api/contact");
-      setContacts(response.data.data);
+      // const response = await axios.get<{ data: Contact[] }>("/api/contact");
+      // setContacts(response.data.data);
     } catch (error) {
       console.error("Error fetching contacts:", error);
     }
   };
 
-  // ✅ Add Contact
+  // Add Contact
   const addContact = async (newContact: Contact) => {
     try {
       const response = await axios.post<{ data: Contact }>("/api/contact", newContact);

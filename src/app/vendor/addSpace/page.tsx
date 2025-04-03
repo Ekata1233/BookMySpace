@@ -19,7 +19,9 @@ const OfficeSpaceForm = () => {
   const { addOfficeSpace } = useOfficeSpaces();
   const [formData, setFormData] = useState({
     officeSpaceName: "",
-    address: "",
+    city: "",
+    state: "",
+    pincode: "",
     description: "",
     rate: "",
     amenities: [] as string[],
@@ -68,37 +70,39 @@ const OfficeSpaceForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     // Create FormData object
     const formDataToSend = new FormData();
     formDataToSend.append("officeSpaceName", formData.officeSpaceName);
-    formDataToSend.append("address", formData.address);
+    formDataToSend.append("city", formData.city);
+    formDataToSend.append("state", formData.state);
+    formDataToSend.append("pincode", formData.pincode);
     formDataToSend.append("description", formData.description);
     formDataToSend.append("rate", formData.rate.toString());
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
-    
-    // Append amenities as JSON string since FormData does not support arrays
+
     formDataToSend.append("amenities", JSON.stringify(formData.amenities));
-  
-    // Append image file if it exists
+
     if (formData.image) {
       formDataToSend.append("image", formData.image);
     }
-  
+
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData
       alert("Office space added successfully!");
       setFormData({
         officeSpaceName: "",
-        address: "",
+        city: "",
+        state: "",
+        pincode: "",
         description: "",
         rate: "",
         amenities: [] as string[],
         isNewlyOpen: false,
         category: "",
         image: null as File | null,
-      })
+      });
     } catch (error) {
       console.error("Error submitting office space:", error);
     }
@@ -135,10 +139,30 @@ const OfficeSpaceForm = () => {
 
         <Input
           type="text"
-          name="address"
-          value={formData.address}
+          name="city"
+          value={formData.city}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Office Address"
+          placeholder="City"
+          required
+          className="rounded-none w-full py-5"
+        />
+
+        <Input
+          type="text"
+          name="state"
+          value={formData.state}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
+          placeholder="State"
+          required
+          className="rounded-none w-full py-5"
+        />
+
+        <Input
+          type="text"
+          name="pincode"
+          value={formData.pincode}
+          onChange={(e) => handleChange(e.target.name, e.target.value)}
+          placeholder="Pincode"
           required
           className="rounded-none w-full py-5"
         />

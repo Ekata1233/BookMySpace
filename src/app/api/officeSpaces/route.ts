@@ -14,14 +14,16 @@ export async function POST(req: Request) {
     const formData = await req.formData();
 
     const officeSpaceName = formData.get("officeSpaceName") as string;
-    const address = formData.get("address") as string;
+    const city = formData.get("city") as string;
+    const state = formData.get("state") as string;
+    const pincode = formData.get("pincode") as string;
     const description = formData.get("description") as string;
     const rate = Number(formData.get("rate"));
     const isNewlyOpen = formData.get("isNewlyOpen") === "true";
     const category = formData.get("category") as string;
     const amenities = JSON.parse(formData.get("amenities") as string);
 
-    if (!officeSpaceName || !address || !description || isNaN(rate)) {
+    if (!officeSpaceName || !city || !description || isNaN(rate)) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400 }
@@ -51,7 +53,9 @@ export async function POST(req: Request) {
     // Create new office space entry in the database
     const newOfficeSpace = await officeSpaces.create({
       officeSpaceName,
-      address,
+      city,
+      state,
+      pincode,
       description,
       rate,
       isNewlyOpen,
