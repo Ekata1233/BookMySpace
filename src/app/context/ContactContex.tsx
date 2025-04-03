@@ -32,8 +32,8 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
   // ✅ Fetch Contacts
   const fetchContacts = async () => {
     try {
-      const response = await axios.get<{ data: Contact[] }>("/api/contact");
-      setContacts(response.data.data);
+      // const response = await axios.get<{ data: Contact[] }>("/api/contact");
+      // setContacts(response.data.data);
     } catch (error) {
       console.error("Error fetching contacts:", error);
     }

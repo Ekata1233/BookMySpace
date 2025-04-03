@@ -11,11 +11,10 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 const OfficeSpaces: React.FC = () => {
   const { officeSpaces } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1];
-
-  console.log("office spaces : ", officeSpaces);
 
   const cities = [
     "Mumbai",
@@ -30,13 +29,32 @@ const OfficeSpaces: React.FC = () => {
   const categories = [
     "Office Space",
     "Coworking",
-    "Virtual Space",
-    "Meeting Rooms",
+    "Virtual Office",
+    "Meeting Room",
     "Private Office",
     "Day Office",
     "Hot Desks",
     "Dedicated Desks",
   ];
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories(prev => 
+      prev.includes(category)
+        ? prev.filter(c => c !== category)
+        : [...prev, category]
+    );
+  };
+
+  // Corrected filter logic with proper parentheses
+  const displaySpaces = selectedCategories.length > 0
+    ? officeSpaces.filter(space => 
+        space.category && 
+        selectedCategories.some(cat => space.category.includes(cat))
+      )
+    : officeSpaces;
+    console.log("selcected cate :", selectedCategories);
+    console.log("Office Space :", officeSpaces);
+
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -78,7 +96,11 @@ const OfficeSpaces: React.FC = () => {
           <h5 className="text-lg font-bold my-3 mt-6">Filter By Category:</h5>
           {categories.map((category, index) => (
             <div key={index} className="flex items-center space-x-2 my-2">
-              <Checkbox id={category.toLowerCase().replace(/\s+/g, "-")} />
+              <Checkbox
+                id={category.toLowerCase().replace(/\s+/g, "-")}
+                checked={selectedCategories.includes(category)}
+                onCheckedChange={() => handleCategoryChange(category)}
+              />
               <label
                 htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
                 className="text-sm font-medium"
@@ -88,9 +110,9 @@ const OfficeSpaces: React.FC = () => {
             </div>
           ))}
         </div>
-        <div className="w-full  lg:w-3/4">
-          {officeSpaces.length > 0 ? (
-            officeSpaces.map((space) => (
+        <div className="w-full lg:w-3/4">
+          {displaySpaces.length > 0 ? (
+            displaySpaces.map((space) => (
               <Card
                 key={space._id}
                 className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
@@ -103,7 +125,6 @@ const OfficeSpaces: React.FC = () => {
                     width={300}
                     height={200}
                   />
-
                 </div>
 
                 <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
