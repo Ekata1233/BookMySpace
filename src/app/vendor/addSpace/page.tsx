@@ -89,6 +89,16 @@ const OfficeSpaceForm = () => {
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData
       alert("Office space added successfully!");
+      setFormData({
+        officeSpaceName: "",
+        address: "",
+        description: "",
+        rate: "",
+        amenities: [] as string[],
+        isNewlyOpen: false,
+        category: "",
+        image: null as File | null,
+      })
     } catch (error) {
       console.error("Error submitting office space:", error);
     }

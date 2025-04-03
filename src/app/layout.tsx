@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "./componants/Header";
 import Footer from "./componants/Footer";
 import { OfficeSpaceProvider } from "./context/OfficeSpaceContext";
+import { ContactProvider } from "./context/ContactContex";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -23,11 +24,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <OfficeSpaceProvider>
-        <Header />
-        {children}
-        <Footer />
-        </OfficeSpaceProvider>
+        <ContactProvider>
+          <OfficeSpaceProvider>
+            <Header />
+            {children}
+            <Footer />
+          </OfficeSpaceProvider>
+        </ContactProvider>
       </body>
     </html>
   );

@@ -4,7 +4,6 @@ import axios from "axios";
 
 // Define Contact Type
 interface Contact {
-  _id: string;
   name: string;
   email: string;
   company?: string;
