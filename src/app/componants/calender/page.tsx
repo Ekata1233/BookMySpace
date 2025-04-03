@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const TimeCalendar = () => {
   const currentYear = new Date().getFullYear();
@@ -29,6 +30,10 @@ const TimeCalendar = () => {
       timeOptions.push(`${hour}:30`);
     }
   }
+
+  const handleSearch = () => {
+    console.log("fdfdf");
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -127,6 +132,14 @@ const TimeCalendar = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div>
+        <Button
+          onClick={handleSearch}
+          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+        >
+          BOOK NOW
+        </Button>
       </div>
     </div>
   );

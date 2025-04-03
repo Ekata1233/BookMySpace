@@ -83,7 +83,6 @@ const OfficeDetails = () => {
         onClick={handleSearch}
         className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
       >
-        {/* <Search size={20} /> */}
         BOOK NOW
       </Button>
 
@@ -168,6 +167,15 @@ const OfficeDetails = () => {
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
               {startTime !== "1970-01-01T00:00:00.000Z" ? startTime : "09:00 AM"} - {endTime !== "1970-01-01T00:00:00.000Z" ? endTime : "08:00 PM"}
             </p>
+          </div>
+
+          <div>
+            <Button
+              onClick={handleSearch}
+              className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+            >
+              BOOK NOW
+            </Button>
           </div>
         </div>
 

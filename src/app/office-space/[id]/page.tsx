@@ -4,7 +4,7 @@ import OfficeDetails from "@/app/componants/officeDetails/page";
 import { useParams } from "next/navigation";
 import React from "react";
 
-const page = () => {
+const IdOfficeSpace = () => {
   const params = useParams();
   const { id } = params;
   return (
@@ -15,4 +15,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default IdOfficeSpace;
