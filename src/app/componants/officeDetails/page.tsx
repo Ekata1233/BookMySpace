@@ -1,6 +1,8 @@
 "use client";
+import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import React from "react";
 import { FaWifi } from "react-icons/fa";
 import { LuAlarmClock } from "react-icons/lu";
@@ -8,20 +10,32 @@ import { PiOfficeChair } from "react-icons/pi";
 import { RiHomeOfficeFill } from "react-icons/ri";
 
 const OfficeDetails = () => {
+  const { officeSpaces } = useOfficeSpaces();
+  const params = useParams();
+  const { id } = params;
+  const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
+
+  console.log("Matched Office Space: ", MatchedOfficeSpace);
+
+  if (!MatchedOfficeSpace) {
+    return <div className="text-center text-lg font-semibold mt-10">Office space not found</div>;
+  }
+
+  const { officeSpaceName, city, state,pincode, description, amenities,thumbnailImage, multiImages, startTime, endTime } = MatchedOfficeSpace;
+
   const handleSearch = () => {
     console.log("Searching for:");
-    // Add your search logic here
   };
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
-        ABC OFFICE
+        {officeSpaceName}
       </h1>
-      <div className="flex">
-        <p className="text-sm sm:text-base text-gray-700  me-5">
-          Kothrud , Pune
+      <div className="">
+        <p className="text-sm sm:text-base text-gray-700 ">
+        {city},{" "}{state},{" "}{pincode}
         </p>
-        <p className="text-red-500 text-sm sm:text-base flex items-center ms-5">
+        <p className="text-red-500 text-sm sm:text-base flex items-center ">
           <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly
           Open
         </p>
@@ -38,7 +52,7 @@ const OfficeDetails = () => {
         {/* First Column */}
         <div className="">
           <Image
-            src="/tourroom1.png"
+            src={thumbnailImage}
             alt="Card Image"
             className="w-full h-full object-cover"
             width={300}
@@ -52,7 +66,7 @@ const OfficeDetails = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="">
               <Image
-                src="/tourroom2.png"
+                src={multiImages[1]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -61,7 +75,7 @@ const OfficeDetails = () => {
             </div>
             <div className="">
               <Image
-                src="/tourroom3.png"
+                src={multiImages[2]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -74,7 +88,7 @@ const OfficeDetails = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="">
               <Image
-                src="/tourroom4.png"
+                src={multiImages[3]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -83,7 +97,7 @@ const OfficeDetails = () => {
             </div>
             <div className="">
               <Image
-                src="/tourroom1.png"
+                src={multiImages[4]}
                 alt="Card Image"
                 className="w-full h-full object-cover"
                 width={300}
@@ -97,10 +111,10 @@ const OfficeDetails = () => {
       <div className="flex flex-col md:flex-row gap-4">
         <div className="w-full md:w-2/3 border-b-2">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
-            About ABC Office
+            About {officeSpaceName}
           </h1>
           <p className="text-md sm:text-base md:text-xl  font-semibold my-2 text-gray-700">
-            Find a new way of working in Pune
+            Find a new way of working in {city}
           </p>
 
           <p className=" text-sm sm:text-base md:text-lg  leading-relaxed text-gray-600 my-2">
@@ -120,7 +134,7 @@ const OfficeDetails = () => {
             </p>
 
             <p className=" text-sm sm:text-base md:text-lg  leading-relaxed text-gray-600 my-2">
-              09:00 AM - 08:00 PM
+            {startTime !== "1970-01-01T00:00:00.000Z" ? startTime : "09:00 AM"} - {endTime !== "1970-01-01T00:00:00.000Z" ? endTime : "08:00 PM"}
             </p>
           </div>
         </div>
@@ -128,7 +142,7 @@ const OfficeDetails = () => {
         {/* Second Column (1/3 Width) */}
         <div className="w-full md:w-1/3 bg-gray-100 py-5  shadow-lg">
           <h4 className="text-lg sm:text-lg md:text-xl lg:text-xl font-bold text-gray-700 text-center pt-1 pb-3">
-            Amenities at ABC Office
+            Amenities at {officeSpaceName}
           </h4>
           <div className="flex flex-wrap justify-center">
             {/* Item 1 */}

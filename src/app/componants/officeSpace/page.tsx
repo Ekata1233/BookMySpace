@@ -14,7 +14,7 @@ const OfficeSpaces: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
-  const pageName = pathSegments[pathSegments.length - 1];
+  const pageName = pathSegments[pathSegments.length - 1] || "office-space";
 
   const cities = [
     "Mumbai",
@@ -120,7 +120,7 @@ const OfficeSpaces: React.FC = () => {
               >
                 <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                   <Image
-                    src={space.image}
+                    src={space.thumbnailImage}
                     alt={space.officeSpaceName}
                     className="w-[350px] h-[300px] object-cover"
                     width={300}

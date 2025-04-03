@@ -24,10 +24,13 @@ const OfficeSpaceForm = () => {
     pincode: "",
     description: "",
     rate: "",
+    startTime: "",
+    endTime: "",
     amenities: [] as string[],
     isNewlyOpen: false,
     category: "",
-    image: null as File | null,
+    thumbnailImage: null as File | null,
+    multiImages: [] as File[],
   });
 
   const categories = [
@@ -65,13 +68,17 @@ const OfficeSpaceForm = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, image: file }));
+    setFormData((prev) => ({ ...prev, thumbnailImage: file }));
   };
+
+  const handleMultiFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setFormData((prev) => ({ ...prev, multiImages: files }));
+  };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Create FormData object
     const formDataToSend = new FormData();
     formDataToSend.append("officeSpaceName", formData.officeSpaceName);
     formDataToSend.append("city", formData.city);
@@ -81,12 +88,22 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("rate", formData.rate.toString());
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
-
     formDataToSend.append("amenities", JSON.stringify(formData.amenities));
+    const today = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
+    const startTime = new Date(
+      `${today}T${formData.startTime}:00`
+    ).toISOString();
+    const endTime = new Date(`${today}T${formData.endTime}:00`).toISOString();
 
-    if (formData.image) {
-      formDataToSend.append("image", formData.image);
+    formDataToSend.append("start time", startTime);
+    formDataToSend.append("end time", endTime);
+    if (formData.thumbnailImage) {
+      formDataToSend.append("thumbnailImage", formData.thumbnailImage);
     }
+
+    formData.multiImages.forEach((file) => {
+      formDataToSend.append("multiImages", file);
+    });
 
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData
@@ -98,10 +115,13 @@ const OfficeSpaceForm = () => {
         pincode: "",
         description: "",
         rate: "",
+        startTime: "",
+        endTime: "",
         amenities: [] as string[],
         isNewlyOpen: false,
         category: "",
-        image: null as File | null,
+        thumbnailImage: null as File | null,
+        multiImages: [],
       });
     } catch (error) {
       console.error("Error submitting office space:", error);
@@ -199,11 +219,41 @@ const OfficeSpaceForm = () => {
           className="rounded-none w-full py-5"
         />
 
+        <div className="text-gray-700">
+          <Label className="py-2">Office Start From</Label>
+          <Input
+            type="time"
+            name="startTime"
+            value={formData.startTime}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            required
+            className="rounded-none w-full py-5"
+          />
+
+          <Label className="py-2 mt-3">Office Start To</Label>
+          <Input
+            type="time"
+            name="endTime"
+            value={formData.endTime}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            required
+            className="rounded-none w-full py-5"
+          />
+        </div>
+
         <Input
           type="file"
-          name="image"
+          name="thumbnailImage"
           onChange={handleFileChange}
-          className="rounded-none w-full text-gray-700"
+          className="rounded-none w-full text-gray-700 mt-3"
+        />
+
+        <Input
+          type="file"
+          name="multiImages"
+          multiple
+          onChange={handleMultiFileChange}
+          className="rounded-none w-full text-gray-700 mt-3"
         />
 
         <div className="flex items-center space-x-2 py-2">
