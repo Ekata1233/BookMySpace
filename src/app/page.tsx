@@ -15,19 +15,8 @@ export default function Home() {
     <main className="mt-16">
       <Hero />
       <TimeCalender />
-      <OfficeDetails />
       <Offices />
       <OfficeTour />
-
-
-
-
-
-
-
-
-
-
       <WorkBusiness />
       <SecondWorkBusiness />
       <ThirdWorkBusiness />

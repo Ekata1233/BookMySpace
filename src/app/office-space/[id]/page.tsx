@@ -9,8 +9,7 @@ const page = () => {
   const { id } = params;
   return (
     <div className=" mt-50">
-      <h1 className="text-4xl">Meeting Room Details</h1>
-      <p>Showing details for Room ID: {id}</p>
+      
       <OfficeDetails />
     </div>
   );

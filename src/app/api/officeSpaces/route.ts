@@ -22,6 +22,8 @@ export async function POST(req: Request) {
     const isNewlyOpen = formData.get("isNewlyOpen") === "true";
     const category = formData.get("category") as string;
     const amenities = JSON.parse(formData.get("amenities") as string);
+    const startTime = new Date(formData.get("startTime") as string);
+    const endTime = new Date(formData.get("endTime") as string);
 
     if (!officeSpaceName || !city || !description || isNaN(rate)) {
       return NextResponse.json(
@@ -39,7 +41,7 @@ export async function POST(req: Request) {
 
     // Handle file upload
     let imageUrl = "";
-    const file = formData.get("image") as File | null;
+    const file = formData.get("thumbnailImage") as File | null;
 
     if (file) {
       const bytes = await file.arrayBuffer();
@@ -50,6 +52,20 @@ export async function POST(req: Request) {
       imageUrl = `/uploads/${file.name}`;
     }
 
+    const multiImages: string[] = [];
+    const files = formData.getAll("multiImages") as File[];
+
+    for (const file of files) {
+      if (file instanceof File) {
+        const bytes = await file.arrayBuffer();
+        const buffer = Buffer.from(bytes);
+        const filePath = path.join(uploadDir, file.name);
+
+        await writeFile(filePath, buffer);
+        multiImages.push(`/uploads/${file.name}`);
+      }
+    }
+
     // Create new office space entry in the database
     const newOfficeSpace = await officeSpaces.create({
       officeSpaceName,
@@ -58,10 +74,13 @@ export async function POST(req: Request) {
       pincode,
       description,
       rate,
+      startTime,
+      endTime,
       isNewlyOpen,
       category,
       amenities,
-      image: imageUrl, // Stores the uploaded image URL
+      thumbnailImage: imageUrl,
+      multiImages,
     });
 
     return NextResponse.json(
