@@ -43,7 +43,7 @@ export class AuthService {
         { expiresIn: "1h" }
       );
 
-      return { message: "Login successful", token, user: { name: user.name, email: user.email, role: user.role } };
+      return { message: "Login successful", token, user: { name: user.name, email: user.email, id: user._id } };
     } catch (error) {
       console.error("Login Error:", error);
       return { error: "Internal Server Error", status: 500 };
