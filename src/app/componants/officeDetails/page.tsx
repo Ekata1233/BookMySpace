@@ -16,6 +16,20 @@ import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
+export interface OfficeSpace {
+  _id: string;
+  officeSpaceName?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  description?: string;
+  extraDescription?: string;
+  amenities?: string[];
+  thumbnailImage?: string;
+  multiImages?: string[];
+  startTime?: string;
+  endTime?: string;
+}
 
 const amenityIcons = {
   "Work Desk": PiOfficeChair,
@@ -62,8 +76,8 @@ const OfficeDetails = () => {
     multiImages,
     startTime,
     endTime,
-    rate
-  } = MatchedOfficeSpace;
+    rate,
+  } = MatchedOfficeSpace as any;
 
   const handleBookNow = () => {
     if (id) {
@@ -181,14 +195,15 @@ const OfficeDetails = () => {
                     hour12: true,
                   })
                 : "10:00 AM"}{" "}
-              - {" "}
+              -{" "}
               {endTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(endTime).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
                     hour12: false,
                   })
-                : "10:00 PM"} PM
+                : "10:00 PM"}{" "}
+              PM
             </p>
           </div>
 
@@ -224,6 +239,21 @@ const OfficeDetails = () => {
               );
             })}
           </div>
+          {MatchedOfficeSpace.amenities.map((amenity, index) => {
+            const IconComponent =
+              amenityIcons[amenity as keyof typeof amenityIcons] || null;
+            return (
+              <div
+                key={index}
+                className="w-1/2 sm:w-1/3 md:w-1/4 flex flex-col items-center text-center my-4 break-words"
+              >
+                {IconComponent && (
+                  <IconComponent className="text-6xl text-[#6BB7BE]" />
+                )}
+                <p className="font-semibold my-2 break-words">{amenity}</p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

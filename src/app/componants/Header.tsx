@@ -50,11 +50,11 @@ import {
 } from "@/components/ui/sheet";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("signup"); // Default to signup tab
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>("signup");
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
@@ -64,15 +64,15 @@ const Header = () => {
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState({});
-  const swiperRef = useRef(null);
-  const [isBeginning, setIsBeginning] = useState(true);
-  const [isEnd, setIsEnd] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const swiperRef = useRef<any>(null);
+  const [isBeginning, setIsBeginning] = useState<boolean>(true);
+  const [isEnd, setIsEnd] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const storedIndex = localStorage.getItem("activeIndex");
@@ -80,7 +80,6 @@ const Header = () => {
       setActiveIndex(parseInt(storedIndex));
     }
 
-    // Check auth status on mount
     const token = localStorage.getItem("authToken");
     if (token) {
       setIsLoggedIn(true);
@@ -93,13 +92,13 @@ const Header = () => {
     }
   };
 
-  const handleLinkClick = (index) => {
+  const handleLinkClick = (index: number) => {
     setActiveIndex(index);
-    localStorage.setItem("activeIndex", index);
+    localStorage.setItem("activeIndex", index.toString());
   };
 
-  const validateSignup = () => {
-    const newErrors = {};
+  const validateSignup = (): boolean => {
+    const newErrors: Record<string, string> = {};
     if (!signupData.name.trim()) newErrors.name = "Name is required";
     if (!signupData.email.trim()) {
       newErrors.email = "Email is required";
@@ -115,8 +114,8 @@ const Header = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateLogin = () => {
-    const newErrors = {};
+  const validateLogin = (): boolean => {
+    const newErrors: Record<string, string> = {};
     if (!loginData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) {
@@ -129,13 +128,12 @@ const Header = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSignupSubmit = async (e) => {
+  const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateSignup()) return;
 
     setIsLoading(true);
     try {
-      // Replace with your actual API call
       const response = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -155,20 +153,19 @@ const Header = () => {
       toast.success("Account created successfully!");
       setSignupData({ name: "", email: "", password: "" });
       setActiveTab("login");
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleLoginSubmit = async (e) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateLogin()) return;
 
     setIsLoading(true);
     try {
-      // Replace with your actual API call
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
@@ -187,7 +184,7 @@ const Header = () => {
       setIsLoggedIn(true);
       toast.success("Logged in successfully!");
       setLoginData({ email: "", password: "" });
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
@@ -216,7 +213,6 @@ const Header = () => {
     <div>
       <nav className="bg-white shadow-md w-full fixed top-0 z-50">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
-          {/* Top Bar with Logo, Search and Contact */}
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <button
@@ -231,7 +227,6 @@ const Header = () => {
               </Link>
             </div>
 
-            {/* Search Bar - Hidden on mobile */}
             <div className="hidden md:flex flex-1 mx-4 max-w-md">
               <div className="relative flex items-center w-full">
                 <input
@@ -251,7 +246,6 @@ const Header = () => {
               </div>
             </div>
 
-            {/* Contact and User Auth Buttons - Hidden on mobile */}
             <div className="hidden md:flex items-center gap-2">
               <Link
                 href="/contact"
@@ -260,40 +254,12 @@ const Header = () => {
                 Contact
               </Link>
 
-              {/* {user ? (
-                <Sheet open={open} onOpenChange={setOpen}>
-                  <SheetTrigger className="cursor-pointer">
-                    <User className="h-10 w-10 blue ms-6" />
-                  </SheetTrigger>
-                  <SheetContent className="p-4 bg-white">
-                    <div className="text-center">
-                      <h3 className="text-lg font-semibold">{user.name}</h3>
-                      <p className="text-gray-500">My Account</p>
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        logout();
-                        setOpen(false);
-                      }}
-                      className="mt-4 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600"
-                    >
-                      Logout
-                    </button>
-                  </SheetContent>
-                </Sheet>
-              ) : (
-                <Link href="/auth">
-                  <User className="h-10 w-10 blue ms-6" />
-                </Link>
-              )} */}
               {user ? (
                 <Sheet open={open} onOpenChange={setOpen}>
                   <SheetTrigger className="cursor-pointer">
                     <User className="h-10 w-10 blue ms-6" />
                   </SheetTrigger>
                   <SheetContent className="p-4 bg-white">
-                    {/* Add SheetTitle for accessibility */}
                     <SheetTitle className="sr-only">User Account</SheetTitle>
 
                     <div className="text-center">
@@ -327,16 +293,13 @@ const Header = () => {
               )}
             </div>
 
-            {/* Mobile-only auth link */}
             <Link href="/auth" className="md:hidden text-gray-800 ml-2">
               <User className="h-5 w-5" />
             </Link>
           </div>
 
-          {/* Navigation Swiper - Visible on all screens */}
           <div className="relative w-full py-5">
             <div className="flex items-center">
-              {/* Left Navigation Button */}
               <button
                 className={`hidden sm:flex items-center justify-center w-8 h-8 mr-1 rounded-full ${
                   isBeginning
@@ -401,20 +364,20 @@ const Header = () => {
                         <Link href={path} legacyBehavior>
                           <a
                             className={`
-                                                            cursor-pointer 
-                                                            text-gray-600 hover:text-gray-900 
-                                                            font-medium 
-                                                            whitespace-nowrap 
-                                                            px-1 sm:px-2 py-1
-                                                            relative 
-                                                            transition-colors 
-                                                            flex flex-col items-center
-                                                            ${
-                                                              pathname === path
-                                                                ? "text-gray-900 font-semibold"
-                                                                : ""
-                                                            }
-                                                        `}
+                              cursor-pointer 
+                              text-gray-600 hover:text-gray-900 
+                              font-medium 
+                              whitespace-nowrap 
+                              px-1 sm:px-2 py-1
+                              relative 
+                              transition-colors 
+                              flex flex-col items-center
+                              ${
+                                pathname === path
+                                  ? "text-gray-900 font-semibold"
+                                  : ""
+                              }
+                            `}
                             onClick={() => handleLinkClick(index)}
                           >
                             <div className="mb-1 ">{item.icon}</div>
@@ -432,7 +395,6 @@ const Header = () => {
                 </Swiper>
               </div>
 
-              {/* Right Navigation Button */}
               <button
                 className={`hidden sm:flex items-center justify-center w-8 h-8 ml-1 rounded-full ${
                   isEnd
@@ -448,11 +410,9 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Mobile Menu - Shows search, contact and auth options */}
           {isOpen && (
             <div className="md:hidden bg-white pb-3">
               <div className="px-2 space-y-3">
-                {/* Search in Mobile Menu */}
                 <div className="relative">
                   <input
                     type="text"
@@ -470,7 +430,6 @@ const Header = () => {
                   </button>
                 </div>
 
-                {/* Contact and Auth Buttons in Mobile Menu */}
                 <div className="space-y-2">
                   <Link
                     href="/contact"

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaLightbulb, FaComments, FaBuilding, FaLaptopHouse, FaIdCard, FaUsers } from "react-icons/fa";
+import type { JSX } from "react"; // ✅ ✅ This line fixes the JSX.Element error
 
 // Map icon names from the database to React components
 const iconMap: { [key: string]: JSX.Element } = {
