@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaLocationDot, FaPhoneAlt, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import {  FaPhoneAlt, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 import { MdAccessTimeFilled, MdEmail } from "react-icons/md";
 import Link from 'next/link';
 import { FaMapLocationDot } from 'react-icons/fa6';
