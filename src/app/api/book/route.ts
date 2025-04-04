@@ -23,10 +23,10 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { userId, officeId, date, startTime, duration } = body;
+    const { userId, officeId, date, startTime, duration,totalPay } = body;
 
     // Validate required fields
-    if (!userId || !officeId || !date || !startTime || !duration) {
+    if (!userId || !officeId || !date || !startTime || !duration || !totalPay) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400 }
@@ -40,6 +40,7 @@ export async function POST(req: Request) {
       date,
       startTime,
       duration,
+      totalPay,
     });
 
     return NextResponse.json({ success: true, data: newBooking }, { status: 201 });

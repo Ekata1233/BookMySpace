@@ -197,7 +197,6 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useParams } from "next/navigation";
 
-
 export interface OfficeSpace {
   _id: string;
   name: string;
@@ -215,6 +214,7 @@ const TimeCalendar = () => {
   const id = params.id;
 
   console.log("Book spaces : ", bookings);
+  console.log("office spaces : ", officeSpaces);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -227,14 +227,17 @@ const TimeCalendar = () => {
     }
   }, []);
 
-  const office = officeSpaces[0] as any; // quick bypass
-  const { _id: officeId, startTime, endTime } = office || {};
+  const office = officeSpaces.find((item) => item._id === id);
+  const { _id: officeId, startTime, endTime, rate } = office || {};
+  console.log("rate of the space : ", rate);
   
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedHour, setSelectedHour] = useState("09");
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
+
+  const totalPay = rate * selectedDuration;
 
   // Generate time slots
   const timeOptions: string[] = [];
@@ -276,6 +279,8 @@ const TimeCalendar = () => {
       date: bookingDate,
       startTime: startTimeFormatted,
       duration: parseInt(selectedDuration),
+      totalPay: totalPay,
+      
     };
 
     try {
@@ -318,7 +323,7 @@ const TimeCalendar = () => {
               BOOK YOUR SLOT
             </h1>
             <h1 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
-              Rate : <span className="text-gray-500">500 / Hour</span>
+              Rate : <span className="text-gray-500">{rate} / Hour</span>
             </h1>
           </div>
           <Calendar
@@ -417,7 +422,13 @@ const TimeCalendar = () => {
           </div>
         </div>
       </div>
+      {/* CALCULATION */}
 
+      <div>
+        <h4 className="p-4 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
+          Total Pay{" "} : {totalPay}
+        </h4>
+      </div>
       {/* BOOK NOW BUTTON */}
       <div>
         <Button

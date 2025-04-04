@@ -10,6 +10,7 @@ interface BookSpace {
   date: string;
   startTime: string;
   duration: number;
+  totalPay: number;
   createdAt?: string;
   _id?: string;
 }
