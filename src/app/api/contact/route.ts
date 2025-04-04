@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import testConnection from "@/lib/db";
-import Contact from "@/models/contact";
+import Contact from "../../../models/contact";
 
 // Connect to MongoDB
 testConnection();
