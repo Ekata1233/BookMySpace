@@ -227,9 +227,26 @@ const TimeCalendar = () => {
     }
   }, []);
 
-  const office = officeSpaces.find((item) => item._id === id);
-  const { _id: officeId, startTime, endTime, rate } = office || {};
+  interface OfficeSpace {
+    _id: string;
+    startTime: string;
+    endTime: string;
+    rate: number;
+  }
+  
+  const office = officeSpaces.find((item) => item._id === id) as OfficeSpace | undefined;
+  
+  const fallback: OfficeSpace = {
+    _id: '',
+    startTime: '',
+    endTime: '',
+    rate: 0,
+  };
+  
+  const { _id: officeId, startTime, endTime, rate } = office ?? fallback;
+  
   console.log("rate of the space : ", rate);
+  
   
 
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -237,7 +254,8 @@ const TimeCalendar = () => {
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
 
-  const totalPay = rate * selectedDuration;
+const totalPay = rate * Number(selectedDuration); // ✅ fixed type error
+
 
   // Generate time slots
   const timeOptions: string[] = [];
