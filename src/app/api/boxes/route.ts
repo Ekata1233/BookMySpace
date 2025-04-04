@@ -14,7 +14,6 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  await testConnection();
 
   try {
     const { icon, link, text, description } = await req.json();
