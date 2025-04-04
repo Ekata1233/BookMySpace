@@ -31,6 +31,6 @@ const bookSpaceSchema = new mongoose.Schema({
   },
 });
 
-const BookSpace = mongoose.model("BookSpace", bookSpaceSchema);
+const BookSpace = mongoose.models.BookSpace || mongoose.model("BookSpace", bookSpaceSchema);
 
 export default BookSpace;

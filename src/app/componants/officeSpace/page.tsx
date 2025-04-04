@@ -171,7 +171,7 @@ const OfficeSpaces: React.FC = () => {
                   <div className="mt-auto flex justify-between items-center mb-2">
                     <div className="flex items-center space-x-1">
                       <h4 className="text-lg font-medium">₹</h4>
-                      <h5 className="text-lg sm:text-xl">{space.rate} / Day</h5>
+                      <h5 className="text-lg sm:text-xl">{space.rate} / Hour</h5>
                     </div>
                     <Link
                       href={`/${pageName}/${space._id}`}

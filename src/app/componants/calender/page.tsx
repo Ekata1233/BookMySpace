@@ -227,8 +227,6 @@ const TimeCalendar = () => {
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
 
-  console.log("selected date in usestate : ", date)
-
   // Generate time slots
   const timeOptions: string[] = [];
   if (startTime && endTime) {
@@ -257,7 +255,7 @@ const TimeCalendar = () => {
   const handleBooking = async () => {
     if (!date || !officeId) return alert("Missing info to book slot.");
 
-    const bookingDate = date.toISOString().split("T")[0]; // "yyyy-mm-dd"
+    const bookingDate = date?.toLocaleDateString("en-CA");
     const startTimeFormatted = `${selectedHour.padStart(
       2,
       "0"
@@ -284,11 +282,8 @@ const TimeCalendar = () => {
   today.setHours(0, 0, 0, 0);
 
   const getHourInt = (timeStr: string) => parseInt(timeStr.split(":")[0]);
-  const selectedDateISO = date?.toISOString().split("T")[0];
+  const selectedDateISO = date?.toLocaleDateString("en-CA");
   const bookedHours: number[] = [];
-
-  console.log("selected date : ", selectedDateISO);
-  
 
   bookings.forEach((booking) => {
     if (
@@ -309,9 +304,14 @@ const TimeCalendar = () => {
       <div className="flex flex-col lg:flex-row w-full gap-4">
         {/* Calendar Column */}
         <div className="bg-white p-4 text-center flex-[2] w-full lg:min-w-[600px]">
-          <h1 className="text-3xl font-bold text-gray-700 text-start pb-5">
-            BOOK YOUR SLOT
-          </h1>
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold text-gray-700 text-start pb-5">
+              BOOK YOUR SLOT
+            </h1>
+            <h1 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
+              Rate : <span className="text-gray-500">500 / Hour</span>
+            </h1>
+          </div>
           <Calendar
             mode="single"
             selected={date}
