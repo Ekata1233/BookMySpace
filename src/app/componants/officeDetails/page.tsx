@@ -190,18 +190,18 @@ const OfficeDetails = () => {
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
               {startTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
                 : "10:00 AM"}{" "}
               -{" "}
               {endTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(endTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
                 : "10:00 PM"}{" "}
               PM
             </p>
@@ -224,24 +224,25 @@ const OfficeDetails = () => {
           </h4>
 
           <div className="flex flex-wrap justify-center">
-          {MatchedOfficeSpace.amenities.map((amenity, index) => {
-  const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons] || null;
+            {MatchedOfficeSpace.amenities.map((amenity, index) => {
+              const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons] || null;
 
-  return (
-    <div
-      key={index}
-      className="w-1/2 sm:w-1/3 md:w-1/4 flex flex-col items-center text-center my-4 break-words"
-    >
-      {IconComponent && (
-        <IconComponent className="text-6xl text-[#6BB7BE]" />
-      )}
-      <p className="font-semibold my-2 break-words">{amenity}</p>
-    </div>
-  );
-})}
+              return (
+                <div
+                  key={index}
+                  className="w-1/2 sm:w-1/3 md:w-1/4 flex flex-col items-center text-center my-4 break-words"
+                >
+                  {IconComponent && (
+                    <IconComponent className="text-6xl text-[#6BB7BE]" />
+                  )}
+                  <p className="font-semibold my-2 break-words">{amenity}</p>
+                </div>
+              );
+            })}
 
+           
           </div>
-          
+
         </div>
       </div>
     </div>
