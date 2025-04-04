@@ -13,6 +13,10 @@ interface OfficeSpace {
   isNewlyOpen: boolean;
   category: string;
   image?: File | null;
+  thumbnailImage: string;
+  city: string;
+  state: string;
+  pincode: string;
 }
 
 interface ApiResponse {

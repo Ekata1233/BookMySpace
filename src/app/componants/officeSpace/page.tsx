@@ -16,9 +16,9 @@ export interface OfficeSpace {
   price: number;
   description: string;
   thumbnailImage: string;
-  city: string;      // ✅ Add this
-  state: string;     // ✅ Add this
-  pincode: string;   // ✅ Add this
+  city: string;
+  state: string;     
+  pincode: string;   
 }
 
 const OfficeSpaces: React.FC = () => {
