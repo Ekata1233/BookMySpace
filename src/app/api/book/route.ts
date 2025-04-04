@@ -2,10 +2,11 @@ import { NextResponse } from "next/server";
 import testConnection from "@/lib/db";
 import BookSpace from "@/models/bookSpace";
 
-testConnection(); 
+
 
 // GET: Fetch all bookings
 export async function GET() {
+  await testConnection(); 
   try {
     const bookings = await BookSpace.find({});
     return NextResponse.json({ success: true, data: bookings }, { status: 200 });
