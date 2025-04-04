@@ -2,7 +2,7 @@
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams,useRouter  } from "next/navigation";
 import React from "react";
 import { FaWifi } from "react-icons/fa";
 import { LuAlarmClock } from "react-icons/lu";
@@ -34,8 +34,10 @@ const amenityIcons = {
 
 const OfficeDetails = () => {
   const { officeSpaces } = useOfficeSpaces();
+  const router = useRouter();
   const params = useParams();
-  const { id } = params;
+  const id = params?.id;
+  
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
   console.log("Matched Office Space: ", MatchedOfficeSpace);
@@ -62,9 +64,12 @@ const OfficeDetails = () => {
     endTime,
   } = MatchedOfficeSpace;
 
-  const handleSearch = () => {
-    console.log("Searching for:");
+  const handleBookNow = () => {
+    if (id) {
+      router.push(`/office-space/${id}/book`);
+    }
   };
+  
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
@@ -80,7 +85,7 @@ const OfficeDetails = () => {
         </p>
       </div>
       <Button
-        onClick={handleSearch}
+        onClick={handleBookNow}
         className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
       >
         BOOK NOW
@@ -171,7 +176,7 @@ const OfficeDetails = () => {
 
           <div>
             <Button
-              onClick={handleSearch}
+              onClick={handleBookNow}
               className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
             >
               BOOK NOW

@@ -32,6 +32,8 @@ const OfficeSpaceContext = createContext<OfficeSpaceContextType | undefined>(und
 export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
   const [officeSpaces, setOfficeSpaces] = useState<OfficeSpace[]>([]);
 
+
+
   // ✅ Fetch Office Spaces (Using your existing "/api/officeSpaces" route)
   const fetchOfficeSpaces = async () => {
     try {
@@ -48,6 +50,7 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
       const response = await axios.post<{ data: OfficeSpace }>("/api/officeSpaces", newOfficeSpace, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+
       setOfficeSpaces((prev) => [...prev, response.data.data]);
     } catch (error) {
       console.error("Error adding office space:", error);

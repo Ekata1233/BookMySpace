@@ -6,6 +6,7 @@ import Footer from "./componants/Footer";
 import { OfficeSpaceProvider } from "./context/OfficeSpaceContext";
 import { AuthProvider } from "./context/authContext";
 import { ContactProvider } from "./context/ContactContex";
+import { BookSpaceProvider } from "./context/BookSpaceContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -26,13 +27,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
         <AuthProvider>
-          <ContactProvider>
-            <OfficeSpaceProvider>
-              <Header />
-              {children}
-              <Footer />
-            </OfficeSpaceProvider>
-          </ContactProvider>
+          <BookSpaceProvider>
+            <ContactProvider>
+              <OfficeSpaceProvider>
+                <Header />
+                {children}
+                <Footer />
+              </OfficeSpaceProvider>
+            </ContactProvider>
+          </BookSpaceProvider>
         </AuthProvider>
       </body>
     </html>

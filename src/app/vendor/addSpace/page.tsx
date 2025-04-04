@@ -34,6 +34,8 @@ const OfficeSpaceForm = () => {
     multiImages: [] as File[],
   });
 
+  console.log("form data : ", formData);
+
   const categories = [
     "Office Space",
     "Virtual Office",
@@ -90,14 +92,34 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
     formDataToSend.append("amenities", JSON.stringify(formData.amenities));
-    const today = new Date().toISOString().split("T")[0]; // Get today's date (YYYY-MM-DD)
-    const startTime = new Date(
-      `${today}T${formData.startTime}:00`
-    ).toISOString();
-    const endTime = new Date(`${today}T${formData.endTime}:00`).toISOString();
+    const today = new Date();
+    const [startHour, startMinute] = formData.startTime.split(":");
+    const [endHour, endMinute] = formData.endTime.split(":");
 
-    formDataToSend.append("start time", startTime);
-    formDataToSend.append("end time", endTime);
+    // Create date object in local timezone WITHOUT UTC conversion
+    const startDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      Number(startHour),
+      Number(startMinute)
+    );
+    const endDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      Number(endHour),
+      Number(endMinute)
+    );
+
+    // Format date as "YYYY-MM-DDTHH:mm:ss" to keep local time
+    const formatLocalDateTime = (date: Date) => {
+      return date.toLocaleString("sv-SE").replace(" ", "T");
+    };
+
+    formDataToSend.append("startTime", formatLocalDateTime(startDate));
+    formDataToSend.append("endTime", formatLocalDateTime(endDate));
+
     if (formData.thumbnailImage) {
       formDataToSend.append("thumbnailImage", formData.thumbnailImage);
     }
@@ -105,6 +127,8 @@ const OfficeSpaceForm = () => {
     formData.multiImages.forEach((file) => {
       formDataToSend.append("multiImages", file);
     });
+
+    console.log("form data to send : ", formDataToSend);
 
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData
@@ -192,7 +216,7 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full"
         />
-        
+
         <Textarea
           name="extraDescription"
           value={formData.extraDescription}
@@ -201,7 +225,7 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full"
         />
-        
+
         <div className="text-gray-700 my-5">
           <Label className="block mb-2">Select Amenities</Label>
           <div className="grid grid-cols-2 gap-2">
