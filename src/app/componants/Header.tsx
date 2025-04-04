@@ -68,8 +68,7 @@ const Header = () => {
   const swiperRef = useRef(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const router = useRouter();
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);  const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
