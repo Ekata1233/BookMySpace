@@ -7,6 +7,19 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
+// Example location: src/types/OfficeSpace.ts
+
+export interface OfficeSpace {
+  _id: string;
+  officeSpaceName: string;
+  location: string;
+  price: number;
+  description: string;
+  thumbnailImage: string;
+  city: string;      // ✅ Add this
+  state: string;     // ✅ Add this
+  pincode: string;   // ✅ Add this
+}
 
 const OfficeSpaces: React.FC = () => {
   const { officeSpaces } = useOfficeSpaces();

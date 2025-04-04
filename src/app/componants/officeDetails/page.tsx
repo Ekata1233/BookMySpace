@@ -16,6 +16,20 @@ import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
+export interface OfficeSpace {
+  _id: string;
+  officeSpaceName?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  description?: string;
+  extraDescription?: string;
+  amenities?: string[];
+  thumbnailImage?: string;
+  multiImages?: string[];
+  startTime?: string;
+  endTime?: string;
+}
 
 const amenityIcons = {
   "Work Desk": PiOfficeChair,
@@ -62,7 +76,8 @@ const OfficeDetails = () => {
     multiImages,
     startTime,
     endTime,
-  } = MatchedOfficeSpace;
+  } = MatchedOfficeSpace as any;
+  
 
   const handleBookNow = () => {
     if (id) {
@@ -191,18 +206,22 @@ const OfficeDetails = () => {
           </h4>
 
           <div className="flex flex-wrap justify-center">
-            {MatchedOfficeSpace.amenities.map((amenity, index) => {
-              const IconComponent = amenityIcons[amenity] || null;
-              return (
-                <div key={index} className="w-1/2 sm:w-1/3 md:w-1/4 flex flex-col items-center text-center my-4 break-words">
-                  {IconComponent && (
-                    <IconComponent className="text-6xl text-[#6BB7BE]" />
-                  )}
-                  <p className="font-semibold my-2 break-words">{amenity}</p>
-                </div>
-              );
-            })}
-          </div>
+  {MatchedOfficeSpace.amenities.map((amenity, index) => {
+    const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons] || null;
+    return (
+      <div
+        key={index}
+        className="w-1/2 sm:w-1/3 md:w-1/4 flex flex-col items-center text-center my-4 break-words"
+      >
+        {IconComponent && (
+          <IconComponent className="text-6xl text-[#6BB7BE]" />
+        )}
+        <p className="font-semibold my-2 break-words">{amenity}</p>
+      </div>
+    );
+  })}
+</div>
+
         </div>
       </div>
 

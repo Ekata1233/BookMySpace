@@ -197,6 +197,14 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useParams } from "next/navigation";
 
+
+export interface OfficeSpace {
+  _id: string;
+  name: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+}
 const TimeCalendar = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { addBooking } = useBookSpaces();
@@ -219,8 +227,9 @@ const TimeCalendar = () => {
     }
   }, []);
 
-  const office = officeSpaces[0]; // Assuming one office for now
+  const office = officeSpaces[0] as any; // quick bypass
   const { _id: officeId, startTime, endTime } = office || {};
+  
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedHour, setSelectedHour] = useState("09");
