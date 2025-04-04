@@ -190,18 +190,18 @@ const OfficeDetails = () => {
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
               {startTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
                 : "10:00 AM"}{" "}
               -{" "}
               {endTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(endTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
                 : "10:00 PM"}{" "}
               PM
             </p>
@@ -225,7 +225,8 @@ const OfficeDetails = () => {
 
           <div className="flex flex-wrap justify-center">
             {MatchedOfficeSpace.amenities.map((amenity, index) => {
-              const IconComponent = amenityIcons[amenity] || null;
+              const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons] || null;
+
               return (
                 <div
                   key={index}
@@ -238,8 +239,10 @@ const OfficeDetails = () => {
                 </div>
               );
             })}
+
+           
           </div>
-          
+
         </div>
       </div>
     </div>
