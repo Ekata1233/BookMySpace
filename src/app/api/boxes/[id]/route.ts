@@ -2,17 +2,18 @@
 
 import { NextResponse } from 'next/server';
 import Box from '@/models/box';
-import connectDB from '../../../../lib/db'; // make sure you are connecting to DB
+import { connectToDatabase } from '../../../../lib/db';
 
 // PUT - Update Box
-export async function PUT(request: Request, context: { params: { id: string } }) {
-  await connectDB();
+export async function PUT(
+  request: Request,
+  { params }: { params: { id: string } } // ✅ THIS is correct
+) {
+  await connectToDatabase();
 
   try {
-    const { id } = context.params;
     const updateData = await request.json();
-
-    const updatedBox = await Box.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedBox = await Box.findByIdAndUpdate(params.id, updateData, { new: true });
 
     if (!updatedBox) {
       return NextResponse.json(
@@ -31,14 +32,15 @@ export async function PUT(request: Request, context: { params: { id: string } })
 }
 
 // DELETE - Soft Delete Box
-export async function DELETE(request: Request, context: { params: { id: string } }) {
-  await connectDB();
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } } // ✅ THIS too
+) {
+  await connectToDatabase();
 
   try {
-    const { id } = context.params;
-
     const deletedBox = await Box.findByIdAndUpdate(
-      id,
+      params.id,
       { isDeleted: true },
       { new: true }
     );
