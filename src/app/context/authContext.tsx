@@ -66,6 +66,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("user");
     router.push("/auth");
   };
+  const getUser = async () => {
+    const res = await fetch("/api/auth/signup", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } else {
+      console.error("Failed to fetch user");
+    }
+  };
+
+  useEffect(()=>{
+    getUser()
+  },[])
 
   return (
     <AuthContext.Provider value={{ user, signup, login, logout }}>
