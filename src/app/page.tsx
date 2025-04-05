@@ -14,6 +14,7 @@ export default function Home() {
   return (
     <main className="mt-16">
       <Hero />
+      <Boxes/>
       <Offices />
       <OfficeTour />
       <WorkBusiness />

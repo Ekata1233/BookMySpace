@@ -3,15 +3,19 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import axios from "axios";
 
 interface Box {
+  _id: string;
   icon: string;
   link: string;
   text: string;
   description: string;
+  isDeleted?: boolean;
 }
 
 interface BoxContextType {
   boxes: Box[];
-  addBox: (newBox: Box) => Promise<void>;
+  addBox: (newBox: Omit<Box, '_id'>) => Promise<void>;
+  updateBox: (id: string, updateData: Partial<Box>) => Promise<void>;
+  deleteBox: (id: string) => Promise<void>;
   refreshBoxes: () => Promise<void>;
 }
 
@@ -29,7 +33,7 @@ export const BoxProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const addBox = async (newBox: Box) => {
+  const addBox = async (newBox: Omit<Box, '_id'>) => {
     try {
       const response = await axios.post<{ success: boolean; data: Box }>("/api/boxes", newBox);
       setBoxes((prev) => [...prev, response.data.data]);
@@ -38,12 +42,30 @@ export const BoxProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const updateBox = async (id: string, updateData: Partial<Box>) => {
+    try {
+      const response = await axios.put<{ success: boolean; data: Box }>("/api/boxes", { _id: id, ...updateData });
+      setBoxes((prev) => prev.map(box => box._id === id ? response.data.data : box));
+    } catch (error) {
+      console.error("Error updating box:", error);
+    }
+  };
+
+  const deleteBox = async (id: string) => {
+    try {
+      await axios.delete("/api/boxes", { data: { _id: id } });
+      setBoxes((prev) => prev.filter(box => box._id !== id));
+    } catch (error) {
+      console.error("Error deleting box:", error);
+    }
+  };
+
   useEffect(() => {
     fetchBoxes();
   }, []);
 
   return (
-    <BoxContext.Provider value={{ boxes, addBox, refreshBoxes: fetchBoxes }}>
+    <BoxContext.Provider value={{ boxes, addBox, updateBox, deleteBox, refreshBoxes: fetchBoxes }}>
       {children}
     </BoxContext.Provider>
   );
