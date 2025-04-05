@@ -1,20 +1,18 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import Box from '@/models/box';
+// src/app/api/boxes/[id]/route.ts
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+import { NextResponse } from 'next/server';
+import Box from '@/models/box';
+import connectDB from '@/utils/db'; // make sure you are connecting to DB
+
+// PUT - Update Box
+export async function PUT(request: Request, context: { params: { id: string } }) {
+  await connectDB();
+
   try {
-    const { id } = params;
+    const { id } = context.params;
     const updateData = await request.json();
 
-    const updatedBox = await Box.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true }
-    );
+    const updatedBox = await Box.findByIdAndUpdate(id, updateData, { new: true });
 
     if (!updatedBox) {
       return NextResponse.json(
@@ -32,12 +30,12 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+// DELETE - Soft Delete Box
+export async function DELETE(request: Request, context: { params: { id: string } }) {
+  await connectDB();
+
   try {
-    const { id } = params;
+    const { id } = context.params;
 
     const deletedBox = await Box.findByIdAndUpdate(
       id,
