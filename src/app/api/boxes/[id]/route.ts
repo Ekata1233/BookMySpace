@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import Box from '@/models/box';
-import { connectToDatabase } from '@/utils/db';
+import { connectToDatabase } from '../../../../lib/db';
 
 // PUT - Update Box
 export async function PUT(request: Request, context: any) {
