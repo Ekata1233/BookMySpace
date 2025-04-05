@@ -48,4 +48,16 @@ export class AuthService {
       return { error: "Internal Server Error", status: 500 };
     }
   }
+  static async getAllUsers() {
+    try {
+      await connectToDatabase();
+  
+      const users = await User.find({}, { password: 0 }); // Exclude password field
+      return { users, status: 200 };
+    } catch (error) {
+      console.error("Get All Users Error:", error);
+      return { error: "Internal Server Error", status: 500 };
+    }
+  }
+  
 }

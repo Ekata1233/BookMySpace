@@ -12,3 +12,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
+export async function GET() {
+  try {
+    const users = await AuthService.getAllUsers(); // Make sure this method exists
+    return NextResponse.json({ users });
+  } catch (error) {
+    console.error("Fetch Users Error:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  }
+}
