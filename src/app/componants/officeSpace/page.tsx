@@ -25,27 +25,27 @@ const OfficeSpaces: React.FC = () => {
   const { officeSpaces } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
-  console.log("page name url : ", pageName);
+  console.log("office spaces : ", officeSpaces);
 
   const normalizedPageCategory = pageName?.replace(/-/g, " ").toLowerCase();
 
   // If no pageName or normalizedPageCategory, show all
-  const pageFilteredSpaces =
-    !normalizedPageCategory
-      ? officeSpaces
-      : officeSpaces.filter((space) => {
-          if (!space.category) return false;
-  
-          const spaceCategory = Array.isArray(space.category)
-            ? space.category.map((cat) => cat.toLowerCase())
-            : [space.category.toLowerCase()];
-  
-          return spaceCategory.includes(normalizedPageCategory);
-        });
-  
+  const pageFilteredSpaces = !normalizedPageCategory
+    ? officeSpaces
+    : officeSpaces.filter((space) => {
+        if (!space.category) return false;
+
+        const spaceCategory = Array.isArray(space.category)
+          ? space.category.map((cat) => cat.toLowerCase())
+          : [space.category.toLowerCase()];
+
+        return spaceCategory.includes(normalizedPageCategory);
+      });
 
   const cities = [
     "Mumbai",
@@ -68,6 +68,12 @@ const OfficeSpaces: React.FC = () => {
     "Dedicated Desks",
   ];
 
+  const handleCityChange = (city: string) => {
+    setSelectedCities((prev) =>
+      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city]
+    );
+  };
+
   const handleCategoryChange = (category: string) => {
     setSelectedCategories((prev) =>
       prev.includes(category)
@@ -77,18 +83,21 @@ const OfficeSpaces: React.FC = () => {
   };
 
   // Corrected filter logic with proper parentheses
-  const displaySpaces =
-    selectedCategories.length > 0
-      ? pageFilteredSpaces.filter(
-          (space) =>
-            space.category &&
-            selectedCategories.some((cat) =>
-              Array.isArray(space.category)
-                ? space.category.includes(cat)
-                : space.category === cat
-            )
-        )
-      : pageFilteredSpaces;
+  const displaySpaces = pageFilteredSpaces.filter((space) => {
+    const cityMatch =
+      selectedCities.length === 0 || selectedCities.includes(space.city);
+
+    const categoryMatch =
+      selectedCategories.length === 0 ||
+      (space.category &&
+        selectedCategories.some((cat) =>
+          Array.isArray(space.category)
+            ? space.category.includes(cat)
+            : space.category === cat
+        ));
+
+    return cityMatch && categoryMatch;
+  });
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -118,7 +127,12 @@ const OfficeSpaces: React.FC = () => {
           <h5 className="text-lg font-bold my-3">Filter By Area:</h5>
           {cities.map((city, index) => (
             <div key={index} className="flex items-center space-x-2 my-2">
-              <Checkbox id={city.toLowerCase()} />
+              <Checkbox
+                id={city.toLowerCase()}
+                checked={selectedCities.includes(city)}
+                onCheckedChange={() => handleCityChange(city)}
+              />
+
               <label
                 htmlFor={city.toLowerCase()}
                 className="text-sm font-medium"
@@ -127,22 +141,29 @@ const OfficeSpaces: React.FC = () => {
               </label>
             </div>
           ))}
-          <h5 className="text-lg font-bold my-3 mt-6">Filter By Category:</h5>
-          {categories.map((category, index) => (
-            <div key={index} className="flex items-center space-x-2 my-2">
-              <Checkbox
-                id={category.toLowerCase().replace(/\s+/g, "-")}
-                checked={selectedCategories.includes(category)}
-                onCheckedChange={() => handleCategoryChange(category)}
-              />
-              <label
-                htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
-                className="text-sm font-medium"
-              >
-                {category}
-              </label>
+
+          {(!pageName || pageName.trim() === "") && (
+            <div>
+              <h5 className="text-lg font-bold my-3 mt-6">
+                Filter By Category:
+              </h5>
+              {categories.map((category, index) => (
+                <div key={index} className="flex items-center space-x-2 my-2">
+                  <Checkbox
+                    id={category.toLowerCase().replace(/\s+/g, "-")}
+                    checked={selectedCategories.includes(category)}
+                    onCheckedChange={() => handleCategoryChange(category)}
+                  />
+                  <label
+                    htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
+                    className="text-sm font-medium"
+                  >
+                    {category}
+                  </label>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
         <div className="w-full lg:w-3/4">
           {displaySpaces.length > 0 ? (
@@ -209,7 +230,16 @@ const OfficeSpaces: React.FC = () => {
                       </h5>
                     </div>
                     <Link
-                      href={`/${pageName}/${space._id}`}
+                      // href={`/${pageName}/${space._id}`}
+                      href={`/${
+                        pageName ||
+                        (Array.isArray(space.category)
+                          ? space.category[0]
+                          : space.category
+                        )
+                          ?.toLowerCase()
+                          .replace(/\s+/g, "-")
+                      }/${space._id}`}
                       className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                     >
                       View Details
