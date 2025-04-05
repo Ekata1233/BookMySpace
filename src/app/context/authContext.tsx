@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 import { useRouter } from "next/navigation";
 
 interface AuthContextType {
@@ -18,8 +24,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Load user from localStorage on initial render
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch (error) {
+        console.error("Error parsing user from localStorage:", error);
+        localStorage.removeItem("user");
+      }
     }
   }, []);
 
@@ -49,10 +61,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     const data = await res.json();
-    
+
     if (res.ok) {
       setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user)); 
+      localStorage.setItem("user", JSON.stringify(data.user));
       alert("Login successful!");
       router.push("/");
     } else {
@@ -81,9 +93,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(()=>{
-    getUser()
-  },[])
+  useEffect(() => {
+    getUser();
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, signup, login, logout }}>
