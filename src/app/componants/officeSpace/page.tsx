@@ -17,8 +17,8 @@ export interface OfficeSpace {
   description: string;
   thumbnailImage: string;
   city: string;
-  state: string;     
-  pincode: string;   
+  state: string;
+  pincode: string;
 }
 
 const OfficeSpaces: React.FC = () => {
@@ -27,7 +27,25 @@ const OfficeSpaces: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
-  const pageName = pathSegments[pathSegments.length - 1] || "office-space";
+  const pageName = pathSegments[pathSegments.length - 1] || "";
+  console.log("page name url : ", pageName);
+
+  const normalizedPageCategory = pageName?.replace(/-/g, " ").toLowerCase();
+
+  // If no pageName or normalizedPageCategory, show all
+  const pageFilteredSpaces =
+    !normalizedPageCategory
+      ? officeSpaces
+      : officeSpaces.filter((space) => {
+          if (!space.category) return false;
+  
+          const spaceCategory = Array.isArray(space.category)
+            ? space.category.map((cat) => cat.toLowerCase())
+            : [space.category.toLowerCase()];
+  
+          return spaceCategory.includes(normalizedPageCategory);
+        });
+  
 
   const cities = [
     "Mumbai",
@@ -42,7 +60,7 @@ const OfficeSpaces: React.FC = () => {
   const categories = [
     "Office Space",
     "Coworking",
-    "Virtual Office",
+    "Virtual Space",
     "Meeting Room",
     "Private Office",
     "Day Office",
@@ -51,24 +69,26 @@ const OfficeSpaces: React.FC = () => {
   ];
 
   const handleCategoryChange = (category: string) => {
-    setSelectedCategories(prev => 
+    setSelectedCategories((prev) =>
       prev.includes(category)
-        ? prev.filter(c => c !== category)
+        ? prev.filter((c) => c !== category)
         : [...prev, category]
     );
   };
 
   // Corrected filter logic with proper parentheses
-  const displaySpaces = selectedCategories.length > 0
-    ? officeSpaces.filter(space => 
-        space.category && 
-        selectedCategories.some(cat => space.category.includes(cat))
-      )
-    : officeSpaces;
-    console.log("selcected cate :", selectedCategories);
-    console.log("Office Space :", officeSpaces);
-
-  console.log("offifce space : ", officeSpaces)
+  const displaySpaces =
+    selectedCategories.length > 0
+      ? pageFilteredSpaces.filter(
+          (space) =>
+            space.category &&
+            selectedCategories.some((cat) =>
+              Array.isArray(space.category)
+                ? space.category.includes(cat)
+                : space.category === cat
+            )
+        )
+      : pageFilteredSpaces;
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -155,7 +175,7 @@ const OfficeSpaces: React.FC = () => {
                       )}
                     </div>
                     <p className="text-sm sm:text-base text-gray-500">
-                      {space.city}{" "}{space.state}{" "}{space.pincode}
+                      {space.city} {space.state} {space.pincode}
                     </p>
                     <p className="text-gray-700 text-sm sm:text-base">
                       {space.description}
@@ -184,7 +204,9 @@ const OfficeSpaces: React.FC = () => {
                   <div className="mt-auto flex justify-between items-center mb-2">
                     <div className="flex items-center space-x-1">
                       <h4 className="text-lg font-medium">₹</h4>
-                      <h5 className="text-lg sm:text-xl">{space.rate} / Hour</h5>
+                      <h5 className="text-lg sm:text-xl">
+                        {space.rate} / Hour
+                      </h5>
                     </div>
                     <Link
                       href={`/${pageName}/${space._id}`}

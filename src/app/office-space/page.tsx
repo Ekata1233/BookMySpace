@@ -9,9 +9,9 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import RentSteps from "../rentsteps/page";
 import Offices from "../componants/officeSpace/page";
+import { usePathname } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
-
 const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
 
 const Officespace = () => {
@@ -20,9 +20,14 @@ const Officespace = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
+    const pathname = usePathname();
+    const pathSegments = pathname.split("/").filter(Boolean);
+    const pageName = pathSegments[pathSegments.length - 1]
+
+    console.log("url path : ",pageName)
+
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
-    // Add your search logic here
   };
 
   useEffect(() => {
@@ -97,7 +102,6 @@ const Officespace = () => {
 
       {/* Boxes Component positioned below */}
       <div className="relative z-0 mt-20">
-        <RentSteps />
         <Offices />
       </div>
     </div>

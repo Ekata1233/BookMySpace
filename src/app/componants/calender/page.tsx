@@ -213,9 +213,6 @@ const TimeCalendar = () => {
   const params = useParams();
   const id = params.id;
 
-  console.log("Book spaces : ", bookings);
-  console.log("office spaces : ", officeSpaces);
-
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -254,7 +251,7 @@ const TimeCalendar = () => {
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
 
-const totalPay = rate * Number(selectedDuration); // ✅ fixed type error
+const totalPay = rate * Number(selectedDuration); 
 
 
   // Generate time slots
