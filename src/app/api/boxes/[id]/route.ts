@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server';
 import Box from '@/models/box';
-import connectDB from '@/utils/db'; // make sure you are connecting to DB
+import connectDB from '../../../../lib/db'; // make sure you are connecting to DB
 
 // PUT - Update Box
 export async function PUT(request: Request, context: { params: { id: string } }) {
