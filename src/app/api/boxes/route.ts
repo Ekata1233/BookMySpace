@@ -6,7 +6,7 @@ testConnection();
 
 export async function GET() {
   try {
-    const boxes = await Box.find({});
+    const boxes = await Box.find({isDeleted: false});
     return NextResponse.json({ success: true, data: boxes }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });
