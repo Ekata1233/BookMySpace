@@ -7,9 +7,11 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-    await connectToDatabase();
-    const { id } = params;
+// ✅ FIXED FUNCTION SIGNATURE
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+  await connectToDatabase();
+  const { id } = context.params;
+
   try {
     const formData = await req.formData();
     const title = formData.get('title') as string;
@@ -43,19 +45,20 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-    await connectToDatabase();
-    const { id } = params;
-  
-    try {
-      const deletedTour = await OfficeTour.findByIdAndDelete(id);
-  
-      if (!deletedTour) {
-        return NextResponse.json({ success: false, message: "Office tour not found" }, { status: 404 });
-      }
-  
-      return NextResponse.json({ success: true, message: "Deleted successfully" });
-    } catch (err: any) {
-      return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+// ✅ FIXED FUNCTION SIGNATURE
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+  await connectToDatabase();
+  const { id } = context.params;
+
+  try {
+    const deletedTour = await OfficeTour.findByIdAndDelete(id);
+
+    if (!deletedTour) {
+      return NextResponse.json({ success: false, message: "Office tour not found" }, { status: 404 });
     }
+
+    return NextResponse.json({ success: true, message: "Deleted successfully" });
+  } catch (err: any) {
+    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
   }
+}
