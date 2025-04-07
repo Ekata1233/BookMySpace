@@ -11,7 +11,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// ✅ Handle preflight
+// ✅ OPTIONS - Preflight
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
@@ -19,7 +19,7 @@ export async function OPTIONS() {
 // ✅ PUT - Update Office Tour
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
-  const id = context.params.id;
+  const { id } = context.params;
 
   try {
     const formData = await req.formData();
@@ -69,10 +69,10 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
   }
 }
 
-// ✅ DELETE - Remove Office Tour
+// ✅ DELETE - Delete Office Tour
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
-  const id = context.params.id;
+  const { id } = context.params;
 
   try {
     const deletedTour = await OfficeTour.findByIdAndDelete(id);
