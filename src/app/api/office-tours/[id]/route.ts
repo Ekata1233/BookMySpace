@@ -17,12 +17,10 @@ export async function OPTIONS() {
 }
 
 // ✅ PUT handler
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function PUT(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
-  const { id } = params;
+
+  const id = req.nextUrl.pathname.split('/').pop(); // Extract ID from URL
 
   try {
     const formData = await req.formData();
@@ -73,12 +71,10 @@ export async function PUT(
 }
 
 // ✅ DELETE handler
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
-  const { id } = params;
+
+  const id = req.nextUrl.pathname.split('/').pop(); // Extract ID from URL
 
   try {
     const deletedTour = await OfficeTour.findByIdAndDelete(id);
