@@ -1,3 +1,4 @@
+'use client';
 import { useAuth } from "@/app/context/authContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
