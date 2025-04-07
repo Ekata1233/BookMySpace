@@ -195,7 +195,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
-import { useParams } from "next/navigation";
+import { useParams , useRouter  } from "next/navigation";
+import axios from "axios";
 
 export interface OfficeSpace {
   _id: string;
@@ -209,6 +210,8 @@ const TimeCalendar = () => {
   const { addBooking } = useBookSpaces();
   const { bookings } = useBookSpaces();
   const [userInfo, setUserInfo] = useState<any>(null);
+  const router = useRouter();
+
 
   const params = useParams();
   const id = params.id;
@@ -223,6 +226,7 @@ const TimeCalendar = () => {
       }
     }
   }, []);
+
 
   interface OfficeSpace {
     _id: string;
@@ -276,36 +280,7 @@ const totalPay = rate * Number(selectedDuration);
     }
   }
 
-  const userId = userInfo?.id;
-
-  // BOOK NOW logic
-  const handleBooking = async () => {
-    if (!date || !officeId) return alert("Missing info to book slot.");
-
-    const bookingDate = date?.toLocaleDateString("en-CA");
-    const startTimeFormatted = `${selectedHour.padStart(
-      2,
-      "0"
-    )}:${selectedMinute}`;
-
-    const bookingData = {
-      userId,
-      officeId: officeId,
-      date: bookingDate,
-      startTime: startTimeFormatted,
-      duration: parseInt(selectedDuration),
-      totalPay: totalPay,
-      
-    };
-
-    try {
-      await addBooking(bookingData);
-      alert("Slot booked successfully!");
-    } catch (err) {
-      alert("Failed to book slot.");
-      console.error(err);
-    }
-  };
+  const userId = userInfo?._id;
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -327,6 +302,81 @@ const totalPay = rate * Number(selectedDuration);
       }
     }
   });
+
+    // BOOK NOW logic
+
+    const loadRazorpayScript = () => {
+      return new Promise((resolve) => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+      });
+    };
+    
+    const handleBooking = async () => {
+      if (!date || !officeId) return alert("Missing info to book slot.");
+    
+      const bookingDate = date?.toLocaleDateString("en-CA");
+      const startTimeFormatted = `${selectedHour.padStart(2, "0")}:${selectedMinute}`;
+    
+      const bookingData = {
+        userId,
+        officeId,
+        date: bookingDate,
+        startTime: startTimeFormatted,
+        duration: parseInt(selectedDuration),
+        totalPay,
+      };
+    
+      const res = await loadRazorpayScript();
+      if (!res) {
+        alert("Failed to load Razorpay SDK");
+        return;
+      }
+    
+      // 1. Get Razorpay Order from Backend using axios
+      try {
+        const { data } = await axios.post("/api/razorpay", bookingData);
+        const { id: orderId } = data;
+    
+        const options = {
+          key: "rzp_test_4IVVmy5cqABEUR", // your Razorpay test public key
+          amount: totalPay * 100,
+          currency: "INR",
+          name: "Office Booking",
+          description: "Booking Office Slot",
+          order_id: orderId,
+          handler: async function (response: any) {
+            console.log("Payment Successful!", response);
+    
+            // Save Booking to DB
+            try {
+              await addBooking(bookingData);
+              router.push("/booking-confirmed");
+            } catch (err) {
+              alert("Payment done but failed to save booking.");
+              console.error(err);
+            }
+          },
+          prefill: {
+            name: userInfo?.name || "Guest",
+            email: userInfo?.email || "",
+          },
+          theme: {
+            color: "#6BB7BE",
+          },
+        };
+    
+        const razorpay = new (window as any).Razorpay(options);
+        razorpay.open();
+    
+      } catch (error) {
+        console.error("Error creating Razorpay order:", error);
+        alert("Failed to initiate Razorpay payment.");
+      }
+    };
 
   return (
     <div className="container mx-auto p-4">
