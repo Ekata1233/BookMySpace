@@ -34,9 +34,9 @@ export async function GET() {
 export async function POST(req: Request) {
   await connectToDatabase();
   try {
-    const { image, title, description } = await req.json();
+    const { image, title, text } = await req.json();
 
-    if (!image || !title || !description) {
+    if (!image || !title || !text) {
       return NextResponse.json(
         { success: false, message: 'Missing required fields' },
         { status: 400, headers: corsHeaders }
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
     const newTour = await OfficeTour.create({
       image,
       title,
-      description,
+      text,
       isDeleted: false,
     });
 
