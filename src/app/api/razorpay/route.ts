@@ -3,21 +3,23 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
-
 export async function POST(req: Request) {
   try {
+    // TEMP LOG TO VERIFY ENV
+    console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
+    console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET);
+
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID!,
+      key_secret: process.env.RAZORPAY_KEY_SECRET!,
+    });
+
     const body = await req.json();
 
-    // console.log("Body of razorpay : ", body)
-
     const options = {
-      amount: body.totalPay * 100, // Razorpay uses paise
+      amount: body.totalPay * 100,
       currency: "INR",
-      receipt: `receipt_order_${Math.random()}`,
+      receipt: `receipt_order_${Math.floor(Math.random() * 1000000)}`,
     };
 
     const order = await razorpay.orders.create(options);
