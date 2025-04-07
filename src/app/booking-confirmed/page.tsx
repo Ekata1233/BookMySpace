@@ -2,15 +2,9 @@
 
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 
 const BookingConfirmedPage = () => {
-  const searchParams = useSearchParams();
-  const bookingId = searchParams.get("bookingId");
-  const space = searchParams.get("space");
-  const date = searchParams.get("date");
-  const time = searchParams.get("time");
-  const email = searchParams.get("email");
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] p-4 mt-10 xl:mt-20">

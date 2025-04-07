@@ -1,3 +1,4 @@
+'use client';
 import { useAuth } from "@/app/context/authContext";
 import React from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
