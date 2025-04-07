@@ -9,11 +9,9 @@ const SECRET_KEY = process.env.JWT_SECRET as string;
 export async function GET(req: NextRequest) {
   try {
     const token = req.headers.get("authorization")?.split(" ")[1]; // Bearer token
-
     if (!token) {
       return NextResponse.json({ error: "No token provided" }, { status: 401 });
     }
-
     const decoded = jwt.verify(token, SECRET_KEY) as any;
     await connectToDatabase();
 
@@ -22,7 +20,6 @@ export async function GET(req: NextRequest) {
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
     console.error("Get User Error:", error);

@@ -245,10 +245,6 @@ const TimeCalendar = () => {
   };
   
   const { _id: officeId, startTime, endTime, rate } = office ?? fallback;
-  
-  console.log("rate of the space : ", rate);
-  
-  
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedHour, setSelectedHour] = useState("09");

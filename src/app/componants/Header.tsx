@@ -268,8 +268,10 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        console.log("my account")
+                        router.push("/my-account");
+                        setOpen(false);
                       }}
+                      
                       className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-[#6BB7BE] hover:text-white border border-[#6BB7BE] px-14 font-bold bg-white hover:bg-[#6BB7BE] font-medium"
                     >
                       My Account

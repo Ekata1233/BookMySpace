@@ -42,7 +42,7 @@ const ThirdWorkBusiness = () => {
         {/* Image Section */}
         <div className="relative flex justify-center items-center h-64 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[32rem]">
           {/* Gray Square Behind Images */}
-          <div className="absolute w-50 h-50 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-gray-300 rounded-lg transform translate-x-8 sm:translate-x-12 md:translate-x-10 lg:translate-x-10 translate-y-6 sm:translate-y-6 md:-translate-y-10 lg:translate-y-0"></div>
+          <div className="absolute w-50 h-50 sm:w-48 sm:h-48 md:w-56 md:h-56 lg:w-64 lg:h-64 bg-gray-300 rounded-none transform translate-x-8 sm:translate-x-12 md:translate-x-10 lg:translate-x-10 translate-y-6 sm:translate-y-6 md:-translate-y-10 lg:translate-y-0"></div>
 
           {/* Top Image */}
           <Image
