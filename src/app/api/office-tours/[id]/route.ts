@@ -4,7 +4,7 @@ import OfficeTour from '@/models/OfficeTour';
 import path from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
-import os from 'os';  // Import the os module
+import os from 'os';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,12 +12,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// ✅ Preflight support for CORS
+// Preflight support for CORS
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ✅ PUT handler
+// PUT handler to update an Office Tour
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
 
@@ -46,6 +46,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
         await mkdir(uploadDir, { recursive: true });
       }
 
+      // Convert the file into a Buffer and save it
       const buffer = Buffer.from(await file.arrayBuffer());
       const filePath = path.join(uploadDir, file.name);
       await writeFile(filePath, buffer);
@@ -73,7 +74,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
   }
 }
 
-// ✅ DELETE handler
+// DELETE handler to delete an Office Tour
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
 
