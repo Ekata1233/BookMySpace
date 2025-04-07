@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
-// ✅ FIXED FUNCTION SIGNATURE
+// ✅ MUST use `context` — not destructuring
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
   const { id } = context.params;
@@ -45,7 +45,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
   }
 }
 
-// ✅ FIXED FUNCTION SIGNATURE
+// ✅ MUST use `context` — not destructuring
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
   const { id } = context.params;
