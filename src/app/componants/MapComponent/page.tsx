@@ -15,15 +15,16 @@ const center = {
 
 const IndiaMap = () => {
   return (
-    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={17} // Adjust zoom level for a larger/smaller area
-      >
-        {/* You can add markers, polygons, etc. here */}
-      </GoogleMap>
-    </LoadScript>
+    // <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
+    //   <GoogleMap
+    //     mapContainerStyle={containerStyle}
+    //     center={center}
+    //     zoom={17} 
+    //   >
+       
+    //   </GoogleMap>
+    // </LoadScript>
+    <div>h</div>
   );
 };
 
