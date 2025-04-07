@@ -59,39 +59,53 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-
+  
     const data = await res.json();
-
+  
     if (res.ok) {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token); // Save token
       alert("Login successful!");
       router.push("/");
     } else {
       alert(data.error);
     }
   };
+  
 
   // Logout function
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     router.push("/auth");
   };
-  const getUser = async () => {
-    const res = await fetch("/api/auth/signup", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+  
 
+
+  const getUser = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    const res = await fetch("/api/auth/me", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
     if (res.ok) {
       const data = await res.json();
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
     } else {
       console.error("Failed to fetch user");
+      logout(); // optional: clear token if invalid
     }
   };
+  
 
   useEffect(() => {
     getUser();
