@@ -9,15 +9,14 @@ import Offices from "./componants/officeSpace/page";
 import Boxes from "./componants/boxes/page";
 import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
-import MapComponent from "./componants/MapComponent/page";
+import IndiaMap from "./componants/MapComponent/page";
 
 export default function Home() {
   return (
     <main className="mt-16">
       <Hero />
-     
+      <IndiaMap />
       <Offices />
-      <MapComponent />
       <OfficeTour />
       <WorkBusiness />
       <SecondWorkBusiness />

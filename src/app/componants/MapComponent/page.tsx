@@ -1,31 +1,30 @@
-'use client';
-import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+'use client'; // required for Next.js 13+ with useEffect
 
-// Fix default marker icon issue
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-});
+import { GoogleMap, LoadScript } from '@react-google-maps/api';
 
-const MapComponent = () => {
-  const puneCoordinates = [18.5204, 73.8567]; // Latitude, Longitude for Pune
+const containerStyle = {
+  width: '100%',
+  height: '1500px'
+};
 
+const center = {
+  lat: 18.5204,  // Latitude for Pune
+  lng: 73.8567   // Longitude for Pune
+};
+
+
+const IndiaMap = () => {
   return (
-    <MapContainer center={puneCoordinates} zoom={13} style={{ height: '500px', width: '100%' }}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={puneCoordinates}>
-        <Popup>Pune City 📍</Popup>
-      </Marker>
-    </MapContainer>
+    <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={17} // Adjust zoom level for a larger/smaller area
+      >
+        {/* You can add markers, polygons, etc. here */}
+      </GoogleMap>
+    </LoadScript>
   );
 };
 
-export default MapComponent;
+export default IndiaMap;
