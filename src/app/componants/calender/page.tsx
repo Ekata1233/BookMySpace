@@ -441,7 +441,7 @@ const totalPay = rate * Number(selectedDuration);
 
       <div>
         <h4 className="p-4 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
-          Total Pay{" "} : {totalPay}
+          Total Pay{" "} : {totalPay}{" "}Rs
         </h4>
       </div>
       {/* BOOK NOW BUTTON */}

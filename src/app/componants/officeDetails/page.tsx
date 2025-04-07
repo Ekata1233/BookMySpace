@@ -2,7 +2,7 @@
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { FaWifi } from "react-icons/fa";
 import { LuAlarmClock } from "react-icons/lu";
@@ -52,6 +52,13 @@ const OfficeDetails = () => {
   const params = useParams();
   const id = params?.id;
 
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const mainSlug = pathSegments[0] || "";
+  const pageName = pathSegments[pathSegments.length - 1] || "";
+
+  console.log("pathe name : ", mainSlug);
+
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
   console.log("Matched Office Space: ", MatchedOfficeSpace);
@@ -81,7 +88,7 @@ const OfficeDetails = () => {
 
   const handleBookNow = () => {
     if (id) {
-      router.push(`/office-space/${id}/book`);
+      router.push(`/${mainSlug}/${id}/book`);
     }
   };
 
@@ -190,18 +197,18 @@ const OfficeDetails = () => {
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
               {startTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(startTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true,
-                })
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
                 : "10:00 AM"}{" "}
               -{" "}
               {endTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(endTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
                 : "10:00 PM"}{" "}
               PM
             </p>
@@ -225,7 +232,8 @@ const OfficeDetails = () => {
 
           <div className="flex flex-wrap justify-center">
             {MatchedOfficeSpace.amenities.map((amenity, index) => {
-              const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons] || null;
+              const IconComponent =
+                amenityIcons[amenity as keyof typeof amenityIcons] || null;
 
               return (
                 <div
@@ -239,10 +247,7 @@ const OfficeDetails = () => {
                 </div>
               );
             })}
-
-           
           </div>
-
         </div>
       </div>
     </div>
