@@ -3,14 +3,13 @@ import OfficeTour from '@/models/OfficeTour';
 import path from 'path';
 import { writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const uploadDir = path.join(process.cwd(), 'public/uploads');
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  await connectToDatabase();
-  const { id } = params;
-
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+    await connectToDatabase();
+    const { id } = params;
   try {
     const formData = await req.formData();
     const title = formData.get('title') as string;
