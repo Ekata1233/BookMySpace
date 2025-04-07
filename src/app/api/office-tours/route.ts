@@ -17,12 +17,12 @@ export async function OPTIONS() {
 }
 
 // ✅ PUT - Update Office Tour
-export async function PUT(request: NextRequest, context: any) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
   const { id } = context.params;
 
   try {
-    const formData = await request.formData();
+    const formData = await req.formData();
     const title = formData.get('title') as string;
     const text = formData.get('text') as string;
     const file = formData.get('image') as File | null;
@@ -70,7 +70,7 @@ export async function PUT(request: NextRequest, context: any) {
 }
 
 // ✅ DELETE - Delete Office Tour
-export async function DELETE(request: NextRequest, context: any) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
   const { id } = context.params;
 
