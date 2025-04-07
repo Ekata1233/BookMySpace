@@ -9,7 +9,7 @@ import PaymentHistory from "./payment-history/page";
 const tabs = [
   { id: "personal", label: "Personal Info" },
   { id: "bookings", label: "My Bookings" },
-  { id: "appointments", label: "Upcoming Appointments" },
+  { id: "appointments", label: "Upcoming Bookings" },
   { id: "payments", label: "Payment History" },
 ];
 

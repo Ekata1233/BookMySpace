@@ -9,6 +9,7 @@ import Offices from "./componants/officeSpace/page";
 import Boxes from "./componants/boxes/page";
 import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
+import MapComponent from "./componants/MapComponent/page";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
      
       <Offices />
+      <MapComponent />
       <OfficeTour />
       <WorkBusiness />
       <SecondWorkBusiness />
