@@ -1,16 +1,28 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
 import OfficeTour from '@/models/OfficeTour';
 import path from 'path';
-import { writeFile, mkdir } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
-import { NextRequest, NextResponse } from 'next/server';
 
-const uploadDir = path.join(process.cwd(), 'public/uploads');
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
-// ✅ MUST use `context` — not destructuring
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+// ✅ Preflight support for CORS
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+// ✅ PUT handler
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   await connectToDatabase();
-  const { id } = context.params;
+  const { id } = params;
 
   try {
     const formData = await req.formData();
@@ -19,10 +31,15 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     const file = formData.get('image') as File | null;
 
     if (!title || !text) {
-      return NextResponse.json({ success: false, message: 'Title and text are required' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Title and text are required' },
+        { status: 400, headers: corsHeaders }
+      );
     }
 
     let image = '';
+    const uploadDir = path.join(process.cwd(), 'public/uploads');
+
     if (file && file.name) {
       if (!existsSync(uploadDir)) {
         await mkdir(uploadDir, { recursive: true });
@@ -37,28 +54,50 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     const updateData: any = { title, text };
     if (image) updateData.image = image;
 
-    const updated = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedTour = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
 
-    return NextResponse.json({ success: true, data: updated });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+    if (!updatedTour) {
+      return NextResponse.json(
+        { success: false, message: 'Office tour not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: updatedTour }, { headers: corsHeaders });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
 
-// ✅ MUST use `context` — not destructuring
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+// ✅ DELETE handler
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   await connectToDatabase();
-  const { id } = context.params;
+  const { id } = params;
 
   try {
     const deletedTour = await OfficeTour.findByIdAndDelete(id);
 
     if (!deletedTour) {
-      return NextResponse.json({ success: false, message: "Office tour not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Office tour not found' },
+        { status: 404, headers: corsHeaders }
+      );
     }
 
-    return NextResponse.json({ success: true, message: "Deleted successfully" });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: true, message: 'Deleted successfully' },
+      { headers: corsHeaders }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }

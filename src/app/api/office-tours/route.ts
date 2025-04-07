@@ -1,9 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
 import OfficeTour from '@/models/OfficeTour';
-import path from 'path';
-import { mkdir, writeFile } from 'fs/promises';
-import { existsSync } from 'fs';
+import { NextResponse } from 'next/server';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,59 +8,20 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// ✅ Preflight support for CORS
+// ✅ Handle preflight requests
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ✅ PUT handler
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+// ✅ GET all office tours (excluding deleted ones)
+export async function GET() {
   await connectToDatabase();
-  const { id } = params;
-
   try {
-    const formData = await req.formData();
-    const title = formData.get('title') as string;
-    const text = formData.get('text') as string;
-    const file = formData.get('image') as File | null;
-
-    if (!title || !text) {
-      return NextResponse.json(
-        { success: false, message: 'Title and text are required' },
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    let image = '';
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-
-    if (file && file.name) {
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true });
-      }
-
-      const buffer = Buffer.from(await file.arrayBuffer());
-      const filePath = path.join(uploadDir, file.name);
-      await writeFile(filePath, buffer);
-      image = `/uploads/${file.name}`;
-    }
-
-    const updateData: any = { title, text };
-    if (image) updateData.image = image;
-
-    const updatedTour = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
-
-    if (!updatedTour) {
-      return NextResponse.json(
-        { success: false, message: 'Office tour not found' },
-        { status: 404, headers: corsHeaders }
-      );
-    }
-
-    return NextResponse.json({ success: true, data: updatedTour }, { headers: corsHeaders });
+    const tours = await OfficeTour.find({ isDeleted: false });
+    return NextResponse.json(
+      { success: true, data: tours },
+      { status: 200, headers: corsHeaders }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -72,32 +30,34 @@ export async function PUT(
   }
 }
 
-// ✅ DELETE handler
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+// ✅ POST a new office tour
+export async function POST(req: Request) {
   await connectToDatabase();
-  const { id } = params;
-
   try {
-    const deletedTour = await OfficeTour.findByIdAndDelete(id);
+    const { image, title, description } = await req.json();
 
-    if (!deletedTour) {
+    if (!image || !title || !description) {
       return NextResponse.json(
-        { success: false, message: 'Office tour not found' },
-        { status: 404, headers: corsHeaders }
+        { success: false, message: 'Missing required fields' },
+        { status: 400, headers: corsHeaders }
       );
     }
 
+    const newTour = await OfficeTour.create({
+      image,
+      title,
+      description,
+      isDeleted: false,
+    });
+
     return NextResponse.json(
-      { success: true, message: 'Deleted successfully' },
-      { headers: corsHeaders }
+      { success: true, data: newTour },
+      { status: 201, headers: corsHeaders }
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500, headers: corsHeaders }
+      { status: 400, headers: corsHeaders }
     );
   }
 }
