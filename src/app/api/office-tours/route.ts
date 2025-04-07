@@ -1,9 +1,9 @@
+import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
 import OfficeTour from '@/models/OfficeTour';
 import path from 'path';
-import { writeFile, mkdir } from 'fs/promises';
+import { mkdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
-import { NextRequest, NextResponse } from 'next/server';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,7 +11,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// ✅ Preflight
+// ✅ Handle preflight
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
@@ -19,7 +19,7 @@ export async function OPTIONS() {
 // ✅ PUT - Update Office Tour
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
-  const { id } = context.params;
+  const id = context.params.id;
 
   try {
     const formData = await req.formData();
@@ -51,16 +51,16 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     const updateData: any = { title, text };
     if (image) updateData.image = image;
 
-    const updated = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedTour = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
 
-    if (!updated) {
+    if (!updatedTour) {
       return NextResponse.json(
         { success: false, message: 'Office tour not found' },
         { status: 404, headers: corsHeaders }
       );
     }
 
-    return NextResponse.json({ success: true, data: updated }, { headers: corsHeaders });
+    return NextResponse.json({ success: true, data: updatedTour }, { headers: corsHeaders });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
@@ -69,10 +69,10 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
   }
 }
 
-// ✅ DELETE - Delete Office Tour
+// ✅ DELETE - Remove Office Tour
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
   await connectToDatabase();
-  const { id } = context.params;
+  const id = context.params.id;
 
   try {
     const deletedTour = await OfficeTour.findByIdAndDelete(id);
