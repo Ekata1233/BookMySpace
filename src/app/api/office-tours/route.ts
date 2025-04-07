@@ -1,61 +1,97 @@
-import { NextResponse } from "next/server";
-import path from "path";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
-import { connectToDatabase } from "@/lib/db";
-import OfficeTour from "@/models/OfficeTour";
+import { connectToDatabase } from '@/lib/db';
+import OfficeTour from '@/models/OfficeTour';
+import path from 'path';
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Ensure MongoDB is connected
-connectToDatabase();
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
 
-export async function POST(req: Request) {
+// ✅ Preflight
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+// ✅ PUT - Update Office Tour
+export async function PUT(request: NextRequest, context: any) {
+  await connectToDatabase();
+  const { id } = context.params;
+
   try {
-    const formData = await req.formData();
+    const formData = await request.formData();
+    const title = formData.get('title') as string;
+    const text = formData.get('text') as string;
+    const file = formData.get('image') as File | null;
 
-    const title = formData.get("title") as string;
-    const text = formData.get("text") as string;
-    const file = formData.get("image") as File;
-
-    if (!title || !text || !file) {
+    if (!title || !text) {
       return NextResponse.json(
-        { success: false, message: "All fields are required" },
-        { status: 400 }
+        { success: false, message: 'Title and text are required' },
+        { status: 400, headers: corsHeaders }
       );
     }
 
-    // Upload directory setup
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
+    let image = '';
+    const uploadDir = path.join(process.cwd(), 'public/uploads');
+
+    if (file && file.name) {
+      if (!existsSync(uploadDir)) {
+        await mkdir(uploadDir, { recursive: true });
+      }
+
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const filePath = path.join(uploadDir, file.name);
+      await writeFile(filePath, buffer);
+      image = `/uploads/${file.name}`;
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const filePath = path.join(uploadDir, file.name);
-    await writeFile(filePath, buffer);
+    const updateData: any = { title, text };
+    if (image) updateData.image = image;
 
-    const imageUrl = `/uploads/${file.name}`;
+    const updated = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
 
-    const newTour = await OfficeTour.create({ title, text, image: imageUrl });
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, message: 'Office tour not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
 
-    return NextResponse.json({ success: true, data: newTour }, { status: 201 });
+    return NextResponse.json({ success: true, data: updated }, { headers: corsHeaders });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
 
-export async function GET() {
+// ✅ DELETE - Delete Office Tour
+export async function DELETE(request: NextRequest, context: any) {
+  await connectToDatabase();
+  const { id } = context.params;
+
   try {
-    await connectToDatabase();
-    const tours = await OfficeTour.find();
-    return NextResponse.json({ success: true, data: tours }, { status: 200 });
+    const deletedTour = await OfficeTour.findByIdAndDelete(id);
+
+    if (!deletedTour) {
+      return NextResponse.json(
+        { success: false, message: 'Office tour not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: 'Deleted successfully' },
+      { headers: corsHeaders }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
