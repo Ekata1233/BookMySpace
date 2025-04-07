@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/lib/db';
-import OfficeTour from '@/models/OfficeTour';
+import Box from '@/models/box';
+import { connectToDatabase } from '../../../../lib/db';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,34 +8,68 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
+// ✅ Handle preflight
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+// ✅ PUT - Update Box
+export async function PUT(request: Request, context: any) {
   await connectToDatabase();
-  const tour = await OfficeTour.findById(params.id);
-  if (!tour || tour.isDeleted) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404, headers: corsHeaders });
+
+  try {
+    const { id } = context.params;
+    const updateData = await request.json();
+
+    const updatedBox = await Box.findByIdAndUpdate(id, updateData, { new: true });
+
+    if (!updatedBox) {
+      return NextResponse.json(
+        { success: false, message: 'Box not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, data: updatedBox },
+      { status: 200, headers: corsHeaders }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 400, headers: corsHeaders }
+    );
   }
-  return NextResponse.json({ success: true, data: tour }, { headers: corsHeaders });
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+// ✅ DELETE - Soft Delete Box
+export async function DELETE(request: Request, context: any) {
   await connectToDatabase();
-  const data = await request.json();
-  const updated = await OfficeTour.findByIdAndUpdate(params.id, data, { new: true });
-  if (!updated) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404, headers: corsHeaders });
-  }
-  return NextResponse.json({ success: true, data: updated }, { headers: corsHeaders });
-}
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  await connectToDatabase();
-  const deleted = await OfficeTour.findByIdAndUpdate(params.id, { isDeleted: true }, { new: true });
-  if (!deleted) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404, headers: corsHeaders });
+  try {
+    const { id } = context.params;
+
+    const deletedBox = await Box.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
+
+    if (!deletedBox) {
+      return NextResponse.json(
+        { success: false, message: 'Box not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, data: deletedBox },
+      { status: 200, headers: corsHeaders }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 400, headers: corsHeaders }
+    );
   }
-  return NextResponse.json({ success: true, data: deleted }, { headers: corsHeaders });
 }
