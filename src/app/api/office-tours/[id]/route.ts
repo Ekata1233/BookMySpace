@@ -4,6 +4,7 @@ import OfficeTour from '@/models/OfficeTour';
 import path from 'path';
 import { mkdir, writeFile } from 'fs/promises';
 import { existsSync } from 'fs';
+import os from 'os';  // Import the os module
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,9 +37,11 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     }
 
     let image = '';
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
+    // Use os.tmpdir() for temporary directory, suitable for serverless environments
+    const uploadDir = path.join(os.tmpdir(), 'uploads');
 
     if (file && file.name) {
+      // Check if the upload directory exists; if not, create it
       if (!existsSync(uploadDir)) {
         await mkdir(uploadDir, { recursive: true });
       }
