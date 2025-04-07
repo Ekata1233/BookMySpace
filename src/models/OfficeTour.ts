@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const officeTourSchema = new mongoose.Schema({
   title: String,
-  text: String,
+  description: String, // Change 'text' to 'description'
   image: String,
 }, { timestamps: true });
 
