@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
-import OfficeTour from '@/models/OfficeTour';
-import imagekit from '@/lib/imagekit'; // ✅ Import ImageKit instance
+import ExploreOffice from '@/models/ExploreOffice';
+import imagekit from '@/lib/imagekit';
 import { Buffer } from 'buffer';
 
 const corsHeaders = {
@@ -10,26 +10,25 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-// ✅ Preflight support for CORS
+// Preflight for CORS
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ✅ PUT handler with ImageKit
+// ✅ PUT handler with ImageKit support
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
-
   const id = req.nextUrl.pathname.split('/').pop();
 
   try {
     const formData = await req.formData();
-    const title = formData.get('title') as string;
-    const description = formData.get('description') as string;
+    const name = formData.get('name') as string;
+    const address = formData.get('address') as string;
     const file = formData.get('image') as File | null;
 
-    if (!title || !description) {
+    if (!name || !address) {
       return NextResponse.json(
-        { success: false, message: 'Title and description are required' },
+        { success: false, message: 'Name and address are required' },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -42,25 +41,25 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
       const uploadResponse = await imagekit.upload({
         file: buffer,
         fileName: file.name,
-        folder: '/office-tours',
+        folder: '/explore-offices',
       });
 
       image = uploadResponse.url;
     }
 
-    const updateData: any = { title, description };
+    const updateData: any = { name, address };
     if (image) updateData.image = image;
 
-    const updatedTour = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedOffice = await ExploreOffice.findByIdAndUpdate(id, updateData, { new: true });
 
-    if (!updatedTour) {
+    if (!updatedOffice) {
       return NextResponse.json(
-        { success: false, message: 'Office tour not found' },
+        { success: false, message: 'Office not found' },
         { status: 404, headers: corsHeaders }
       );
     }
 
-    return NextResponse.json({ success: true, data: updatedTour }, { headers: corsHeaders });
+    return NextResponse.json({ success: true, data: updatedOffice }, { headers: corsHeaders });
 
   } catch (error: any) {
     return NextResponse.json(
@@ -69,18 +68,18 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     );
   }
 }
-// ✅ DELETE handler (unchanged)
+
+// ✅ DELETE handler
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
-
-  const id = req.nextUrl.pathname.split('/').pop(); // Extract ID from URL
+  const id = req.nextUrl.pathname.split('/').pop();
 
   try {
-    const deletedTour = await OfficeTour.findByIdAndDelete(id);
+    const deletedOffice = await ExploreOffice.findByIdAndDelete(id);
 
-    if (!deletedTour) {
+    if (!deletedOffice) {
       return NextResponse.json(
-        { success: false, message: 'Office tour not found' },
+        { success: false, message: 'Office not found' },
         { status: 404, headers: corsHeaders }
       );
     }

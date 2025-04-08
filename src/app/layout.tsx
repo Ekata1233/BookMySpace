@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/authContext";
 import { ContactProvider } from "./context/ContactContex";
 import { BookSpaceProvider } from "./context/BookSpaceContext";
 import { OfficeTourProvider } from "./context/OfficeTourContext";
+import { ExploreOfficeProvider } from "./context/ExploreOfficeContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -32,9 +33,11 @@ export default function RootLayout({
             <ContactProvider>
               <OfficeSpaceProvider>
                 <OfficeTourProvider>
+                  <ExploreOfficeProvider>
                 <Header />
                 {children}
                 <Footer />
+                </ExploreOfficeProvider>
                 </OfficeTourProvider>
               </OfficeSpaceProvider>
             </ContactProvider>

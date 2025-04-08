@@ -8,7 +8,7 @@ interface OfficeTourItem {
   _id: string;
   image: string;
   title: string;
-  text: string;
+  description: string;
 }
 
 const OfficeTour = () => {
@@ -66,7 +66,7 @@ const OfficeTour = () => {
 
               {/* Hover Description */}
               <div className="hover-text text-base md:text-lg lg:text-xl xl:text-xl text-center px-4 md:px-6">
-                <p>{item.text}</p>
+                <p>{item.description}</p>
               </div>
             </div>
           ))}
