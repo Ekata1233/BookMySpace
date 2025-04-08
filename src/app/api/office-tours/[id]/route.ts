@@ -35,11 +35,10 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     }
 
     let image = '';
-    if (file && file.name) {
-      // ✅ Convert file to Buffer
-      const buffer = Buffer.from(await file.arrayBuffer());
+    if (file && typeof file === 'object' && file.name) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
 
-      // ✅ Upload to ImageKit
       const uploadResponse = await imagekit.upload({
         file: buffer,
         fileName: file.name,
@@ -62,9 +61,10 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     }
 
     return NextResponse.json({ success: true, data: updatedTour }, { headers: corsHeaders });
+
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { success: false, message: error.message || 'Server Error' },
       { status: 500, headers: corsHeaders }
     );
   }
