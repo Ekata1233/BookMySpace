@@ -19,7 +19,7 @@ export async function OPTIONS() {
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
 
-  const id = req.nextUrl.pathname.split('/').pop(); // Extract ID from URL
+  const id = req.nextUrl.pathname.split('/').pop();
 
   try {
     const formData = await req.formData();
@@ -64,12 +64,11 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
 
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, message: error.message || 'Server Error' },
+      { success: false, message: error.message },
       { status: 500, headers: corsHeaders }
     );
   }
 }
-
 // ✅ DELETE handler (unchanged)
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
