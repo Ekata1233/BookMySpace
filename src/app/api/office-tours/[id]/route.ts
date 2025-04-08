@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectToDatabase } from '@/lib/db';
 import OfficeTour from '@/models/OfficeTour';
-import path from 'path';
-import { mkdir, writeFile } from 'fs/promises';
-import { existsSync } from 'fs';
-import os from 'os';  // Import the os module
+import imagekit from '@/lib/imagekit'; // ✅ Import ImageKit instance
+import { Buffer } from 'buffer';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -17,7 +15,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ✅ PUT handler
+// ✅ PUT handler with ImageKit
 export async function PUT(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
 
@@ -37,19 +35,18 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
     }
 
     let image = '';
-    // Use os.tmpdir() for temporary directory, suitable for serverless environments
-    const uploadDir = path.join(os.tmpdir(), 'uploads');
-
     if (file && file.name) {
-      // Check if the upload directory exists; if not, create it
-      if (!existsSync(uploadDir)) {
-        await mkdir(uploadDir, { recursive: true });
-      }
-
+      // ✅ Convert file to Buffer
       const buffer = Buffer.from(await file.arrayBuffer());
-      const filePath = path.join(uploadDir, file.name);
-      await writeFile(filePath, buffer);
-      image = `/uploads/${file.name}`;
+
+      // ✅ Upload to ImageKit
+      const uploadResponse = await imagekit.upload({
+        file: buffer,
+        fileName: file.name,
+        folder: '/office-tours',
+      });
+
+      image = uploadResponse.url;
     }
 
     const updateData: any = { title, text };
@@ -73,7 +70,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
   }
 }
 
-// ✅ DELETE handler
+// ✅ DELETE handler (unchanged)
 export async function DELETE(req: NextRequest): Promise<NextResponse> {
   await connectToDatabase();
 

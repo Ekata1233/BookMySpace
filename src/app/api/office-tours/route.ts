@@ -1,9 +1,8 @@
 import { connectToDatabase } from '@/lib/db';
 import OfficeTour from '@/models/OfficeTour';
 import { NextResponse } from 'next/server';
-import path from "path";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
+import imagekit from '@/lib/imagekit'; // ✅ ImageKit instance
+import { Buffer } from 'buffer';
 
 // ✅ CORS headers
 const corsHeaders = {
@@ -28,7 +27,7 @@ export async function GET() {
   }
 }
 
-// ✅ POST
+// ✅ POST (with ImageKit upload)
 export async function POST(req: Request) {
   await connectToDatabase();
   try {
@@ -41,20 +40,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, message: 'All fields are required' }, { status: 400, headers: corsHeaders });
     }
 
-    // ✅ Create upload directory if needed
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
+    // ✅ Convert file to Buffer for ImageKit upload
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
-    // ✅ Save file
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const filePath = path.join(uploadDir, file.name);
-    await writeFile(filePath, buffer);
-    const imagePath = `/uploads/${file.name}`;
+    // ✅ Upload to ImageKit
+    const uploadResponse = await imagekit.upload({
+      file: buffer,
+      fileName: file.name,
+      folder: '/office-tours',
+    });
 
-    // ✅ Save to DB
-    const newTour = await OfficeTour.create({ title, description, image: imagePath });
+    // ✅ Save to DB with uploaded URL
+    const newTour = await OfficeTour.create({
+      title,
+      description,
+      image: uploadResponse.url,
+    });
+
     return NextResponse.json({ success: true, data: newTour }, { status: 201, headers: corsHeaders });
   } catch (error: any) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500, headers: corsHeaders });
