@@ -38,14 +38,14 @@ const OfficeSpaces: React.FC = () => {
   const pageFilteredSpaces = !normalizedPageCategory
     ? officeSpaces
     : officeSpaces.filter((space) => {
-        if (!space.category) return false;
+      if (!space.category) return false;
 
-        const spaceCategory = Array.isArray(space.category)
-          ? space.category.map((cat) => cat.toLowerCase())
-          : [space.category.toLowerCase()];
+      const spaceCategory = Array.isArray(space.category)
+        ? space.category.map((cat) => cat.toLowerCase())
+        : [space.category.toLowerCase()];
 
-        return spaceCategory.includes(normalizedPageCategory);
-      });
+      return spaceCategory.includes(normalizedPageCategory);
+    });
 
   const cities = [
     "Mumbai",
@@ -170,13 +170,13 @@ const OfficeSpaces: React.FC = () => {
             displaySpaces.map((space) => (
               <Card
                 key={space._id}
-                className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
+                className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
               >
                 <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                   <Image
                     src={space.thumbnailImage}
                     alt={space.officeSpaceName}
-                    className="w-[350px] h-[300px] object-cover"
+                    className="w-full h-full object-cover"
                     width={300}
                     height={200}
                   />
@@ -184,17 +184,19 @@ const OfficeSpaces: React.FC = () => {
 
                 <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
                   <div>
-                    <div className="flex justify-between">
-                      <h3 className="text-lg sm:text-xl font-semibold">
-                        {space.officeSpaceName}
-                      </h3>
-                      {space.isNewlyOpen && (
-                        <p className="text-red-500 text-sm sm:text-base flex items-center">
-                          <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>{" "}
-                          Newly Open
-                        </p>
-                      )}
-                    </div>
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+  <h3 className="text-lg sm:text-xl font-semibold">
+    {space.officeSpaceName}
+  </h3>
+  {space.isNewlyOpen && (
+    <p className="text-red-500 text-sm sm:text-base flex items-center mt-1 sm:mt-0 sm:ml-auto">
+      <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
+      Newly Open
+    </p>
+  )}
+</div>
+
+
                     <p className="text-sm sm:text-base text-gray-500">
                       {space.city} {space.state} {space.pincode}
                     </p>
@@ -231,15 +233,14 @@ const OfficeSpaces: React.FC = () => {
                     </div>
                     <Link
                       // href={`/${pageName}/${space._id}`}
-                      href={`/${
-                        pageName ||
+                      href={`/${pageName ||
                         (Array.isArray(space.category)
                           ? space.category[0]
                           : space.category
                         )
                           ?.toLowerCase()
                           .replace(/\s+/g, "-")
-                      }/${space._id}`}
+                        }/${space._id}`}
                       className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                     >
                       View Details
