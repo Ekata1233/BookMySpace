@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
+import MapComponent from "../MapComponent/page";
 // Example location: src/types/OfficeSpace.ts
 
 export interface OfficeSpace {
@@ -26,10 +27,13 @@ const OfficeSpaces: React.FC = () => {
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [showAll, setShowAll] = useState(false);
+
 
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
+
   console.log("office spaces : ", officeSpaces);
 
   const normalizedPageCategory = pageName?.replace(/-/g, " ").toLowerCase();
@@ -99,6 +103,9 @@ const OfficeSpaces: React.FC = () => {
     return cityMatch && categoryMatch;
   });
 
+  const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
+
+
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <div className="flex justify-between">
@@ -124,6 +131,14 @@ const OfficeSpaces: React.FC = () => {
       <div className="border-b-2 border-gray-300 w-full my-5"></div>
       <div className="flex flex-col lg:flex-row text-gray-700">
         <div className="w-full lg:w-1/4">
+          {/* ------------------------------------------MAP------------------------------------------------------------------ */}
+          <div className="me-5 my-4 h-40 border border-gray-300 ">
+            <MapComponent />
+          </div>
+
+          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
+
+          {/* -------------------------------FILTER BY AREA ------------------------------------------------------------ */}
           <h5 className="text-lg font-bold my-3">Filter By Area:</h5>
           {cities.map((city, index) => (
             <div key={index} className="flex items-center space-x-2 my-2">
@@ -141,6 +156,10 @@ const OfficeSpaces: React.FC = () => {
               </label>
             </div>
           ))}
+
+          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
+
+          {/* -----------------------------------FILTER BY CATEGORY --------------------------------------------------------------- */}
 
           {(!pageName || pageName.trim() === "") && (
             <div>
@@ -164,10 +183,13 @@ const OfficeSpaces: React.FC = () => {
               ))}
             </div>
           )}
+
+          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
         </div>
         <div className="w-full lg:w-3/4">
-          {displaySpaces.length > 0 ? (
-            displaySpaces.map((space) => (
+        {visibleSpaces.length > 0 ? (
+  <>
+    {visibleSpaces.map((space) => (
               <Card
                 key={space._id}
                 className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
@@ -247,7 +269,19 @@ const OfficeSpaces: React.FC = () => {
                   </div>
                 </CardContent>
               </Card>
-            ))
+            ))}
+
+            {displaySpaces.length > 3 && !showAll && (
+              <div className="text-center mt-6">
+                <Button
+                  onClick={() => setShowAll(true)}
+                  className="rounded-none bg-[#6BB7BE] hover:bg-[#5AA4A9] text-white px-6 py-2"
+                >
+                  View More
+                </Button>
+              </div>
+            )}
+          </>
           ) : (
             <div>No office spaces available</div>
           )}

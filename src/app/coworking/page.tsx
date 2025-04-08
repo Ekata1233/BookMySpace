@@ -9,19 +9,21 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import OfficeSpaces from "../componants/officeSpace/page";
 import RentSteps from "../rentsteps/page";
+import { useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual Space", "Meeting Room"];
 const Coworking = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("Office Space");
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
+  const router = useRouter();
+
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // Add your search logic here
+    router.push("/contact");
   };
 
   useEffect(() => {

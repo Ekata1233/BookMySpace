@@ -17,6 +17,8 @@ export async function POST(req: Request) {
     const city = formData.get("city") as string;
     const state = formData.get("state") as string;
     const pincode = formData.get("pincode") as string;
+    const lat = Number(formData.get("lat"));
+    const lng = Number(formData.get("lng"));
     const description = formData.get("description") as string;
     const extraDescription = formData.get("extraDescription") as string;
     const rate = Number(formData.get("rate"));
@@ -73,6 +75,8 @@ export async function POST(req: Request) {
       city,
       state,
       pincode,
+      lat,
+      lng,
       description,
       extraDescription,
       rate,

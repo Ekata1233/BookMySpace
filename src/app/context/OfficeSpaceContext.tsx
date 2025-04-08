@@ -7,6 +7,8 @@ interface OfficeSpace {
   _id: string;
   officeSpaceName: string;
   address: string;
+  lat: number;
+  lng: number;
   description: string;
   rate: number;
   amenities: string[];

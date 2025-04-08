@@ -231,7 +231,7 @@ const Header = () => {
               <div className="relative flex items-center w-full">
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search for a location"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -418,7 +418,7 @@ const Header = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Search for a location"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}

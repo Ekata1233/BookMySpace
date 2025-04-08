@@ -7,6 +7,7 @@ import {
   ReactNode,
 } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: any;
@@ -65,8 +66,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (res.ok) {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token); // Save token
-      alert("Login successful!");
+      localStorage.setItem("token", data.token); 
       router.push("/");
     } else {
       alert(data.error);

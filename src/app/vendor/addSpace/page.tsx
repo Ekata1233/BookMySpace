@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 const OfficeSpaceForm = () => {
   const { addOfficeSpace } = useOfficeSpaces();
@@ -32,15 +33,29 @@ const OfficeSpaceForm = () => {
     category: "",
     thumbnailImage: null as File | null,
     multiImages: [] as File[],
+    lat: null as number | null,
+    lng: null as number | null,
   });
 
-  console.log("form data : ", formData);
+  const mapContainerStyle = {
+    width: "100%",
+    height: "400px",
+  };
+
+  const defaultCenter = {
+    lat: 18.5204,
+    lng: 73.8567,
+  };
 
   const categories = [
     "Office Space",
-    "Virtual Office",
+    "Coworking",
+    "Virtual Space",
     "Meeting Room",
     "Private Office",
+    "Day Office",
+    "Hot Desks",
+    "Dedicated Desks",
   ];
   const amenitiesList = [
     "Work Desk",
@@ -89,6 +104,9 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("description", formData.description);
     formDataToSend.append("extraDescription", formData.extraDescription);
     formDataToSend.append("rate", formData.rate.toString());
+    formDataToSend.append("lat", String(formData.lat ?? ""));
+    formDataToSend.append("lng", String(formData.lng ?? ""));
+
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
     formDataToSend.append("amenities", JSON.stringify(formData.amenities));
@@ -141,6 +159,8 @@ const OfficeSpaceForm = () => {
         description: "",
         extraDescription: "",
         rate: "",
+        lat: null as number | null,
+        lng: null as number | null,
         startTime: "",
         endTime: "",
         amenities: [] as string[],
@@ -208,6 +228,33 @@ const OfficeSpaceForm = () => {
           required
           className="rounded-none w-full py-5"
         />
+        <div>
+        <LoadScript
+          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+        >
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={
+              formData.lat && formData.lng
+                ? { lat: formData.lat, lng: formData.lng }
+                : defaultCenter
+            }
+            zoom={13}
+            onClick={(e) => {
+              const lat = e.latLng?.lat();
+              const lng = e.latLng?.lng();
+              if (lat && lng) {
+                handleChange("lat", lat);
+                handleChange("lng", lng);
+              }
+            }}
+          >
+            {formData.lat && formData.lng && (
+              <Marker position={{ lat: formData.lat, lng: formData.lng }} />
+            )}
+          </GoogleMap>
+        </LoadScript>
+        </div>
         <Textarea
           name="description"
           value={formData.description}
@@ -294,6 +341,9 @@ const OfficeSpaceForm = () => {
             Newly Open
           </Label>
         </div>
+
+        
+
         <Button
           type="submit"
           className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"

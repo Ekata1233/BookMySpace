@@ -9,10 +9,10 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import RentSteps from "../rentsteps/page";
 import Offices from "../componants/officeSpace/page";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual Space", "Meeting Room"];
 
 const Officespace = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,10 +24,10 @@ const Officespace = () => {
     const pathSegments = pathname.split("/").filter(Boolean);
     const pageName = pathSegments[pathSegments.length - 1]
 
-    console.log("url path : ",pageName)
+  const router = useRouter();
 
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
+    router.push("/contact");
   };
 
   useEffect(() => {

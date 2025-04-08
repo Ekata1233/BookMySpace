@@ -12,9 +12,13 @@ const OfficeSpaceSchema = new mongoose.Schema(
       required: true,
       enum: [
         "Office Space",
-        "Virtual Office",
+        "Coworking",
+        "Virtual Space",
         "Meeting Room",
         "Private Office",
+        "Day Office",
+        "Hot Desks",
+        "Dedicated Desks",
       ],
     },
     city: {
@@ -58,6 +62,12 @@ const OfficeSpaceSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    lat: {
+      type: Number,
+    },
+    lng: {
+      type: Number,
+    },
     startTime: {
       type: Date,
       required: true,
@@ -71,7 +81,7 @@ const OfficeSpaceSchema = new mongoose.Schema(
       default: "",
     },
     multiImages: {
-      type: [String], 
+      type: [String],
       default: [],
     },
     isNewlyOpen: {

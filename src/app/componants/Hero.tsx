@@ -6,19 +6,30 @@ import { cn } from "@/lib/utils";
 import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Boxes from "./boxes/page";
+import { useRouter } from "next/navigation";
+
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual space", "Meeting Rooms"];
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [activeTab, setActiveTab] = useState("Office Space");
+  const [activeTab, setActiveTab] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
+  const router = useRouter();
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm);
     // Add your search logic here
+  };
+
+  const handleTabClick = (tab: string) => {
+    const url = tab
+      .toLowerCase()
+      .replace(/\s+/g, "-") // replace spaces with dashes
+      .replace(/[^a-z\-]/g, ""); // remove any non-alphabetic characters
+    router.push(`/${url}`);
   };
 
   useEffect(() => {
@@ -55,7 +66,15 @@ const Hero = () => {
           {tabs.map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => {
+                setActiveTab(tab);
+                const url = tab
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")
+                  .replace(/[^a-z\-]/g, "");
+                router.push(`/${url}`);
+              }}
+              
               className={cn(
                 "relative pb-2 text-lg font-medium text-gray-600 transition-all",
                 activeTab === tab &&
@@ -90,7 +109,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row items-center w-full gap-3">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search here"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="px-4 h-12 w-full sm:flex-1 
