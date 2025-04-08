@@ -24,12 +24,12 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
   try {
     const formData = await req.formData();
     const title = formData.get('title') as string;
-    const text = formData.get('text') as string;
+    const description = formData.get('description') as string;
     const file = formData.get('image') as File | null;
 
-    if (!title || !text) {
+    if (!title || !description) {
       return NextResponse.json(
-        { success: false, message: 'Title and text are required' },
+        { success: false, message: 'Title and description are required' },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -48,7 +48,7 @@ export async function PUT(req: NextRequest): Promise<NextResponse> {
       image = uploadResponse.url;
     }
 
-    const updateData: any = { title, text };
+    const updateData: any = { title, description };
     if (image) updateData.image = image;
 
     const updatedTour = await OfficeTour.findByIdAndUpdate(id, updateData, { new: true });
