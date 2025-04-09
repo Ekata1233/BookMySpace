@@ -10,6 +10,7 @@ import Boxes from "./componants/boxes/page";
 import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
 import IndiaMap from "./componants/MapComponent/page";
+import Loader from "./componants/loader/page";
 
 export default function Home() {
   return (
@@ -18,8 +19,7 @@ export default function Home() {
       <Offices />
       <OfficeTour />
       <WorkBusiness />
-      <SecondWorkBusiness />
-      <ThirdWorkBusiness />
+      {/* <Loader /> */}
       <ExploreOffice />
       <OurAmenites />
     </main>

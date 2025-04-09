@@ -62,7 +62,7 @@ const OfficeTour = () => {
               <div className="absolute inset-0 bg-black/50"></div>
 
               {/* Title */}
-              <h2 className="title-overlay">{item.title}</h2>
+              <h2 className="title-overlay ">{item.title}</h2>
 
               {/* Hover Description */}
               <div className="hover-text text-base md:text-lg lg:text-xl xl:text-xl text-center px-4 md:px-6">
