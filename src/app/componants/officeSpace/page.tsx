@@ -29,7 +29,6 @@ const OfficeSpaces: React.FC = () => {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [showAll, setShowAll] = useState(false);
 
-
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
@@ -104,7 +103,6 @@ const OfficeSpaces: React.FC = () => {
   });
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
-
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -187,101 +185,101 @@ const OfficeSpaces: React.FC = () => {
           <div className="border-b-2 border-gray-300 my-7 me-5"></div>
         </div>
         <div className="w-full lg:w-3/4">
-        {visibleSpaces.length > 0 ? (
-  <>
-    {visibleSpaces.map((space) => (
-              <Card
-                key={space._id}
-                className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
-              >
-                <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
-                  <Image
-                    src={space.thumbnailImage}
-                    alt={space.officeSpaceName}
-                    className="w-[350px] h-[300px] object-cover"
-                    width={300}
-                    height={200}
-                  />
-                </div>
-
-                <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
-                  <div>
-                    <div className="flex justify-between">
-                      <h3 className="text-lg sm:text-xl font-semibold">
-                        {space.officeSpaceName}
-                      </h3>
-                      {space.isNewlyOpen && (
-                        <p className="text-red-500 text-sm sm:text-base flex items-center">
-                          <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>{" "}
-                          Newly Open
-                        </p>
-                      )}
-                    </div>
-                    <p className="text-sm sm:text-base text-gray-500">
-                      {space.city} {space.state} {space.pincode}
-                    </p>
-                    <p className="text-gray-700 text-sm sm:text-base">
-                      {space.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 my-3">
-                      {space.amenities && space.amenities.length > 0 ? (
-                        <div className="flex flex-wrap gap-2">
-                          {space.amenities.map((feature, idx) => (
-                            <button
-                              key={idx}
-                              className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 hover:bg-transparent hover:border-[#6BB7BE]"
-                            >
-                              {feature}
-                            </button>
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 inline-block">
-                          Work Desk
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="mt-auto flex justify-between items-center mb-2">
-                    <div className="flex items-center space-x-1">
-                      <h4 className="text-lg font-medium">₹</h4>
-                      <h5 className="text-lg sm:text-xl">
-                        {space.rate} / Hour
-                      </h5>
-                    </div>
-                    <Link
-                      // href={`/${pageName}/${space._id}`}
-                      href={`/${
-                        pageName ||
-                        (Array.isArray(space.category)
-                          ? space.category[0]
-                          : space.category
-                        )
-                          ?.toLowerCase()
-                          .replace(/\s+/g, "-")
-                      }/${space._id}`}
-                      className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
-                    >
-                      View Details
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-
-            {displaySpaces.length > 3 && !showAll && (
-              <div className="text-center mt-6">
-                <Button
-                  onClick={() => setShowAll(true)}
-                  className="rounded-none bg-[#6BB7BE] hover:bg-[#5AA4A9] text-white px-6 py-2"
+          {visibleSpaces.length > 0 ? (
+            <>
+              {visibleSpaces.map((space) => (
+                <Card
+                  key={space._id}
+                  className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
                 >
-                  View More
-                </Button>
-              </div>
-            )}
-          </>
+                  <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
+                    <Image
+                      src={space.thumbnailImage}
+                      alt={space.officeSpaceName}
+                      className="w-[350px] h-[300px] object-cover"
+                      width={300}
+                      height={200}
+                    />
+                  </div>
+
+                  <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
+                    <div>
+                      <div className="flex justify-between">
+                        <h3 className="text-lg sm:text-xl font-semibold">
+                          {space.officeSpaceName}
+                        </h3>
+                        {space.isNewlyOpen && (
+                          <p className="text-red-500 text-sm sm:text-base flex items-center">
+                            <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>{" "}
+                            Newly Open
+                          </p>
+                        )}
+                      </div>
+                      <p className="text-sm sm:text-base text-gray-500">
+                        {space.city} {space.state} {space.pincode}
+                      </p>
+                      <p className="text-gray-700 text-sm sm:text-base">
+                        {space.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 my-3">
+                        {space.amenities && space.amenities.length > 0 ? (
+                          <div className="flex flex-wrap gap-2">
+                            {space.amenities.map((feature, idx) => (
+                              <button
+                                key={idx}
+                                className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 hover:bg-transparent hover:border-[#6BB7BE]"
+                              >
+                                {feature}
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-xs sm:text-sm text-[#6BB7BE] border border-[#6BB7BE] bg-[#FAFAFA] rounded-none px-3 py-1 inline-block">
+                            Work Desk
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-auto flex justify-between items-center mb-2">
+                      <div className="flex items-center space-x-1">
+                        <h4 className="text-lg font-medium">₹</h4>
+                        <h5 className="text-lg sm:text-xl">
+                          {space.rate} / Hour
+                        </h5>
+                      </div>
+                      <Link
+                        // href={`/${pageName}/${space._id}`}
+                        href={`/${
+                          pageName ||
+                          (Array.isArray(space.category)
+                            ? space.category[0]
+                            : space.category
+                          )
+                            ?.toLowerCase()
+                            .replace(/\s+/g, "-")
+                        }/${space._id}`}
+                        className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+
+              {displaySpaces.length > 3 && !showAll && (
+                <div className="text-center mt-6">
+                  <Button
+                    onClick={() => setShowAll(true)}
+                    className="rounded-none bg-[#6BB7BE] hover:bg-[#5AA4A9] text-white px-6 py-2"
+                  >
+                    View More
+                  </Button>
+                </div>
+              )}
+            </>
           ) : (
             <div>No office spaces available</div>
           )}
