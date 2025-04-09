@@ -195,7 +195,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
-import { useParams , useRouter  } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 
 export interface OfficeSpace {
@@ -212,6 +212,7 @@ const TimeCalendar = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
 
+  console.log("available offce spaces : ", officeSpaces);
 
   const params = useParams();
   const id = params.id;
@@ -227,35 +228,39 @@ const TimeCalendar = () => {
     }
   }, []);
 
-
   interface OfficeSpace {
     _id: string;
     startTime: string;
     endTime: string;
     rate: number;
   }
-  
-  const office = officeSpaces.find((item) => item._id === id) as OfficeSpace | undefined;
-  
+
+  const office = officeSpaces.find((item) => item._id === id) as
+    | OfficeSpace
+    | undefined;
+
   const fallback: OfficeSpace = {
-    _id: '',
-    startTime: '',
-    endTime: '',
+    _id: "",
+    startTime: "",
+    endTime: "",
     rate: 0,
   };
-  
+
   const { _id: officeId, startTime, endTime, rate } = office ?? fallback;
+
+  console.log("start time : ", startTime);
+  console.log("end time : ", endTime);
 
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedHour, setSelectedHour] = useState("09");
   const [selectedMinute, setSelectedMinute] = useState("00");
   const [selectedDuration, setSelectedDuration] = useState("1");
 
-const totalPay = rate * Number(selectedDuration); 
-
+  const totalPay = rate * Number(selectedDuration);
 
   // Generate time slots
   const timeOptions: string[] = [];
+
   if (startTime && endTime) {
     const start = new Date(startTime);
     const end = new Date(endTime);
@@ -273,7 +278,10 @@ const totalPay = rate * Number(selectedDuration);
       });
       timeOptions.push(formatted);
       current.setHours(current.getHours() + 1);
+
+      
     }
+    console.log("time options : ", timeOptions);
   }
 
   const userId = userInfo?._id;
@@ -299,79 +307,81 @@ const totalPay = rate * Number(selectedDuration);
     }
   });
 
-    // BOOK NOW logic
+  // BOOK NOW logic
 
-    const loadRazorpayScript = () => {
-      return new Promise((resolve) => {
-        const script = document.createElement("script");
-        script.src = "https://checkout.razorpay.com/v1/checkout.js";
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-      });
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleBooking = async () => {
+    if (!date || !officeId) return alert("Missing info to book slot.");
+
+    const bookingDate = date?.toLocaleDateString("en-CA");
+    const startTimeFormatted = `${selectedHour.padStart(
+      2,
+      "0"
+    )}:${selectedMinute}`;
+
+    const bookingData = {
+      userId,
+      officeId,
+      date: bookingDate,
+      startTime: startTimeFormatted,
+      duration: parseInt(selectedDuration),
+      totalPay,
     };
-    
-    const handleBooking = async () => {
-      if (!date || !officeId) return alert("Missing info to book slot.");
-    
-      const bookingDate = date?.toLocaleDateString("en-CA");
-      const startTimeFormatted = `${selectedHour.padStart(2, "0")}:${selectedMinute}`;
-    
-      const bookingData = {
-        userId,
-        officeId,
-        date: bookingDate,
-        startTime: startTimeFormatted,
-        duration: parseInt(selectedDuration),
-        totalPay,
+
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert("Failed to load Razorpay SDK");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post("/api/razorpay", bookingData);
+      const { id: orderId } = data;
+
+      const options = {
+        key: "rzp_test_4IVVmy5cqABEUR",
+        amount: totalPay * 100,
+        currency: "INR",
+        name: "Office Booking",
+        description: "Booking Office Slot",
+        order_id: orderId,
+        handler: async function (response: any) {
+          console.log("Payment Successful!", response);
+
+          // Save Booking to DB
+          try {
+            await addBooking(bookingData);
+            router.push("/booking-confirmed");
+          } catch (err) {
+            alert("Payment done but failed to save booking.");
+            console.error(err);
+          }
+        },
+        prefill: {
+          name: userInfo?.name || "Guest",
+          email: userInfo?.email || "",
+        },
+        theme: {
+          color: "#6BB7BE",
+        },
       };
-    
-      const res = await loadRazorpayScript();
-      if (!res) {
-        alert("Failed to load Razorpay SDK");
-        return;
-      }
-    
-      try {
-        const { data } = await axios.post("/api/razorpay", bookingData);
-        const { id: orderId } = data;
-    
-        const options = {
-          key: "rzp_test_4IVVmy5cqABEUR", 
-          amount: totalPay * 100,
-          currency: "INR",
-          name: "Office Booking",
-          description: "Booking Office Slot",
-          order_id: orderId,
-          handler: async function (response: any) {
-            console.log("Payment Successful!", response);
-    
-            // Save Booking to DB
-            try {
-              await addBooking(bookingData);
-              router.push("/booking-confirmed");
-            } catch (err) {
-              alert("Payment done but failed to save booking.");
-              console.error(err);
-            }
-          },
-          prefill: {
-            name: userInfo?.name || "Guest",
-            email: userInfo?.email || "",
-          },
-          theme: {
-            color: "#6BB7BE",
-          },
-        };
-    
-        const razorpay = new (window as any).Razorpay(options);
-        razorpay.open();
-    
-      } catch (error) {
-        console.error("Error creating Razorpay order:", error);
-        alert("Failed to initiate Razorpay payment.");
-      }
-    };
+
+      const razorpay = new (window as any).Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error("Error creating Razorpay order:", error);
+      alert("Failed to initiate Razorpay payment.");
+    }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -486,7 +496,7 @@ const totalPay = rate * Number(selectedDuration);
 
       <div>
         <h4 className="p-4 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
-          Total Pay{" "} : {totalPay}{" "}Rs
+          Total Pay : {totalPay} Rs
         </h4>
       </div>
       {/* BOOK NOW BUTTON */}
