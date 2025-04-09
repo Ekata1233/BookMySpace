@@ -1,53 +1,109 @@
-import { NextResponse } from "next/server";
-import WorkBusiness from "@/models/WorkBusiness";
-import { connectToDatabase } from "@/lib/db";
-import imagekit from "@/lib/imagekit";
+import { NextRequest, NextResponse } from 'next/server';
+import { connectToDatabase } from '@/lib/db';
+import WorkBusiness from '@/models/WorkBusiness';
+import imagekit from '@/lib/imagekit';
+import { Buffer } from 'buffer';
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+// ✅ Preflight CORS support
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
+
+// ✅ PUT: Update WorkBusiness
+export async function PUT(req: NextRequest): Promise<NextResponse> {
+  await connectToDatabase();
+
+  const id = req.nextUrl.pathname.split('/').pop();
+
   try {
-    await connectToDatabase();
-
     const formData = await req.formData();
-    const { id } = params;
-    const title = formData.get("title") as string;
-    const description1 = formData.get("description1") as string;
-    const description2 = formData.get("description2") as string;
-    const imageTopFile = formData.get("imageTop") as File | null;
-    const imageBottomFile = formData.get("imageBottom") as File | null;
+    const title = formData.get('title') as string;
+    const description1 = formData.get('description1') as string;
+    const description2 = formData.get('description2') as string;
+    const imageTopFile = formData.get('imageTop') as File | null;
+    const imageBottomFile = formData.get('imageBottom') as File | null;
 
-    const updateData: any = { title, description1, description2 };
-
-    if (imageTopFile && typeof imageTopFile !== "string") {
-      const bufferTop = Buffer.from(await imageTopFile.arrayBuffer());
-      const uploadedTop = await imagekit.upload({
-        file: bufferTop,
-        fileName: "workBusiness_top_updated.jpg",
-      });
-      updateData.imageTop = uploadedTop.url;
+    if (!title || !description1 || !description2) {
+      return NextResponse.json(
+        { success: false, message: 'All text fields are required' },
+        { status: 400, headers: corsHeaders }
+      );
     }
 
-    if (imageBottomFile && typeof imageBottomFile !== "string") {
-      const bufferBottom = Buffer.from(await imageBottomFile.arrayBuffer());
-      const uploadedBottom = await imagekit.upload({
-        file: bufferBottom,
-        fileName: "workBusiness_bottom_updated.jpg",
+    const updateData: any = {
+      title,
+      description1,
+      description2,
+    };
+
+    if (imageTopFile && typeof imageTopFile === 'object' && imageTopFile.name) {
+      const bufferTop = Buffer.from(await imageTopFile.arrayBuffer());
+      const uploadTop = await imagekit.upload({
+        file: bufferTop,
+        fileName: imageTopFile.name,
+        folder: '/work-business',
       });
-      updateData.imageBottom = uploadedBottom.url;
+      updateData.imageTop = uploadTop.url;
+    }
+
+    if (imageBottomFile && typeof imageBottomFile === 'object' && imageBottomFile.name) {
+      const bufferBottom = Buffer.from(await imageBottomFile.arrayBuffer());
+      const uploadBottom = await imagekit.upload({
+        file: bufferBottom,
+        fileName: imageBottomFile.name,
+        folder: '/work-business',
+      });
+      updateData.imageBottom = uploadBottom.url;
     }
 
     const updated = await WorkBusiness.findByIdAndUpdate(id, updateData, { new: true });
-    return NextResponse.json(updated, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+
+    if (!updated) {
+      return NextResponse.json(
+        { success: false, message: 'WorkBusiness not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json({ success: true, data: updated }, { headers: corsHeaders });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message || 'Update failed' },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+// ✅ DELETE: Remove WorkBusiness
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
+  await connectToDatabase();
+
+  const id = req.nextUrl.pathname.split('/').pop();
+
   try {
-    await connectToDatabase();
-    const deleted = await WorkBusiness.findByIdAndDelete(params.id);
-    return NextResponse.json(deleted, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
+    const deleted = await WorkBusiness.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return NextResponse.json(
+        { success: false, message: 'WorkBusiness not found' },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: 'Deleted successfully' },
+      { headers: corsHeaders }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message || 'Delete failed' },
+      { status: 500, headers: corsHeaders }
+    );
   }
 }
