@@ -9,20 +9,22 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import Offices from "../componants/officeSpace/page";
 import RentSteps from "../rentsteps/page";
+import { useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual Space", "Meeting Room"];
 
-const EventsSpace = () => {
+const CustomOffice = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("Office Space");
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
+  const router = useRouter();
+
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // Add your search logic here
+    router.push("/contact");
   };
 
   useEffect(() => {
@@ -58,16 +60,17 @@ const EventsSpace = () => {
         <div className=" justify-around border-b px-10 py-4 bg-white">
           <div className="">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal text-center">
-              Events Space
+              Custom Office
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-            Host your next gathering in a fully-equipped event space, designed for meetings, conferences, and networking—complete with modern amenities and flexible setups.
+              Create a custom office tailored to your needs, with flexible
+              layouts, branding options, and essential amenities—designed for
+              your team’s productivity and growth.
             </p>
           </div>
         </div>
 
-        
         {/* Search Box */}
         <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-100 w-full">
           <div className="flex flex-col sm:flex-row justify-around items-center w-full gap-3">
@@ -88,10 +91,8 @@ const EventsSpace = () => {
             </Button>
 
             <div className="text-sm sm:text-base md:text-lg leading-relaxed font-bold text-gray-700 py-2 flex gap-2">
-            <LuPhoneCall className="font-bold mt-1" />
-              <p className=" ">
-               Call us +91 9272003735
-              </p>
+              <LuPhoneCall className="font-bold mt-1" />
+              <p className=" ">Call us +91 9272003735</p>
             </div>
           </div>
         </div>
@@ -105,4 +106,4 @@ const EventsSpace = () => {
   );
 };
 
-export default EventsSpace;
+export default CustomOffice;

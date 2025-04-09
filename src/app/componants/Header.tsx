@@ -207,6 +207,10 @@ const Header = () => {
     { name: "Day Office", icon: <CalendarDays size={28} className="blue" /> },
     { name: "Hot Desks", icon: <Sofa size={28} className="blue" /> },
     { name: "Dedicated Desks", icon: <Clock size={28} className="blue" /> },
+    { name: "Custom Office", icon: <Clock size={28} className="blue" /> },
+    { name: "Event Space", icon: <Clock size={28} className="blue" /> },
+    { name: "Workplace Recovery", icon: <Clock size={28} className="blue" /> },
+
   ];
 
   return (
@@ -231,7 +235,7 @@ const Header = () => {
               <div className="relative flex items-center w-full">
                 <input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search for a location"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -418,7 +422,7 @@ const Header = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder="Search for a location"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}

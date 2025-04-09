@@ -11,6 +11,7 @@ import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
+import { PiBuildingOffice } from "react-icons/pi";
 
 const OurAmenites = () => {
   return (
@@ -35,7 +36,7 @@ const OurAmenites = () => {
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <RiHomeOfficeFill  className="text-6xl text-[#6BB7BE]" />
+              <PiBuildingOffice   className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Private Cabins</p>
             </div>
 

@@ -9,10 +9,11 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import Offices from "../componants/officeSpace/page";
 import RentSteps from "../rentsteps/page";
+import { useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual Space", "Meeting Room"];
 
 const VirtualSpace = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -20,9 +21,10 @@ const VirtualSpace = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
+  const router = useRouter();
+
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // Add your search logic here
+    router.push("/contact");
   };
 
   useEffect(() => {
@@ -62,7 +64,7 @@ const VirtualSpace = () => {
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-              Establish your business with a virtual office that offers a
+              Establish your business with a Virtual Space that offers a
               professional address, mail handling, and essential support—ideal
               for remote work and flexibility.
             </p>

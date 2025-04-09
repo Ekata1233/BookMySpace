@@ -8,7 +8,7 @@ const steps = [
     id: 1,
     image: '/Office_Space_Pricing_Step_1.png',
     title: '1. Choose your space',
-    description: 'Select from office spaces, coworking, virtual offices, meeting rooms, or dedicated desks.'
+    description: 'Select from office spaces, coworking, Virtual Spaces, meeting rooms, or dedicated desks.'
   },
   {
     id: 2,
@@ -31,7 +31,7 @@ const RentSteps = () => {
       Get your ideal workspace in three quick steps.
         <span className="text-[#6BB7BE] font-extrabold">.</span>
       </h1>
-      <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">Browse top spaces, customise your choice, and start working hassle-free. Our solutions are affordable, flexible, and designed to fit your business needs. Whether you need an office, coworking space, virtual office, or meeting room, we have the perfect option for you.</p>
+      <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">Browse top spaces, customise your choice, and start working hassle-free. Our solutions are affordable, flexible, and designed to fit your business needs. Whether you need an office, coworking space, Virtual Space, or meeting room, we have the perfect option for you.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {steps.map((step) => (

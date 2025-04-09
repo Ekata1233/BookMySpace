@@ -9,20 +9,22 @@ import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import Offices from "../componants/officeSpace/page";
 import RentSteps from "../rentsteps/page";
+import { useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 
-const tabs = ["Office Space", "Coworking", "Virtual Office", "Meeting Room"];
+const tabs = ["Office Space", "Coworking", "Virtual Space", "Meeting Room"];
 
-const WorkPlaceRecovery = () => {
+const EventsSpace = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("Office Space");
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
+  const router = useRouter();
+
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // Add your search logic here
+    router.push("/contact");
   };
 
   useEffect(() => {
@@ -58,11 +60,11 @@ const WorkPlaceRecovery = () => {
         <div className=" justify-around border-b px-10 py-4 bg-white">
           <div className="">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 leading-tight sm:leading-snug md:leading-normal text-center">
-              Work Place Recovery
+              Events Space
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-            Ensure business continuity with a workplace recovery solution that provides a fully-equipped office, secure infrastructure, and essential support during disruptions.
+            Host your next gathering in a fully-equipped event space, designed for meetings, conferences, and networking—complete with modern amenities and flexible setups.
             </p>
           </div>
         </div>
@@ -105,4 +107,4 @@ const WorkPlaceRecovery = () => {
   );
 };
 
-export default WorkPlaceRecovery;
+export default EventsSpace;

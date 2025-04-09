@@ -16,6 +16,8 @@ import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
+import { PiBuildingOffice } from "react-icons/pi";
+
 export interface OfficeSpace {
   _id: string;
   officeSpaceName?: string;
@@ -33,7 +35,7 @@ export interface OfficeSpace {
 
 const amenityIcons = {
   "Work Desk": PiOfficeChair,
-  "Private Cabins": RiHomeOfficeFill,
+  "Private Cabins": PiBuildingOffice ,
   "24x7 Availability": LuAlarmClock,
   "Power Backup": LuCable,
   HouseKeeping: LiaBroomSolid,
