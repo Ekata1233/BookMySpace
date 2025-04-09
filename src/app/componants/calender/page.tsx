@@ -332,13 +332,12 @@ const totalPay = rate * Number(selectedDuration);
         return;
       }
     
-      // 1. Get Razorpay Order from Backend using axios
       try {
         const { data } = await axios.post("/api/razorpay", bookingData);
         const { id: orderId } = data;
     
         const options = {
-          key: "rzp_test_4IVVmy5cqABEUR", // your Razorpay test public key
+          key: "rzp_test_4IVVmy5cqABEUR", 
           amount: totalPay * 100,
           currency: "INR",
           name: "Office Booking",

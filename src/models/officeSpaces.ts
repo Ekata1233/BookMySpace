@@ -90,7 +90,7 @@ const OfficeSpaceSchema = new mongoose.Schema(
     },
     isAdminApprove: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     isDelete: {
       type: Boolean,

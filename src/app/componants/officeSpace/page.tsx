@@ -29,7 +29,6 @@ const OfficeSpaces: React.FC = () => {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [showAll, setShowAll] = useState(false);
 
-
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
@@ -104,7 +103,6 @@ const OfficeSpaces: React.FC = () => {
   });
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
-
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
