@@ -11,7 +11,6 @@ export interface IVendor extends Document {
   businessType: 'Individual' | 'Company';
   message: string;
   agreed: boolean;
-  userId: string;
 }
 
 const VendorSchema: Schema = new Schema({

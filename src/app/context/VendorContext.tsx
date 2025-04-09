@@ -1,8 +1,8 @@
 // context/VendorContext.tsx
-'use client';
+"use client";
 
-import React, { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+import React, { createContext, useContext, useState } from "react";
+import axios from "axios";
 
 type VendorData = {
   name: string;
@@ -15,6 +15,7 @@ type VendorData = {
   message: string;
   agreed: boolean;
   paid: boolean;
+  amount: number;
 };
 
 interface VendorContextProps {
@@ -27,31 +28,33 @@ const VendorContext = createContext<VendorContextProps | undefined>(undefined);
 
 export const useVendor = () => {
   const context = useContext(VendorContext);
-  if (!context) throw new Error('useVendor must be used within VendorProvider');
+  if (!context) throw new Error("useVendor must be used within VendorProvider");
   return context;
 };
 
 export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
   const [formData, setFormData] = useState<VendorData>({
-    name: '',
-    companyName: '',
-    workEmail: '',
-    phone: '',
-    address: '',
-    website: '',
-    businessType: '',
-    message: '',
+    name: "",
+    companyName: "",
+    workEmail: "",
+    phone: "",
+    address: "",
+    website: "",
+    businessType: "",
+    message: "",
     agreed: false,
     paid: true,
+    amount: 1999,
   });
 
   const submitVendor = async () => {
     try {
-      const response = await axios.post('/api/vendor/registration', formData);
-      // Handle response if needed
+      await axios.post("/api/vendor/registration", formData, {
+        headers: { "Content-Type": "application/json" },
+      });
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.error || 'Something went wrong';
+        error.response?.data?.error || "Something went wrong";
       throw new Error(errorMessage);
     }
   };

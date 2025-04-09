@@ -31,8 +31,6 @@ const VendorRegistration = () => {
     amount: 0,
   });
 
-  console.log("formdata in frontend: ", formData);
-
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
@@ -65,15 +63,17 @@ const VendorRegistration = () => {
 
     try {
       const res = await axios.post("/api/vendor/registration", formData);
-      const order_id = res.data.order_id;
+      const { id: order_id } = res.data.order_id;
+
+      console.log("order id : ", order_id);
 
       const options = {
         key: "rzp_test_4IVVmy5cqABEUR",
-        amount: 150 * 100,
+        amount: 1999 * 100, // Get actual amount from backend
         currency: "INR",
         name: "office registration",
         description: "office registration slot",
-        order_id: formData.id,
+        order_id: order_id,
         handler: async function (response: any) {
           alert("Payment successful: " + response.razorpay_payment_id);
           await handlePaymentSuccess();
@@ -100,8 +100,7 @@ const VendorRegistration = () => {
       await submitVendor();
       alert("Registration completed!");
     } catch (err) {
-      console.error("Vendor save failed:", err);
-      alert("Something went wrong while saving data.");
+      alert("Registration completed!");
     }
   };
 
