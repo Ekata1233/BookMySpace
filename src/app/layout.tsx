@@ -9,6 +9,7 @@ import { ContactProvider } from "./context/ContactContex";
 import { BookSpaceProvider } from "./context/BookSpaceContext";
 import { OfficeTourProvider } from "./context/OfficeTourContext";
 import { ExploreOfficeProvider } from "./context/ExploreOfficeContext";
+import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
 
 const poppins = Poppins({
@@ -34,6 +35,7 @@ export default function RootLayout({
             <ContactProvider>
               <OfficeSpaceProvider>
                 <OfficeTourProvider>
+                  <WorkBusinessProvider>
                   <ExploreOfficeProvider>
                     <VendorProvider>
                       <Header />
@@ -41,6 +43,7 @@ export default function RootLayout({
                       <Footer />
                     </VendorProvider>
                   </ExploreOfficeProvider>
+                  </WorkBusinessProvider>
                 </OfficeTourProvider>
               </OfficeSpaceProvider>
             </ContactProvider>
