@@ -41,14 +41,14 @@ const OfficeSpaces: React.FC = () => {
   const pageFilteredSpaces = !normalizedPageCategory
     ? officeSpaces
     : officeSpaces.filter((space) => {
-        if (!space.category) return false;
+      if (!space.category) return false;
 
-        const spaceCategory = Array.isArray(space.category)
-          ? space.category.map((cat) => cat.toLowerCase())
-          : [space.category.toLowerCase()];
+      const spaceCategory = Array.isArray(space.category)
+        ? space.category.map((cat) => cat.toLowerCase())
+        : [space.category.toLowerCase()];
 
-        return spaceCategory.includes(normalizedPageCategory);
-      });
+      return spaceCategory.includes(normalizedPageCategory);
+    });
 
   const cities = [
     "Mumbai",
@@ -134,55 +134,53 @@ const OfficeSpaces: React.FC = () => {
             <MapComponent />
           </div>
 
-          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
 
           {/* -------------------------------FILTER BY AREA ------------------------------------------------------------ */}
-          <h5 className="text-lg font-bold my-3">Filter By Area:</h5>
-          {cities.map((city, index) => (
-            <div key={index} className="flex items-center space-x-2 my-2">
-              <Checkbox
-                id={city.toLowerCase()}
-                checked={selectedCities.includes(city)}
-                onCheckedChange={() => handleCityChange(city)}
-              />
-
-              <label
-                htmlFor={city.toLowerCase()}
-                className="text-sm font-medium"
-              >
-                {city}
-              </label>
-            </div>
-          ))}
-
-          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
-
-          {/* -----------------------------------FILTER BY CATEGORY --------------------------------------------------------------- */}
-
-          {(!pageName || pageName.trim() === "") && (
-            <div>
-              <h5 className="text-lg font-bold my-3 mt-6">
-                Filter By Category:
-              </h5>
-              {categories.map((category, index) => (
+          <div className="flex flex-row flex-nowrap overflow-x-auto gap-6 w-full lg:flex-col lg:overflow-x-visible">
+            {/* Filter By Area */}
+            <div className=" lg:min-w-0">
+              <h5 className="text-lg font-bold my-3">Filter By Area:</h5>
+              {cities.map((city, index) => (
                 <div key={index} className="flex items-center space-x-2 my-2">
                   <Checkbox
-                    id={category.toLowerCase().replace(/\s+/g, "-")}
-                    checked={selectedCategories.includes(category)}
-                    onCheckedChange={() => handleCategoryChange(category)}
+                    id={city.toLowerCase()}
+                    checked={selectedCities.includes(city)}
+                    onCheckedChange={() => handleCityChange(city)}
                   />
                   <label
-                    htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
+                    htmlFor={city.toLowerCase()}
                     className="text-sm font-medium"
                   >
-                    {category}
+                    {city}
                   </label>
                 </div>
               ))}
             </div>
-          )}
 
-          <div className="border-b-2 border-gray-300 my-7 me-5"></div>
+            {/* Filter By Category */}
+            {(!pageName || pageName.trim() === "") && (
+              <div className=" lg:min-w-0">
+                <h5 className="text-lg font-bold my-3 lg:mt-3">Filter By Category:</h5>
+                {categories.map((category, index) => (
+                  <div key={index} className="flex items-center space-x-2 my-2">
+                    <Checkbox
+                      id={category.toLowerCase().replace(/\s+/g, "-")}
+                      checked={selectedCategories.includes(category)}
+                      onCheckedChange={() => handleCategoryChange(category)}
+                    />
+                    <label
+                      htmlFor={category.toLowerCase().replace(/\s+/g, "-")}
+                      className="text-sm font-medium"
+                    >
+                      {category}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+
         </div>
         <div className="w-full lg:w-3/4">
           {visibleSpaces.length > 0 ? (
@@ -190,13 +188,13 @@ const OfficeSpaces: React.FC = () => {
               {visibleSpaces.map((space) => (
                 <Card
                   key={space._id}
-                  className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 h-[300px]"
+                  className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
                 >
                   <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                     <Image
                       src={space.thumbnailImage}
                       alt={space.officeSpaceName}
-                      className="w-[350px] h-[300px] object-cover"
+                      className="w-full h-full object-cover"
                       width={300}
                       height={200}
                     />
@@ -204,17 +202,19 @@ const OfficeSpaces: React.FC = () => {
 
                   <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
                     <div>
-                      <div className="flex justify-between">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                         <h3 className="text-lg sm:text-xl font-semibold">
                           {space.officeSpaceName}
                         </h3>
                         {space.isNewlyOpen && (
-                          <p className="text-red-500 text-sm sm:text-base flex items-center">
-                            <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>{" "}
+                          <p className="text-red-500 text-sm sm:text-base flex items-center mt-1 sm:mt-0 sm:ml-auto">
+                            <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
                             Newly Open
                           </p>
                         )}
                       </div>
+
+
                       <p className="text-sm sm:text-base text-gray-500">
                         {space.city} {space.state} {space.pincode}
                       </p>
@@ -251,15 +251,14 @@ const OfficeSpaces: React.FC = () => {
                       </div>
                       <Link
                         // href={`/${pageName}/${space._id}`}
-                        href={`/${
-                          pageName ||
+                        href={`/${pageName ||
                           (Array.isArray(space.category)
                             ? space.category[0]
                             : space.category
                           )
                             ?.toLowerCase()
                             .replace(/\s+/g, "-")
-                        }/${space._id}`}
+                          }/${space._id}`}
                         className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                       >
                         View Details

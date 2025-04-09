@@ -207,6 +207,10 @@ const Header = () => {
     { name: "Day Office", icon: <CalendarDays size={28} className="blue" /> },
     { name: "Hot Desks", icon: <Sofa size={28} className="blue" /> },
     { name: "Dedicated Desks", icon: <Clock size={28} className="blue" /> },
+    { name: "Custom Office", icon: <Clock size={28} className="blue" /> },
+    { name: "Event Space", icon: <Clock size={28} className="blue" /> },
+    { name: "Workplace Recovery", icon: <Clock size={28} className="blue" /> },
+
   ];
 
   return (
