@@ -49,7 +49,7 @@ const Boxes = () => {
       {boxes.map((item) => (
         <div key={item._id} className="text-dark p-6 shadow-md text-center flex flex-col items-center">
           {iconMap[item.icon] || <FaLightbulb className="text-4xl mb-2 text-gray-500" />}
-          <a href={item.link} className="text-sm sm:text-base md:text-lg blue underline my-4">
+          <a href={item.link} className="text-sm sm:text-base md:text-lg blue underline my-4 ">
             {item.text}
           </a>
           <p className="text-md whitespace-pre-line text-gray-600">{item.description}</p>
