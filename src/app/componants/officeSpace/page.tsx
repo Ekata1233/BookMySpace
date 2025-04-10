@@ -21,6 +21,7 @@ export interface OfficeSpace {
   city: string;
   state: string;
   pincode: string;
+  isAdminApprove: boolean;
 }
 
 const OfficeSpaces: React.FC = () => {
@@ -100,10 +101,17 @@ const OfficeSpaces: React.FC = () => {
             : space.category === cat
         ));
 
-    return cityMatch && categoryMatch;
+        console.log("displaySpaces spaces : ", space)
+
+        const isApproved = space.isAdminApprove === true;
+
+        return cityMatch && categoryMatch && isApproved;
   });
 
+
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
+
+  
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">

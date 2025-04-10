@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import { connectToDatabase } from '../../../../lib/db';
+import { NextResponse } from "next/server";
+import { connectToDatabase } from "../../../../lib/db";
 import officeSpaces from "@/models/officeSpaces";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 // ✅ Handle preflight
@@ -21,11 +21,15 @@ export async function PUT(request: Request, context: any) {
     const { id } = context.params;
     const updateData = await request.json();
 
-    const updatedOfficeSpaces = await officeSpaces.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedOfficeSpaces = await officeSpaces.findByIdAndUpdate(
+      id,
+      { isAdminApprove: true },
+      { new: true }
+    );
 
     if (!updatedOfficeSpaces) {
       return NextResponse.json(
-        { success: false, message: 'OfficeSpaces not found' },
+        { success: false, message: "OfficeSpaces not found" },
         { status: 404, headers: corsHeaders }
       );
     }
@@ -57,7 +61,7 @@ export async function DELETE(request: Request, context: any) {
 
     if (!deletedOfficeSpaces) {
       return NextResponse.json(
-        { success: false, message: 'OfficeSpaces not found' },
+        { success: false, message: "OfficeSpaces not found" },
         { status: 404, headers: corsHeaders }
       );
     }
