@@ -22,10 +22,11 @@ export interface OfficeSpace {
   state: string;
   pincode: string;
   isAdminApprove: boolean;
+  category?: string | string[];
 }
 
 const OfficeSpaces: React.FC = () => {
-  const { officeSpaces,loading } = useOfficeSpaces();
+  const { officeSpaces, loading } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
@@ -43,14 +44,14 @@ const OfficeSpaces: React.FC = () => {
   const pageFilteredSpaces = !normalizedPageCategory
     ? officeSpaces
     : officeSpaces.filter((space) => {
-      if (!space.category) return false;
+        if (!space.category) return false;
 
-      const spaceCategory = Array.isArray(space.category)
-        ? space.category.map((cat) => cat.toLowerCase())
-        : [space.category.toLowerCase()];
+        const spaceCategory = Array.isArray(space.category)
+          ? space.category.map((cat) => cat.toLowerCase())
+          : [space.category.toLowerCase()];
 
-      return spaceCategory.includes(normalizedPageCategory);
-    });
+        return spaceCategory.includes(normalizedPageCategory);
+      });
 
   const cities = [
     "Mumbai",
@@ -101,17 +102,16 @@ const OfficeSpaces: React.FC = () => {
             : space.category === cat
         ));
 
-        console.log("displaySpaces spaces : ", space)
 
-        const isApproved = space.isAdminApprove === true;
+    const isApproved = space.isAdminApprove === true;
 
-        return cityMatch && categoryMatch && isApproved;
+    return cityMatch && categoryMatch && isApproved;
   });
-
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
 
-  
+  console.log("Sample space:", officeSpaces[0]);
+
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -143,7 +143,6 @@ const OfficeSpaces: React.FC = () => {
             <MapComponent />
           </div>
 
-
           {/* -------------------------------FILTER BY AREA ------------------------------------------------------------ */}
           <div className="flex flex-row flex-nowrap overflow-x-auto gap-6 w-full lg:flex-col lg:overflow-x-visible">
             {/* Filter By Area */}
@@ -169,7 +168,9 @@ const OfficeSpaces: React.FC = () => {
             {/* Filter By Category */}
             {(!pageName || pageName.trim() === "") && (
               <div className=" lg:min-w-0">
-                <h5 className="text-lg font-bold my-3 lg:mt-3">Filter By Category:</h5>
+                <h5 className="text-lg font-bold my-3 lg:mt-3">
+                  Filter By Category:
+                </h5>
                 {categories.map((category, index) => (
                   <div key={index} className="flex items-center space-x-2 my-2">
                     <Checkbox
@@ -188,8 +189,6 @@ const OfficeSpaces: React.FC = () => {
               </div>
             )}
           </div>
-
-
         </div>
         <div className="w-full lg:w-3/4">
           {visibleSpaces.length > 0 ? (
@@ -222,7 +221,6 @@ const OfficeSpaces: React.FC = () => {
                           </p>
                         )}
                       </div>
-
 
                       <p className="text-sm sm:text-base text-gray-500">
                         {space.city} {space.state} {space.pincode}
@@ -260,14 +258,15 @@ const OfficeSpaces: React.FC = () => {
                       </div>
                       <Link
                         // href={`/${pageName}/${space._id}`}
-                        href={`/${pageName ||
+                        href={`/${
+                          pageName ||
                           (Array.isArray(space.category)
                             ? space.category[0]
                             : space.category
                           )
                             ?.toLowerCase()
                             .replace(/\s+/g, "-")
-                          }/${space._id}`}
+                        }/${space._id}`}
                         className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                       >
                         View Details
