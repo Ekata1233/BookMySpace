@@ -8,6 +8,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import MapComponent from "../MapComponent/page";
+import Loader from "../loader/page";
 // Example location: src/types/OfficeSpace.ts
 
 export interface OfficeSpace {
@@ -23,12 +24,12 @@ export interface OfficeSpace {
 }
 
 const OfficeSpaces: React.FC = () => {
-  const { officeSpaces } = useOfficeSpaces();
+  const { officeSpaces,loading } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [showAll, setShowAll] = useState(false);
-
+  if (loading) return <Loader />;
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";

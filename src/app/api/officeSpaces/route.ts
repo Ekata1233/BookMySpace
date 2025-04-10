@@ -103,7 +103,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const newOfficeSpace = await officeSpaces.find({isAdminApprove:true});
+    const newOfficeSpace = await officeSpaces.find({});
     return NextResponse.json(
       { success: true, data: newOfficeSpace },
       { status: 200 }

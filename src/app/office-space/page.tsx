@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import Boxes from "../componants/boxes/page";
 import { LuPhoneCall } from "react-icons/lu";
 import RentSteps from "../rentsteps/page";
-import Offices from "../componants/officeSpace/page";
+import OfficeSpaces from "../componants/officeSpace/page";
 import { usePathname, useRouter } from "next/navigation";
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
@@ -102,7 +102,7 @@ const Officespace = () => {
 
       {/* Boxes Component positioned below */}
       <div className="relative z-0 mt-20">
-        <Offices />
+        <OfficeSpaces />
       </div>
     </div>
   );

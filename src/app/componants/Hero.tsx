@@ -113,7 +113,7 @@ const Hero = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="px-4 h-12 w-full sm:flex-1 
-             border border-[#6BB7BE] rounded 
+             border border-[#6BB7BE] rounded-none 
              focus:border-2 focus:outline-none"
             />
             <Button

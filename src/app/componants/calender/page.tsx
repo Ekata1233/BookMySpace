@@ -277,15 +277,12 @@ const TimeCalendar = () => {
         hour12: false,
       });
       timeOptions.push(formatted);
-      current.setHours(current.getHours() + 1);
-
-      
+      current.setHours(current.getHours() + 1);      
     }
     console.log("time options : ", timeOptions);
   }
 
   const userId = userInfo?._id;
-
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -308,7 +305,6 @@ const TimeCalendar = () => {
   });
 
   // BOOK NOW logic
-
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
