@@ -29,7 +29,6 @@ const OfficeSpaces: React.FC = () => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [showAll, setShowAll] = useState(false);
-  if (loading) return <Loader />;
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
@@ -104,6 +103,7 @@ const OfficeSpaces: React.FC = () => {
   });
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
+  if (loading) return <Loader />;
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
@@ -189,19 +189,20 @@ const OfficeSpaces: React.FC = () => {
               {visibleSpaces.map((space) => (
                 <Card
                   key={space._id}
-                  className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4"
+                  className="flex flex-col md:flex-row w-full rounded-none p-0 items-stretch my-4 "
                 >
                   <div className="w-full md:w-1/3 flex-shrink-0 h-50 md:h-auto flex">
                     <Image
                       src={space.thumbnailImage}
                       alt={space.officeSpaceName}
-                      className="w-full h-full object-cover"
+                      className="w-full lg:h-[300px] sm:h-auto  object-cover"
+
                       width={300}
                       height={200}
                     />
                   </div>
 
-                  <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between">
+                  <CardContent className="w-full md:w-2/3 px-4 pt-4 flex flex-col justify-between mt-0 ">
                     <div>
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                         <h3 className="text-lg sm:text-xl font-semibold">

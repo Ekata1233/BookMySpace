@@ -34,6 +34,7 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
       console.error('Failed to fetch work business:', error);
     }
   };
+console.log("workbusiness data : ",workBusinessData);
 
   const createWorkBusiness = async (data: FormData) => {
     try {
@@ -61,7 +62,6 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
       console.error('Failed to delete work business:', error);
     }
   };
-
   useEffect(() => {
     fetchWorkBusiness();
   }, []);

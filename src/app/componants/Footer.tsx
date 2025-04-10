@@ -1,54 +1,36 @@
 import React from 'react';
-import {  FaPhoneAlt, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaPhoneAlt, FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaArrowRight } from "react-icons/fa";
 import { MdAccessTimeFilled, MdEmail } from "react-icons/md";
-import Link from 'next/link';
+import Link from "next/link";
 import { FaMapLocationDot } from 'react-icons/fa6';
+import { Button } from '@/components/ui/button';
 
 const Footer = () => {
   return (
     <div className='bg-[#6BB7BE] text-white'>
       <div className='max-w-7xl mx-auto px-4 py-8'>
-        {/* Main Footer Columns - all in one row */}
+        {/* Main Footer Columns */}
         <div className='flex flex-col md:flex-row flex-wrap gap-8 justify-between'>
-          
-          {/* Brand/Contact Column */}
-          <div className='min-w-[250px] flex-1'>
+
+          {/* Brand/Contact Column - smaller width */}
+          <div className='flex-[0.5] min-w-[160px]'>
             <h1 className='text-3xl font-bold mb-4'>Conference.</h1>
-            <div className='space-y-3'>
-              <div className='flex items-start gap-2'>
-                <FaMapLocationDot className='mt-1 flex-shrink-0' />
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white ">
-                  3rd Floor, C307, Amanora Chamber, Amanora Mall, Hadapsar, Pune, Maharashtra 411028
-                </p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <MdAccessTimeFilled />
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white ">Mon-Sat: 9:30am-6:30pm</p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <FaPhoneAlt />
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white">+91 9272003735</p>
-              </div>
-              <div className='flex items-center gap-2'>
-                <MdEmail />
-                <p className="text-sm sm:text-base md:text-lg leading-relaxed text-white ">info@conference.com</p>
-              </div>
-            </div>
+            {/* Contact info commented */}
           </div>
 
           {/* Quick Links Column */}
-          <div className='min-w-[150px]'>
-            <h3 className='font-semibold text-lg mb-4 border-b pb-2'>Quick Links</h3>
+          <div className='flex-1 min-w-[150px]'>
+            <h3 className='font-semibold text-lg mb-4 border-b pb-2 '>Quick Links</h3>
             <ul className='space-y-2'>
               <li><Link href="/about" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">About Us</Link></li>
-              <li><Link href="/services" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Services</Link></li>
-              <li><Link href="/pricing" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Pricing</Link></li>
-              <li><Link href="/blog" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Blog</Link></li>
+              <li><Link href="/services" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Privacy Policy</Link></li>
+              <li><Link href="/pricing" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Terms of Service</Link></li>
+              <li><Link href="/blog" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Retun and Refund Policy</Link></li>
             </ul>
           </div>
 
           {/* Services Column */}
-          <div className='min-w-[150px]'>
+          <div className='flex-1 min-w-[150px]'>
             <h3 className='font-semibold text-lg mb-4 border-b pb-2'>Services</h3>
             <ul className='space-y-2'>
               <li><Link href="/meeting-rooms" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Meeting Rooms</Link></li>
@@ -59,7 +41,7 @@ const Footer = () => {
           </div>
 
           {/* Support Column */}
-          <div className='min-w-[150px]'>
+          <div className='flex-1 min-w-[150px]'>
             <h3 className='font-semibold text-lg mb-4 border-b pb-2'>Support</h3>
             <ul className='space-y-2'>
               <li><Link href="/faq" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">FAQ</Link></li>
@@ -70,14 +52,16 @@ const Footer = () => {
           </div>
 
           {/* Legal Column */}
-          <div className='min-w-[150px]'>
-            <h3 className='font-semibold text-lg mb-4 border-b pb-2'>Legal</h3>
-            <ul className='space-y-2'>
-              <li><Link href="/privacy" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Terms of Service</Link></li>
-              <li><Link href="/cookies" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Cookie Policy</Link></li>
-              <li><Link href="/accessibility" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Accessibility</Link></li>
-            </ul>
+          <div className='flex-1 min-w-[250px] my-auto'>
+            <h2 className='font-semibold text-3xl mb-4 border-b pb-2 mb-8'>Become a Partner</h2>
+            <Link
+  href="/vendor/dashboard"
+  className="flex items-center gap-2 text-base sm:text-md md:text-lg lg:text-lg text-[#6BB7BE] hover:text-[#FAFAFA] border border-[#FAFAFA] px-4 py-3 bg-[#FAFAFA] hover:bg-[#6BB7BE] font-medium rounded-none mt-6 w-fit"
+>
+  Apply for Partnership
+  <FaArrowRight className="text-lg" />
+</Link>
+
           </div>
         </div>
 

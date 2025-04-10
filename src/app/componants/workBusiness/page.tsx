@@ -16,6 +16,15 @@ const WorkBusiness = () => {
 
   return (
     <div>
+       <div className="mx-auto px-4 pt-10 pb-6">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center pt-12">
+              Work Wherever Business Takes You
+              </h1>
+              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-500 text-center font-semibold py-5">
+              Workspaces that move with your business—flexible, global, and ready when you are.
+              </h1>
+             
+            </div>
       {workBusinessData.map((item, index) => (
         <div
           key={item._id}
@@ -45,7 +54,7 @@ const WorkBusiness = () => {
                   />
                 </div>
 
-                <div className="order-2 md:order-2 px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start mt-32 ">
+                <div className="order-2 md:order-2 px-0 sm:px-4 md:px-6 lg:px-8 xl:px-12 text-start mt-32 xl:mt-12 ">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 leading-tight">
                     {item.title}
                     <span className="text-[#6BB7BE] font-extrabold">.</span>
@@ -57,7 +66,7 @@ const WorkBusiness = () => {
                     </p>
                   </div>
                   <div className="flex text-4xl mt-4 mb-4 text-gray-600">
-                    <LuLaptopMinimalCheck className="my-2 me-3" />
+                    <LuLaptopMinimalCheck className="my-2 me-3"size={55} />
                     <p className="text-sm sm:text-base md:text-lg leading-relaxed">
                       {item.description2}
                     </p>

@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectToDatabase();
-    const data = await WorkBusiness.find().sort({ createdAt: -1 });
+    const data = await WorkBusiness.find().sort({ createdAt: 1 });
     return NextResponse.json(data, { status: 200, headers: corsHeaders });
   } catch (error: any) {
     return NextResponse.json(

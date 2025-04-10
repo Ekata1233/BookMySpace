@@ -33,7 +33,7 @@ const ExploreOffice = () => {
                 {office.name}
               </h3>
               <h3 className="text-xl sm:text-xl md:text-xl lg:text-2xl font-bold text-white">
-                {office.address}
+                '{office.address}'
               </h3>
               <Button className="text-base sm:text-md md:text-lg lg:text-lg text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-3 py-5 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none mt-4">
                 Know More
