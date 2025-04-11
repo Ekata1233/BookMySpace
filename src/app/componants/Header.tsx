@@ -49,6 +49,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useOfficeSpaces } from "../context/OfficeSpaceContext";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -74,6 +75,21 @@ const Header = () => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState<boolean>(false);
+
+  const { officeSpaces, setFilteredOfficeSpaces } = useOfficeSpaces();
+  const [searchInput, setSearchInput] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const filtered = officeSpaces.filter((space:any) =>
+        space.city.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setFilteredOfficeSpaces(filtered);
+    }, 200); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchInput, officeSpaces, setFilteredOfficeSpaces]);
+  
 
   useEffect(() => {
     const storedIndex = localStorage.getItem("activeIndex");
@@ -237,9 +253,9 @@ const Header = () => {
                 <input
                   type="text"
                   placeholder="Search for a location"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                   className="px-4 h-10 border w-full focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
                 />
                 <button
@@ -424,10 +440,10 @@ const Header = () => {
                   <input
                     type="text"
                     placeholder="Search for a location"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    className="px-3 h-10 border w-full focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    // onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                    className="px-3 h-10 border w-full text-[#6bb7be] focus:outline-none focus:ring-2 focus:ring-[#6BB7BE]"
                   />
                   <button
                     onClick={handleSearch}

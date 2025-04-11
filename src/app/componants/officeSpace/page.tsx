@@ -26,7 +26,7 @@ export interface OfficeSpace {
 }
 
 const OfficeSpaces: React.FC = () => {
-  const { officeSpaces, loading } = useOfficeSpaces();
+  const { officeSpaces,filteredOfficeSpaces, loading } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);

@@ -96,6 +96,11 @@ const OfficeSpaceSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+      vendorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Vendor", 
+        required: true,
+      },
   },
   { timestamps: true }
 );

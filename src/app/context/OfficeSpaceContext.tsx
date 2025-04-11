@@ -36,6 +36,8 @@ interface ApiResponse {
 
 interface OfficeSpaceContextType {
   officeSpaces: OfficeSpace[];
+  filteredOfficeSpaces: OfficeSpace[];
+  setFilteredOfficeSpaces: React.Dispatch<React.SetStateAction<OfficeSpace[]>>;
   loading: boolean;
   addOfficeSpace: (newOfficeSpace: FormData) => Promise<void>;
   refreshOfficeSpaces: () => Promise<void>;
@@ -50,6 +52,12 @@ const OfficeSpaceContext = createContext<OfficeSpaceContextType | undefined>(
 export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
   const [officeSpaces, setOfficeSpaces] = useState<OfficeSpace[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [filteredOfficeSpaces, setFilteredOfficeSpaces] = useState<OfficeSpace[]>([]);
+
+useEffect(() => {
+  fetchOfficeSpaces();
+}, []);
+
 
   // ✅ Fetch Office Spaces (Using your existing "/api/officeSpaces" route)
   const fetchOfficeSpaces = async () => {
@@ -58,6 +66,7 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
         "/api/officeSpaces"
       );
       setOfficeSpaces(response.data.data);
+      setFilteredOfficeSpaces(response.data.data); 
     } catch (error) {
       console.error("Error fetching office spaces:", error);
     } finally {
@@ -120,6 +129,8 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
     <OfficeSpaceContext.Provider
       value={{
         officeSpaces,
+        filteredOfficeSpaces,
+        setFilteredOfficeSpaces,
         loading,
         addOfficeSpace,
         refreshOfficeSpaces: fetchOfficeSpaces,
