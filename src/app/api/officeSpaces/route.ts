@@ -25,6 +25,8 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
 
+    console.log("form data of office space: ", formData);
+
     const officeSpaceName = formData.get("officeSpaceName") as string;
     const city = formData.get("city") as string;
     const state = formData.get("state") as string;
@@ -39,6 +41,7 @@ export async function POST(req: Request) {
     const amenities = JSON.parse(formData.get("amenities") as string);
     const startTime = new Date(formData.get("startTime") as string);
     const endTime = new Date(formData.get("endTime") as string);
+    const vendorId = formData.get("vendorId") as string;
 
     if (!officeSpaceName || !city || !description || isNaN(rate)) {
       return NextResponse.json(
@@ -99,6 +102,7 @@ export async function POST(req: Request) {
       amenities,
       thumbnailImage: imageUrl,
       multiImages,
+      vendorId,
     });
 
     return NextResponse.json(

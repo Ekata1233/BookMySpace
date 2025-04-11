@@ -138,7 +138,7 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchVendor = async () => {
     const token = localStorage.getItem("vendorToken");
     if (!token) return;
-
+  
     try {
       const res = await fetch("/api/vendor/me", {
         method: "GET",
@@ -147,19 +147,22 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
+      const data = await res.json();
+      console.log("Fetch vendor result:", res.status, data);
+  
       if (res.ok) {
-        const data = await res.json();
         setVendor(data.vendor);
         localStorage.setItem("vendor", JSON.stringify(data.vendor));
       } else {
-        logoutVendor(); // invalid token
+        toast.error("Invalid token or session expired.");
+        logoutVendor();
       }
     } catch (error) {
       console.error("Fetch vendor error:", error);
     }
   };
-
+  
   useEffect(() => {
     fetchVendor();
   }, []);
