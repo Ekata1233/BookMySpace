@@ -7,22 +7,28 @@ import { useState } from "react";
 import Link from "next/link";
 import { Building2, CalendarClock, DollarSign, MailCheck } from "lucide-react";
 import {
-    LayoutDashboard,
-    
-    CalendarDays,
-    Settings,
-  } from "lucide-react"
-  import { usePathname } from "next/navigation"
+  LayoutDashboard,
+  Plus,
+  FolderKanban,
+  CalendarDays,
+  Settings,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname()
+  const [openSpaces, setOpenSpaces] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => pathname === href;
   const navItems = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "My Spaces", href: "/dashboard/spaces", icon: Building2 },
     { name: "Bookings", href: "/dashboard/bookings", icon: CalendarDays },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
-  ]
+  ];
   const cardData = [
     {
       title: "Total Spaces",
@@ -48,7 +54,7 @@ const page = () => {
       icon: <MailCheck className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#31878f]",
     },
-  ]
+  ];
 
   return (
     <div className="flex h-screen mt-42">
@@ -58,31 +64,96 @@ const page = () => {
           sidebarOpen ? "block" : "hidden"
         } md:relative absolute z-20`}
       >
-        <h2 className="text-2xl font-extrabold text-[#6bb7be] mb-6 tracking-wider">
-        Vendor Panel
-      </h2>
+        <h2 className="text-3xl pt-7 font-extrabold text-white mb-8 tracking-wider">
+          Vendor Panel
+        </h2>
 
-      <nav className="space-y-3">
-        {navItems.map(({ name, href, icon: Icon }, i) => {
-          const active = pathname === href
-          return (
-            <Link
-              key={i}
-              href={href}
-              className={`flex items-center gap-3 px-4 py-2 rounded-none font-semibold text-base tracking-wide transition-all duration-300
-                ${
-                  active
-                    ? "bg-gradient-to-r from-[#6bb7be]/10 to-transparent border-l-4 border-[#6bb7be] text-[#6bb7be]"
-                    : "text-gray-700 hover:text-[#6bb7be] hover:translate-x-1 hover:border-l-4 hover:border-[#6bb7be] hover:bg-[#6bb7be]/5"
-                }`}
+        <nav className="space-y-4">
+          {/* Dashboard */}
+          <Link
+            href="/dashboard"
+            className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
+          ${
+            isActive("/dashboard")
+              ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
+              : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
+          }`}
+          >
+            <LayoutDashboard className="w-6 h-6" />
+            Dashboard
+          </Link>
+
+          {/* Spaces Dropdown */}
+          <div>
+            <button
+              onClick={() => setOpenSpaces(!openSpaces)}
+              className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
             >
-              <Icon className={`w-5 h-5 ${active ? "text-[#6bb7be]" : "text-gray-500"}`} />
-              {name}
-            </Link>
-          )
-        })}
-      </nav>
+              <FolderKanban className="w-6 h-6" />
+              Spaces
+              <span className="ml-auto">
+                {openSpaces ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </span>
+            </button>
 
+            {openSpaces && (
+              <div className="ml-10 mt-1 space-y-2">
+                <Link
+                  href="/vendor/addSpace
+                  "
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${
+                    isActive("/dashboard/spaces/add") && "text-[#6bb7be]"
+                  }`}
+                >
+                  <Plus className="w-5 h-5" />
+                  Add Space
+                </Link>
+
+                <Link
+                  href="/dashboard/spaces"
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${
+                    isActive("/dashboard/spaces") && "text-[#6bb7be]"
+                  }`}
+                >
+                  <FolderKanban className="w-5 h-5" />
+                  My Spaces
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Bookings */}
+          <Link
+            href="/dashboard/bookings"
+            className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
+          ${
+            isActive("/dashboard/bookings")
+              ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
+              : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
+          }`}
+          >
+            <CalendarDays className="w-6 h-6" />
+            Bookings
+          </Link>
+
+          {/* Settings */}
+          <Link
+            href="/dashboard/settings"
+            className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
+          ${
+            isActive("/dashboard/settings")
+              ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
+              : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
+          }`}
+          >
+            <Settings className="w-6 h-6" />
+            Settings
+          </Link>
+        </nav>
       </aside>
 
       {/* Main content */}
@@ -100,23 +171,23 @@ const page = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mt-6">
-      {cardData.map((card, idx) => (
-        <div
-          key={idx}
-          className={`rounded-none overflow-hidden bg-gradient-to-br ${card.color} text-white shadow-lg backdrop-blur-sm bg-opacity-60 p-6 transform hover:scale-[1.02] transition-all duration-300`}
-        >
-          <div className="flex justify-between items-center">
-            <div className="space-y-1">
-              <p className="text-sm font-medium opacity-80">{card.title}</p>
-              <p className="text-3xl font-extrabold">{card.value}</p>
+          {cardData.map((card, idx) => (
+            <div
+              key={idx}
+              className={`rounded-none overflow-hidden bg-gradient-to-br ${card.color} text-white shadow-lg backdrop-blur-sm bg-opacity-60 p-6 transform hover:scale-[1.02] transition-all duration-300`}
+            >
+              <div className="flex justify-between items-center">
+                <div className="space-y-1">
+                  <p className="text-sm font-medium opacity-80">{card.title}</p>
+                  <p className="text-3xl font-extrabold">{card.value}</p>
+                </div>
+                <div className="p-3 bg-white/20 rounded-full shadow-lg">
+                  {card.icon}
+                </div>
+              </div>
             </div>
-            <div className="p-3 bg-white/20 rounded-full shadow-lg">
-              {card.icon}
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
-    </div>
 
         {/* Add more components below as needed */}
       </main>

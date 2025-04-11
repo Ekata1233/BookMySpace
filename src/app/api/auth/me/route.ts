@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      // return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

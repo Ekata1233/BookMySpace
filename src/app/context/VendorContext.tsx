@@ -1,8 +1,9 @@
-// context/VendorContext.tsx
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type VendorData = {
   name: string;
@@ -19,9 +20,12 @@ type VendorData = {
 };
 
 interface VendorContextProps {
+  vendor: any;
   formData: VendorData;
   setFormData: React.Dispatch<React.SetStateAction<VendorData>>;
   submitVendor: () => Promise<void>;
+  logoutVendor: () => void;
+  vendorLogin: (email: string, password: string) => Promise<void>;
 }
 
 const VendorContext = createContext<VendorContextProps | undefined>(undefined);
@@ -47,6 +51,23 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
     amount: 1999,
   });
 
+  const [vendor, setVendor] = useState<any>(null);
+  const router = useRouter();
+
+  // Load vendor from localStorage
+  useEffect(() => {
+    const storedVendor = localStorage.getItem("vendor");
+    if (storedVendor && storedVendor !== "undefined") {
+      try {
+        setVendor(JSON.parse(storedVendor));
+      } catch (error) {
+        console.error("Error parsing vendor from localStorage:", error);
+        localStorage.removeItem("vendor");
+      }
+    }
+  }, []);
+
+  // Submit and login vendor
   const submitVendor = async () => {
     try {
       const formDataToSend = new FormData();
@@ -60,25 +81,93 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       formDataToSend.append("agreed", String(formData.agreed));
       formDataToSend.append("paid", String(formData.paid));
       formDataToSend.append("amount", String(formData.amount));
-  
-      // Append your file fields here if available (logo, documentImage)
-      // formDataToSend.append("logo", yourLogoFile);
-      // formDataToSend.append("documentImage", yourDocFile);
-  
-      await axios.post("/api/vendor/registration", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+
+      // 🚀 Submit to your API
+      const response = await axios.post("/api/vendor/registration", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
+
+      const data = response.data;
+
+      // ✅ Save vendor & token in localStorage
+      localStorage.setItem("vendor", JSON.stringify(data.vendor));
+      localStorage.setItem("vendorToken", data.token);
+      setVendor(data.vendor);
+
+      toast.success("Vendor registered & logged in! 🚀");
+      router.push("/vendor/dashboard"); // or wherever you want to send them
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.error || "Something went wrong";
-      throw new Error(errorMessage);
+      const errMsg = error.response?.data?.error || "Vendor registration failed";
+      toast.error(errMsg);
     }
   };
 
+  const vendorLogin = async (email: string, password: string) => {
+    try {
+      const res = await fetch("/api/vendor/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ workEmail: email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setVendor(data.vendor);
+        localStorage.setItem("vendor", JSON.stringify(data.vendor));
+        localStorage.setItem("vendorToken", data.token);
+        toast.success("Login successful!");
+        router.push("/vendor/dashboard");
+      } else {
+        toast.error(data.error || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An error occurred during login.");
+    }
+  };
+
+  // Logout
+  const logoutVendor = () => {
+    setVendor(null);
+    localStorage.removeItem("vendor");
+    localStorage.removeItem("vendorToken");
+    router.push("/vendor/auth"); // or vendor login page
+  };
+
+  const fetchVendor = async () => {
+    const token = localStorage.getItem("vendorToken");
+    if (!token) return;
+
+    try {
+      const res = await fetch("/api/vendor/me", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setVendor(data.vendor);
+        localStorage.setItem("vendor", JSON.stringify(data.vendor));
+      } else {
+        logoutVendor(); // invalid token
+      }
+    } catch (error) {
+      console.error("Fetch vendor error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchVendor();
+  }, []);
+
   return (
-    <VendorContext.Provider value={{ formData, setFormData, submitVendor }}>
+    <VendorContext.Provider
+      value={{ vendor, formData, setFormData, submitVendor, logoutVendor, vendorLogin }}
+    >
       {children}
     </VendorContext.Provider>
   );
