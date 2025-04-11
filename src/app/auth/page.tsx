@@ -17,27 +17,20 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useAuth } from "../context/authContext";
-<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-=======
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import { useVendor } from "../context/VendorContext";
->>>>>>> fcf3cfdde18883756b8ce421279d7041b2e953e4
 
 const Auth = () => {
   const { user, signup, login } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirect") || "/office-space";
-=======
   const { vendorLogin } = useVendor();
 
->>>>>>> fcf3cfdde18883756b8ce421279d7041b2e953e4
 
   console.log("Current user:", user);
 
@@ -87,10 +80,10 @@ const Auth = () => {
     };
 
     try {
-      // await login(credentials.email, credentials.password);
-      // router.push("/");
-      await vendorLogin(credentials.email, credentials.password);
-        router.push("/vendor/dashboard");
+      await login(credentials.email, credentials.password);
+      router.push("/");
+      // await vendorLogin(credentials.email, credentials.password);
+      //   router.push("/vendor/dashboard");
     } catch (userError) {
       try {
         await vendorLogin(credentials.email, credentials.password);
