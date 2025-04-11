@@ -180,18 +180,21 @@ const OfficeSpaceForm = () => {
         ADD OFFICE SPACE
       </h1>
       <form onSubmit={handleSubmit} className="space-y-4">
+        <Label className="text-[#6BB7BE] my-2">Office Space Name</Label>
         <Input
           type="text"
           name="officeSpaceName"
           value={formData.officeSpaceName}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Office Space Name"
+          placeholder="Abc Pvt Ltd"
           required
           className="rounded-none w-full py-5"
         />
+
+        <Label className="text-[#6BB7BE] my-2">Select Category</Label>
         <Select onValueChange={(value) => handleChange("category", value)}>
           <SelectTrigger className="rounded-none w-full py-5">
-            <SelectValue placeholder="Select a category" />
+            <SelectValue placeholder="Office Space" />
           </SelectTrigger>
           <SelectContent className="w-full">
             {categories.map((cat) => (
@@ -201,80 +204,93 @@ const OfficeSpaceForm = () => {
             ))}
           </SelectContent>
         </Select>
+
+        <Label className="text-[#6BB7BE] my-2">City</Label>
         <Input
           type="text"
           name="city"
           value={formData.city}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="City"
+          placeholder="Pune"
           required
           className="rounded-none w-full py-5"
         />
+
+        <Label className="text-[#6BB7BE] my-2">State</Label>
         <Input
           type="text"
           name="state"
           value={formData.state}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="State"
+          placeholder="Maharashtra"
           required
           className="rounded-none w-full py-5"
         />
+
+        <Label className="text-[#6BB7BE] my-2">Pincode</Label>
         <Input
           type="text"
           name="pincode"
           value={formData.pincode}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Pincode"
+          placeholder="411 038"
           required
           className="rounded-none w-full py-5"
         />
+
+        <Label className="text-[#6BB7BE] my-2">Select Location</Label>
         <div>
-        <LoadScript
-          googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-        >
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            center={
-              formData.lat && formData.lng
-                ? { lat: formData.lat, lng: formData.lng }
-                : defaultCenter
-            }
-            zoom={13}
-            onClick={(e) => {
-              const lat = e.latLng?.lat();
-              const lng = e.latLng?.lng();
-              if (lat && lng) {
-                handleChange("lat", lat);
-                handleChange("lng", lng);
-              }
-            }}
+          <LoadScript
+            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
           >
-            {formData.lat && formData.lng && (
-              <Marker position={{ lat: formData.lat, lng: formData.lng }} />
-            )}
-          </GoogleMap>
-        </LoadScript>
+            <GoogleMap
+              mapContainerStyle={mapContainerStyle}
+              center={
+                formData.lat && formData.lng
+                  ? { lat: formData.lat, lng: formData.lng }
+                  : defaultCenter
+              }
+              zoom={13}
+              onClick={(e) => {
+                const lat = e.latLng?.lat();
+                const lng = e.latLng?.lng();
+                if (lat && lng) {
+                  handleChange("lat", lat);
+                  handleChange("lng", lng);
+                }
+              }}
+            >
+              {formData.lat && formData.lng && (
+                <Marker position={{ lat: formData.lat, lng: formData.lng }} />
+              )}
+            </GoogleMap>
+          </LoadScript>
         </div>
+
+        <Label className="text-[#6BB7BE] my-2">Description (In Short)</Label>
         <Textarea
           name="description"
           value={formData.description}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Description"
+          placeholder="Description..."
           required
           className="rounded-none w-full"
         />
 
+        <Label className="text-[#6BB7BE] my-2">
+          Extra Description (In Detail)
+        </Label>
         <Textarea
           name="extraDescription"
           value={formData.extraDescription}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="extraDescription"
+          placeholder="Extra Description...."
           required
           className="rounded-none w-full"
         />
 
-        <div className="text-gray-700 my-5">
-          <Label className="block mb-2">Select Amenities</Label>
+        <div className="text-gray-600 my-5">
+          <Label className="text-[#6BB7BE] my-2">Select Amenities</Label>
           <div className="grid grid-cols-2 gap-2">
             {amenitiesList.map((amenity) => (
               <div key={amenity} className="flex items-center space-x-2">
@@ -288,17 +304,19 @@ const OfficeSpaceForm = () => {
             ))}
           </div>
         </div>
+
+        <Label className="text-[#6BB7BE] my-2">Price</Label>
         <Input
           type="number"
           name="rate"
           value={formData.rate}
           onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Rate"
+          placeholder="1500"
           required
           className="rounded-none w-full py-5"
         />
         <div className="text-gray-700">
-          <Label className="py-2">Office Start From</Label>
+          <Label className="text-[#6BB7BE] my-2">Office Start From </Label>
           <Input
             type="time"
             name="startTime"
@@ -308,7 +326,7 @@ const OfficeSpaceForm = () => {
             className="rounded-none w-full py-5"
           />
 
-          <Label className="py-2 mt-3">Office Start To</Label>
+          <Label className="text-[#6BB7BE] my-2">office Start To</Label>
           <Input
             type="time"
             name="endTime"
@@ -318,12 +336,16 @@ const OfficeSpaceForm = () => {
             className="rounded-none w-full py-5"
           />
         </div>
+
+        <Label className="text-[#6BB7BE] my-2">Select Thumbnail Image</Label>
         <Input
           type="file"
           name="thumbnailImage"
           onChange={handleFileChange}
           className="rounded-none w-full text-gray-700 mt-3"
         />
+
+        <Label className="text-[#6BB7BE] my-2">Select 4 Images</Label>
         <Input
           type="file"
           name="multiImages"
@@ -331,6 +353,8 @@ const OfficeSpaceForm = () => {
           onChange={handleMultiFileChange}
           className="rounded-none w-full text-gray-700 mt-3"
         />
+
+        <Label className="text-[#6BB7BE] my-2">Newly Open ?</Label>
         <div className="flex items-center space-x-2 py-2">
           <Checkbox
             id="isNewlyOpen"
@@ -341,8 +365,6 @@ const OfficeSpaceForm = () => {
             Newly Open
           </Label>
         </div>
-
-        
 
         <Button
           type="submit"

@@ -19,12 +19,15 @@ import {
 import { useAuth } from "../context/authContext";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useVendor } from "../context/VendorContext";
 
 const Auth = () => {
   const { user, signup, login } = useAuth();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { vendorLogin } = useVendor();
+
 
   console.log("Current user:", user);
 
@@ -74,10 +77,18 @@ const Auth = () => {
     };
 
     try {
-      await login(credentials.email, credentials.password);
-      router.push("/");
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+      // await login(credentials.email, credentials.password);
+      // router.push("/");
+      await vendorLogin(credentials.email, credentials.password);
+        router.push("/vendor/dashboard");
+    } catch (userError) {
+      try {
+        await vendorLogin(credentials.email, credentials.password);
+        router.push("/vendor/dashboard");
+      } catch (vendorError) {
+        console.log("Login failed for both user and vendor");
+        // Optionally show an error message here (toast/alert/etc.)
+      }
     } finally {
       setLoading(false);
     }
