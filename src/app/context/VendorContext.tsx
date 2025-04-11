@@ -49,8 +49,26 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
 
   const submitVendor = async () => {
     try {
-      await axios.post("/api/vendor/registration", formData, {
-        headers: { "Content-Type": "application/json" },
+      const formDataToSend = new FormData();
+      formDataToSend.append("companyName", formData.companyName);
+      formDataToSend.append("workEmail", formData.workEmail);
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("address", formData.address);
+      formDataToSend.append("website", formData.website || "");
+      formDataToSend.append("businessType", formData.businessType);
+      formDataToSend.append("message", formData.message);
+      formDataToSend.append("agreed", String(formData.agreed));
+      formDataToSend.append("paid", String(formData.paid));
+      formDataToSend.append("amount", String(formData.amount));
+  
+      // Append your file fields here if available (logo, documentImage)
+      // formDataToSend.append("logo", yourLogoFile);
+      // formDataToSend.append("documentImage", yourDocFile);
+  
+      await axios.post("/api/vendor/registration", formDataToSend, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     } catch (error: any) {
       const errorMessage =

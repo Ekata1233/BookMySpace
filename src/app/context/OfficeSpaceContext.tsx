@@ -25,6 +25,7 @@ interface OfficeSpace {
   city: string;
   state: string;
   pincode: string;
+  isAdminApprove: boolean;
 }
 
 interface ApiResponse {

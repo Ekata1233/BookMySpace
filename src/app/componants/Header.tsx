@@ -17,6 +17,7 @@ import {
   CalendarDays,
   Sofa,
   Library,
+  Building2, RefreshCw 
 } from "lucide-react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -207,9 +208,9 @@ const Header = () => {
     { name: "Day Office", icon: <CalendarDays size={28} className="blue" /> },
     { name: "Hot Desks", icon: <Sofa size={28} className="blue" /> },
     { name: "Dedicated Desks", icon: <Clock size={28} className="blue" /> },
-    { name: "Custom Office", icon: <Clock size={28} className="blue" /> },
-    { name: "Event Space", icon: <Clock size={28} className="blue" /> },
-    { name: "Workplace Recovery", icon: <Clock size={28} className="blue" /> },
+    { name: "Custom Office", icon: <Building2 size={28} className="blue" /> },
+    { name: "Event Space", icon: <CalendarDays size={28} className="blue" /> },
+    { name: "Workplace Recovery", icon: <RefreshCw size={28} className="blue" /> },
 
   ];
 

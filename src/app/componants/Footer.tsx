@@ -46,8 +46,7 @@ const Footer = () => {
             <ul className='space-y-2'>
               <li><Link href="/faq" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">FAQ</Link></li>
               <li><Link href="/contact" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Contact Us</Link></li>
-              <li><Link href="/feedback" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Feedback</Link></li>
-              <li><Link href="/help-center" className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2">Help Center</Link></li>
+              
             </ul>
           </div>
 
@@ -55,12 +54,12 @@ const Footer = () => {
           <div className='flex-1 min-w-[250px] my-auto'>
             <h2 className='font-semibold text-3xl mb-4 border-b pb-2 mb-8'>Become a Partner</h2>
             <Link
-  href="/vendor/dashboard"
-  className="flex items-center gap-2 text-base sm:text-md md:text-lg lg:text-lg text-[#6BB7BE] hover:text-[#FAFAFA] border border-[#FAFAFA] px-4 py-3 bg-[#FAFAFA] hover:bg-[#6BB7BE] font-medium rounded-none mt-6 w-fit"
->
-  Apply for Partnership
-  <FaArrowRight className="text-lg" />
-</Link>
+              href="/vendor/registration"
+              className="flex items-center gap-2 text-base sm:text-md md:text-lg lg:text-lg text-[#6BB7BE] hover:text-[#FAFAFA] border border-[#FAFAFA] px-4 py-3 bg-[#FAFAFA] hover:bg-[#6BB7BE] font-medium rounded-none mt-6 w-fit"
+            >
+              Apply for Partnership
+              <FaArrowRight className="text-lg" />
+            </Link>
 
           </div>
         </div>

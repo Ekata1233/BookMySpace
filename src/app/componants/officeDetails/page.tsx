@@ -17,6 +17,7 @@ import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
 import { GrShieldSecurity } from "react-icons/gr";
 import { PiBuildingOffice } from "react-icons/pi";
+import { useAuth } from "@/app/context/authContext";
 
 export interface OfficeSpace {
   _id: string;
@@ -50,8 +51,10 @@ const amenityIcons = {
 
 const OfficeDetails = () => {
   const { officeSpaces } = useOfficeSpaces();
+  const { user } = useAuth();
+  
   const router = useRouter();
-  const params = useParams();
+    const params = useParams();
   const id = params?.id;
 
   const pathname = usePathname();
@@ -59,7 +62,8 @@ const OfficeDetails = () => {
   const mainSlug = pathSegments[0] || "";
   const pageName = pathSegments[pathSegments.length - 1] || "";
 
-  console.log("pathe name : ", mainSlug);
+  // console.log("pathe name : ", mainSlug);
+console.log("Path Name : ",pathname);
 
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
@@ -89,9 +93,14 @@ const OfficeDetails = () => {
   } = MatchedOfficeSpace as any;
 
   const handleBookNow = () => {
+    if (!user) {
+      router.push(`/auth?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
     if (id) {
       router.push(`/${mainSlug}/${id}/book`);
     }
+    console.log("Proceed to book slot...");
   };
 
   return (

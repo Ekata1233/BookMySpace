@@ -17,14 +17,16 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { useAuth } from "../context/authContext";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Auth = () => {
   const { user, signup, login } = useAuth();
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect") || "/office-space";
 
   console.log("Current user:", user);
 
@@ -82,6 +84,11 @@ const Auth = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (user) {
+      router.push(redirectPath); // After login/signup, go back to booking page
+    }
+  }, [user]);
 
   return (
     <div className="flex items-center justify-center py-45 mt-10">
