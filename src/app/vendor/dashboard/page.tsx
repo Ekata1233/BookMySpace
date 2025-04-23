@@ -25,7 +25,7 @@ const page = () => {
 
   const isActive = (href: string) => pathname === href;
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Dashboard", href: "vendor/dashboard", icon: LayoutDashboard },
     { name: "My Spaces", href: "/dashboard/spaces", icon: Building2 },
     { name: "Bookings", href: "/dashboard/bookings", icon: CalendarDays },
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
@@ -71,9 +71,9 @@ const page = () => {
         <nav className="space-y-4">
           {/* Dashboard */}
           <Link
-            href="/dashboard"
+            href="/vendor/dashboard"
             className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
-          ${isActive("/dashboard")
+          ${isActive("/vendor/dashboard")
                 ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
                 : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
               }`}
@@ -104,7 +104,7 @@ const page = () => {
                 <Link
                   href="/vendor/addSpace
                   "
-                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${isActive("/dashboard/spaces/add") && "text-[#6bb7be]"
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${isActive("/vendor/addSpace") && "text-[#6bb7be]"
                     }`}
                 >
                   <Plus className="w-5 h-5" />
@@ -113,7 +113,7 @@ const page = () => {
 
                 <Link
                   href="/vendor/mySpaces"
-                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${isActive("/dashboard/mySpaces") && "text-[#6bb7be]"
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${isActive("/vendor/mySpaces") && "text-[#6bb7be]"
                     }`}
                 >
                   <FolderKanban className="w-5 h-5" />
@@ -156,7 +156,7 @@ const page = () => {
               <div className="ml-10 mt-1 space-y-2">
                 <Link
                   href="/vendor/bookings/upcomingBookings"
-                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${isActive("/dashboard/bookings/upcoming") && "text-[#6bb7be]"
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${isActive("/vendor/bookings/upcomingBookings") && "text-[#6bb7be]"
                     }`}
                 >
                   <CalendarDays className="w-5 h-5" />
@@ -165,7 +165,7 @@ const page = () => {
 
                 <Link
                   href="/vendor/bookings/completedBookings"
-                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${isActive("/dashboard/bookings/completed") && "text-[#6bb7be]"
+                  className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${isActive("/vendor/bookings/completedBookings") && "text-[#6bb7be]"
                     }`}
                 >
                   <CalendarDays className="w-5 h-5" />
