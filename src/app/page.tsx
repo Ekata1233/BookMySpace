@@ -11,6 +11,7 @@ import OfficeDetails from "./componants/officeDetails/page";
 import TimeCalender from "./componants/calender/page";
 import IndiaMap from "./componants/MapComponent/page";
 import Loader from "./componants/loader/page";
+import FAQs from "./faq/page";
 
 export default function Home() {
   return (
@@ -22,6 +23,9 @@ export default function Home() {
       {/* <Loader /> */}
       <ExploreOffice />
       <OurAmenites />
+      <div className="mt-0">
+        <FAQs/>
+      </div>
     </main>
   );
 }

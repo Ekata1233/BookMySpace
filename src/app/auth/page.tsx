@@ -80,10 +80,10 @@ const Auth = () => {
     };
 
     try {
-      await login(credentials.email, credentials.password);
-      router.push("/");
-      // await vendorLogin(credentials.email, credentials.password);
-      //   router.push("/vendor/dashboard");
+      // await login(credentials.email, credentials.password);
+      // router.push("/");
+      await vendorLogin(credentials.email, credentials.password);
+        router.push("/vendor/dashboard");
     } catch (userError) {
       try {
         await vendorLogin(credentials.email, credentials.password);
