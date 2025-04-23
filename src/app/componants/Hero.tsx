@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Boxes from "./boxes/page";
 import { useRouter } from "next/navigation";
+import { useOfficeSpaces } from "../context/OfficeSpaceContext";
 
 
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
@@ -16,6 +17,7 @@ const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeTab, setActiveTab] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const { officeSpaces, setFilteredOfficeSpaces } = useOfficeSpaces();
   const totalSlides = images.length;
   const router = useRouter();
 
@@ -23,6 +25,19 @@ const Hero = () => {
     console.log("Searching for:", searchTerm);
     // Add your search logic here
   };
+
+  console.log("office spaces : ", officeSpaces)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const filtered = officeSpaces.filter((space:any) =>
+        space.category.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredOfficeSpaces(filtered);
+    }, 200); // 500ms debounce
+
+    return () => clearTimeout(timer);
+  }, [searchTerm, officeSpaces, setFilteredOfficeSpaces]);
 
   const handleTabClick = (tab: string) => {
     const url = tab

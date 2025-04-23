@@ -70,7 +70,8 @@ const VendorSchema: Schema = new Schema(
 
 VendorSchema.pre<IVendor>("save", async function (next) {
   if (!this.isModified("password")) return next();
-  this.password = await bcrypt.hash(this.password, 10);
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
   next();
 });
 
@@ -79,6 +80,7 @@ VendorSchema.pre<IVendor>("save", async function (next) {
 VendorSchema.methods.comparePassword = async function (candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
 };
+
 
 export default mongoose.models.Vendor ||
   mongoose.model<IVendor>("Vendor", VendorSchema);
