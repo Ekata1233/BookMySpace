@@ -67,7 +67,7 @@ const Auth = () => {
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);  // Make sure to reset error before the login process
+    setError(null);
   
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const email = formData.get("email-login") as string;
@@ -83,17 +83,16 @@ const Auth = () => {
       console.log("Vendor status:", vendorResult.status);
   
       if (vendorResult.status === "fulfilled" && userResult.status === "rejected") {
-        // Vendor login succeeded, user login failed
+        // Only vendor login succeeded
         router.push("/vendor/dashboard");
       } else if (userResult.status === "fulfilled" && vendorResult.status === "rejected") {
-        // User login succeeded, vendor login failed
+        // Only user login succeeded
         router.push("/");
       } else {
-        // Both login attempts failed, no alert is shown.
-        // Optionally, you could log or handle this silently.
+        // Either both failed or both succeeded (which should not happen)
+        // setError("Login failed. Please check your credentials.");
       }
     } catch (err) {
-      // We don't display any error alert here
       setError("Unexpected error occurred during login.");
       console.error(err);
     } finally {

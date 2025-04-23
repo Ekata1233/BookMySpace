@@ -70,7 +70,8 @@ const MapComponent: React.FC = () => {
           {officeSpaces?.map(
             (office) =>
               office.lat &&
-              office.lng && (
+              office.lng &&
+              office.isAdminApprove === true && (
                 <Marker
                   key={office._id}
                   position={{ lat: office.lat, lng: office.lng }}
@@ -118,15 +119,7 @@ const MapComponent: React.FC = () => {
                         {activeOffice.rate} / Hour
                       </span>
                     </p>
-                    {/* <Button
-                      className="mt-4 w-full rounded-none"
-                      style={{ backgroundColor: "#6bb7be", color: "white" }}
-                    >
-                      View More
-                    </Button> */}
-
                     <Link
-                      // href={`/${pageName}/${space._id}`}
                       href={`/${(Array.isArray(activeOffice.category)
                         ? activeOffice.category[0]
                         : activeOffice.category
@@ -145,15 +138,6 @@ const MapComponent: React.FC = () => {
         </GoogleMap>
       </LoadScript>
     </div>
-    // <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
-    //   <GoogleMap
-    //     mapContainerStyle={containerStyle}
-    //     center={center}
-    //     zoom={17} 
-    //   >
-       
-    //   </GoogleMap>
-    // </LoadScript>
   );
 };
 

@@ -35,7 +35,7 @@ const OfficeSpaces: React.FC = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
 
-  console.log("office spaces : ", officeSpaces);
+  console.log("office filteredOfficeSpaces : ", filteredOfficeSpaces);
 
   const normalizedPageCategory = pageName?.replace(/-/g, " ").toLowerCase();
 
@@ -88,10 +88,12 @@ const OfficeSpaces: React.FC = () => {
   };
 
   // Corrected filter logic with proper parentheses
+  const filteredOfficeSpaceIds = filteredOfficeSpaces.map((space) => space._id);
+
   const displaySpaces = pageFilteredSpaces.filter((space) => {
     const cityMatch =
       selectedCities.length === 0 || selectedCities.includes(space.city);
-
+  
     const categoryMatch =
       selectedCategories.length === 0 ||
       (space.category &&
@@ -100,12 +102,14 @@ const OfficeSpaces: React.FC = () => {
             ? space.category.includes(cat)
             : space.category === cat
         ));
-
-
+  
     const isApproved = space.isAdminApprove === true;
-
-    return cityMatch && categoryMatch && isApproved;
+  
+    const isInFilteredOfficeSpaces = filteredOfficeSpaceIds.includes(space._id);
+  
+    return cityMatch && categoryMatch && isApproved && isInFilteredOfficeSpaces;
   });
+  
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
   if (loading) return <Loader />;
