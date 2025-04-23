@@ -114,9 +114,9 @@ const page = () => {
                 </Link>
 
                 <Link
-                  href="/dashboard/spaces"
+                  href="/vendor/mySpaces"
                   className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200  ${
-                    isActive("/dashboard/spaces") && "text-[#6bb7be]"
+                    isActive("/dashboard/mySpaces") && "text-[#6bb7be]"
                   }`}
                 >
                   <FolderKanban className="w-5 h-5" />
