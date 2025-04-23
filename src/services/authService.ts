@@ -34,7 +34,7 @@ export class AuthService {
       // if (!user) return { error: "User not found", status: 404 };
 
       const isValidPassword = await user.comparePassword(password);
-      // if (!isValidPassword) return { error: "Invalid credentials", status: 401 };
+      if (!isValidPassword) return { error: "Invalid credentials", status: 401 };
 
       const token = jwt.sign(
         { id: user._id, email: user.email, role: user.role },
@@ -44,7 +44,7 @@ export class AuthService {
 
       return { message: "Login successful", token, user: { name: user.name, email: user.email, id: user._id } };
     } catch (error) {
-      console.error("Login Error:", error);
+      console.log("Login Error:");
       return { error: "Internal Server Error", status: 500 };
     }
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,22 @@ const OfficeSpaceForm = () => {
     lat: null as number | null,
     lng: null as number | null,
   });
+  const [vendorInfo, setVendorInfo] = useState<any>(null);
+
+  useEffect(() => {
+    const storedVendor = localStorage.getItem("vendor");
+    if (storedVendor) {
+      try {
+        setVendorInfo(JSON.parse(storedVendor));
+      } catch (error) {
+        console.error("Invalid vendor data in localStorage.");
+      }
+    }
+  }, []);
+
+  const vendorId = vendorInfo?._id;
+
+  console.log("Vendor Id : ", vendorId);
 
   const mapContainerStyle = {
     width: "100%",
@@ -110,6 +126,7 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("isNewlyOpen", formData.isNewlyOpen.toString());
     formDataToSend.append("category", formData.category);
     formDataToSend.append("amenities", JSON.stringify(formData.amenities));
+    formDataToSend.append("vendorId", vendorId);
     const today = new Date();
     const [startHour, startMinute] = formData.startTime.split(":");
     const [endHour, endMinute] = formData.endTime.split(":");
