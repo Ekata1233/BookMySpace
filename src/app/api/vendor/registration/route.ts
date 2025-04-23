@@ -1,45 +1,93 @@
+// /api/vendor/registration/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import Vendor from "@/models/vendor";
-import bcrypt from "bcryptjs";
+import Vendor from "../../../../models/vendor";
 import jwt from "jsonwebtoken";
-import testConnection from "@/lib/db"; // ✅ update if you use a different path
+import testConnection from "@/lib/db";
 
 const JWT_SECRET = process.env.JWT_SECRET || "$ecretKey123";
 
 export async function POST(req: NextRequest) {
   try {
-    await testConnection(); // ✅ important
+    await testConnection();
 
     const body = await req.json();
-    const { workEmail, password } = body;
+    const {
+      companyName,
+      workEmail,
+      phone,
+      website,
+      businessType,
+      address,
+      message,
+      logo,
+      contactName,
+      contactMobile,
+      contactEmail,
+      documentType,
+      documentNo,
+      documentImage,
+      password,
+      agreed,
+      paid,
+      amount,
+    } = body;
 
-    if (!workEmail || !password) {
-      return NextResponse.json({ error: "Missing credentials" }, { status: 400 });
+    if (
+      !companyName ||
+      !workEmail ||
+      !phone ||
+      !businessType ||
+      !address ||
+      !contactName ||
+      !contactMobile ||
+      !contactEmail ||
+      !documentType ||
+      !documentNo ||
+      !password ||
+      agreed === undefined
+    ) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const vendor = await Vendor.findOne({ workEmail });
-
-    if (!vendor) {
-      return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
+    const existingVendor = await Vendor.findOne({ workEmail });
+    if (existingVendor) {
+      return NextResponse.json({ error: "Vendor with this email already exists" }, { status: 409 });
     }
 
-    const isMatch = await bcrypt.compare(password, vendor.password);
+    const newVendor = new Vendor({
+      companyName,
+      workEmail,
+      phone,
+      website,
+      businessType,
+      address,
+      message,
+      logo: logo || "",
+      contactName,
+      contactMobile,
+      contactEmail,
+      documentType,
+      documentNo,
+      documentImage: documentImage || "",
+      password, // No manual bcrypt.hash here
+      agreed,
+      paid: paid || false,
+      amount,
+    });
 
-    if (!isMatch) {
-      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
-    }
+    const savedVendor = await newVendor.save();
 
     const token = jwt.sign(
-      { id: vendor._id, email: vendor.workEmail },
+      { id: savedVendor._id, email: savedVendor.workEmail },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    const { password: _, ...vendorData } = vendor.toObject(); // remove password before sending
+    const { password: _, ...vendorData } = savedVendor.toObject();
 
-    return NextResponse.json({ token, vendor: vendorData }, { status: 200 });
+    return NextResponse.json({ token, vendor: vendorData }, { status: 201 });
   } catch (error: any) {
-    console.error("🔴 Login Error:", error.message || error); // more detailed logging
+    console.error("🔴 Registration Error:", error.message || error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

@@ -1,17 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import Vendor from "@/models/vendor";
+// src/app/api/vendor/login/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import Vendor from '../../../../models/vendor';
+import { connectToDatabase } from '@/lib/db';
 import jwt from "jsonwebtoken";
-import { connectToDatabase } from "@/lib/db";
+import bcrypt from 'bcryptjs';
 
-<<<<<<< HEAD
 const JWT_SECRET = process.env.JWT_SECRET || "$ecretKey123";
-=======
-const JWT_SECRET = process.env.JWT_SECRET || "$bookjwt"; // Use env for production
->>>>>>> 4709410c025cd3f4cb96e9b99e7ad32c3875f0d8
 
 export async function POST(req: NextRequest) {
   try {
-    await connectToDatabase(); // ⬅️ important!
+    await connectToDatabase(); // ✅ Ensure DB is connected
 
     const body = await req.json();
     const { workEmail, password } = body;
@@ -21,12 +19,13 @@ export async function POST(req: NextRequest) {
     }
 
     const vendor = await Vendor.findOne({ workEmail });
+
     if (!vendor) {
       return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
     }
 
-<<<<<<< HEAD
-    const isMatch = await vendor.comparePassword(password); // ⬅️ clean and model-based
+    const isMatch = await bcrypt.compare(password, vendor.password);
+
     if (!isMatch) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
@@ -35,36 +34,13 @@ export async function POST(req: NextRequest) {
       { id: vendor._id, email: vendor.workEmail },
       JWT_SECRET,
       { expiresIn: "7d" }
-=======
-    // const isMatch = await bcrypt.compare(hashedPassword, vendor.password);
-    // console.log("ismatchh : ", isMatch);
-    // console.log("vendor passowrd : ", vendor.password);
-    // if (!isMatch) {
-    //   return NextResponse.json({ error: "Password not match " }, { status: 401 });
-    // }
-
-    const isValidPassword = await vendor.comparePassword(password);
-    // if (!isValidPassword) return { error: "VEndor password not match", status: 401 };
-    if (!isValidPassword) {
-      return NextResponse.json(
-        { error: "Password not match " },
-        { status: 401 }
-      );
-    }
-    const token = jwt.sign(
-      { id: vendor._id, email: vendor.workEmail },
-      JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
->>>>>>> 4709410c025cd3f4cb96e9b99e7ad32c3875f0d8
     );
 
-    const { password: _, ...vendorData } = vendor.toObject();
+    const { password: _, ...vendorData } = vendor.toObject(); // Remove password from response
 
     return NextResponse.json({ token, vendor: vendorData }, { status: 200 });
   } catch (error: any) {
-    console.error("Vendor Login Error:", error.message || error);
-    return NextResponse.json({ error: "Login failed" }, { status: 500 });
+    console.error("🔴 Login Error:", error.message || error); // More detailed logging
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
