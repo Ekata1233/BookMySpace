@@ -80,6 +80,19 @@ const Auth = () => {
     };
 
     try {
+<<<<<<< HEAD
+      // await login(credentials.email, credentials.password);
+      // router.push("/");
+      await vendorLogin(credentials.email, credentials.password);
+        router.push("/vendor/dashboard");
+    } catch (userError) {
+      try {
+        await vendorLogin(credentials.email, credentials.password);
+        router.push("/vendor/dashboard");
+      } catch (vendorError) {
+        console.log("Login failed for both user and vendor");
+        // Optionally show an error message here (toast/alert/etc.)
+=======
       const results = await Promise.allSettled([
         login(credentials.email, credentials.password),
         vendorLogin(credentials.email, credentials.password)
@@ -91,6 +104,7 @@ const Auth = () => {
         // router.push("/");
       } else {
         console.error("Both user and vendor login failed");
+>>>>>>> 4709410c025cd3f4cb96e9b99e7ad32c3875f0d8
       }
       
     } catch (error) {

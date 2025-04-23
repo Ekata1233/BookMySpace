@@ -1,89 +1,45 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import testConnection from "@/lib/db";
 import Vendor from "@/models/vendor";
-import { v4 as uuidv4 } from "uuid";
-import path from "path";
 import bcrypt from "bcryptjs";
-import { writeFile, mkdir } from "fs/promises";
-import { existsSync } from "fs";
+import jwt from "jsonwebtoken";
+import testConnection from "@/lib/db"; // ✅ update if you use a different path
 
-export async function GET() {
-  await testConnection();
-  try {
-    const vendor = await Vendor.find({});
-    return NextResponse.json({ success: true, data: vendor }, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
-  }
-}
+const JWT_SECRET = process.env.JWT_SECRET || "$ecretKey123";
 
 export async function POST(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    if (!existsSync(uploadDir)) await mkdir(uploadDir, { recursive: true });
+    await testConnection(); // ✅ important
 
-    const getValue = (key: string) => formData.get(key)?.toString() || "";
-    const logo = formData.get("logo") as File | null;
-    const documentImage = formData.get("documentImage") as File | null;
+    const body = await req.json();
+    const { workEmail, password } = body;
 
-    // Save logo
-    let logoUrl = "";
-    if (logo) {
-      const buffer = Buffer.from(await logo.arrayBuffer());
-      const filePath = path.join(uploadDir, logo.name);
-      await writeFile(filePath, buffer);
-      logoUrl = `/uploads/${logo.name}`;
+    if (!workEmail || !password) {
+      return NextResponse.json({ error: "Missing credentials" }, { status: 400 });
     }
 
-    // Save document image
-    let documentImageUrl = "";
-    if (documentImage) {
-      const buffer = Buffer.from(await documentImage.arrayBuffer());
-      const filePath = path.join(uploadDir, documentImage.name);
-      await writeFile(filePath, buffer);
-      documentImageUrl = `/uploads/${documentImage.name}`;
+    const vendor = await Vendor.findOne({ workEmail });
+
+    if (!vendor) {
+      return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
     }
 
-    const existingVendor = await Vendor.findOne({ workEmail: getValue("workEmail") });
-    if (existingVendor) {
-      return NextResponse.json({ error: "Vendor already exists" }, { status: 400 });
+    const isMatch = await bcrypt.compare(password, vendor.password);
+
+    if (!isMatch) {
+      return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
 
-    const hashedPassword = await bcrypt.hash(getValue("password"), 10);
+    const token = jwt.sign(
+      { id: vendor._id, email: vendor.workEmail },
+      JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-    const newVendor = new Vendor({
-      companyName: getValue("companyName"),
-      workEmail: getValue("workEmail"),
-      phone: getValue("phone"),
-      website: getValue("website"),
-      businessType: getValue("businessType"),
-      address: getValue("address"),
-      message: getValue("message"),
-      logo: logoUrl,
-      contactName: getValue("contactName"),
-      contactMobile: getValue("contactMobile"),
-      contactEmail: getValue("contactEmail"),
-      documentType: getValue("documentType"),
-      documentNo: getValue("documentNo"),
-      documentImage: documentImageUrl,
-      password: hashedPassword,
-      agreed: getValue("agreed") === "true",
-      paid: true,
-      amount: getValue("amount"),
-      status: "pending",
-    });
+    const { password: _, ...vendorData } = vendor.toObject(); // remove password before sending
 
-    await newVendor.save();
-
-    return NextResponse.json({ message: "Vendor registered successfully" }, { status: 201 });
-  } catch (error) {
-    console.error("Signup Error:", error);
-    return NextResponse.json({ error: "Signup failed" }, { status: 500 });
+    return NextResponse.json({ token, vendor: vendorData }, { status: 200 });
+  } catch (error: any) {
+    console.error("🔴 Login Error:", error.message || error); // more detailed logging
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
