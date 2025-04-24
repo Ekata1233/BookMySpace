@@ -3,7 +3,7 @@ import Sidebar from "@/app/componants/sidebar/Sidebar";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
 const OfficeSpaces = () => {
@@ -14,20 +14,21 @@ const OfficeSpaces = () => {
     const [openReport, setOpenReport] = useState(false);
     const [openAccount, setOpenAccount] = useState(false);
 
-
-    const vendorData = localStorage.getItem("vendor");
-
-    let vendorId = null;
-
-    if (vendorData) {
-        try {
-            const parsedVendor = JSON.parse(vendorData);
-            vendorId = parsedVendor._id;
-            console.log("Vendor ID:", vendorId);
-        } catch (error) {
-            console.error("Error parsing vendor data:", error);
+    const [vendorId, setVendorId] = useState<string | null>(null);
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const vendorData = localStorage.getItem("vendor");
+            if (vendorData) {
+                try {
+                    const parsedVendor = JSON.parse(vendorData);
+                    setVendorId(parsedVendor._id);
+                    console.log("Vendor ID:", parsedVendor._id);
+                } catch (error) {
+                    console.error("Error parsing vendor data:", error);
+                }
+            }
         }
-    }
+    }, []);
 
     // Filter office spaces based on the vendorId
     const filteredOfficeSpaces = officeSpaces.filter(
