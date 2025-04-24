@@ -12,6 +12,8 @@ const OfficeSpaces = () => {
     const [openSpaces, setOpenSpaces] = useState(false);
     const [openBookings, setOpenBookings] = useState(false);
     const [openReport, setOpenReport] = useState(false);
+    const [openAccount, setOpenAccount] = useState(false);
+
 
     const vendorData = localStorage.getItem("vendor");
 
@@ -43,6 +45,8 @@ const OfficeSpaces = () => {
                 setOpenBookings={setOpenBookings}
                 openReport={openReport}
                 setOpenReport={setOpenReport}
+                openAccount={openAccount} // ✅ Add this
+        setOpenAccount={setOpenAccount} // ✅ Add this
             />
 
             <main className="flex-1 max-w-4xl mx-auto p-6">
