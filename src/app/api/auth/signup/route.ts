@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error("Signup Error:", error);
     return withCors(
-      NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+      NextResponse.json({ error: "Internal Server Error 2" }, { status: 500 })
     );
   }
 }
@@ -34,7 +34,7 @@ export async function GET() {
   } catch (error) {
     console.error("Fetch Users Error:", error);
     return withCors(
-      NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+      NextResponse.json({ error: "Internal Server Error 3" }, { status: 500 })
     );
   }
 }

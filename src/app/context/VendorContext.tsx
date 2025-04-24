@@ -95,7 +95,7 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       setVendor(data.vendor);
 
       toast.success("Vendor registered & logged in! 🚀");
-      router.push("/vendor/dashboard"); // or wherever you want to send them
+      router.push("/"); // or wherever you want to send them
     } catch (error: any) {
       const errMsg = error.response?.data?.error || "Vendor registration failed";
       toast.error(errMsg);
@@ -117,7 +117,7 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem("vendor", JSON.stringify(data.vendor));
         localStorage.setItem("vendorToken", data.token);
         alert("Login successful!");
-        router.push("/vendor/dashboard");
+        router.push("/");
       } else {
         // alert("Vendor Login Failed!");
       }
