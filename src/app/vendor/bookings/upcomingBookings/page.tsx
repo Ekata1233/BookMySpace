@@ -32,7 +32,7 @@ const UpcomingBookings = () => {
     }
 
     const filteredOfficeSpaces = officeSpaces.filter(
-        (space) => space.vendorId === vendorId
+        (space:any) => space.vendorId === vendorId
     );
 
     console.log("filteredOfficeSpaces officeSpaces booking : ", filteredOfficeSpaces)

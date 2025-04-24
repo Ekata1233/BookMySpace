@@ -12,6 +12,7 @@ const OfficeSpaces = () => {
     const [openSpaces, setOpenSpaces] = useState(false);
     const [openBookings, setOpenBookings] = useState(false);
     const [openReport, setOpenReport] = useState(false);
+    const [openAccount, setOpenAccount] = useState(false);
 
     const vendorData = localStorage.getItem("vendor");
 
@@ -29,7 +30,7 @@ const OfficeSpaces = () => {
 
     // Filter office spaces based on the vendorId
     const filteredOfficeSpaces = officeSpaces.filter(
-        (space) => space.vendorId === vendorId
+        (space:any) => space.vendorId === vendorId
     );
 
     return (
@@ -41,8 +42,10 @@ const OfficeSpaces = () => {
                 setOpenSpaces={setOpenSpaces}
                 openBookings={openBookings}
                 setOpenBookings={setOpenBookings}
-                openReport={openReport}
+                openReport={openReport} // ✅ Pass this
                 setOpenReport={setOpenReport}
+                openAccount={openAccount} // ✅ Add this
+                setOpenAccount={setOpenAccount}
             />
 
             <main className="flex-1 max-w-4xl mx-auto p-6">
