@@ -31,7 +31,7 @@ const OfficeSpaces = () => {
 
     // Filter office spaces based on the vendorId
     const filteredOfficeSpaces = officeSpaces.filter(
-        (space) => space.vendorId === vendorId
+        (space:any) => space.vendorId === vendorId
     );
 
     return (
