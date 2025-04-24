@@ -2,22 +2,29 @@
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import Sidebar from "../sidebar/page";
 
 const OfficeSpaces = () => {
     const { officeSpaces } = useOfficeSpaces();
+     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [openSpaces, setOpenSpaces] = useState(false);
+    const [openBookings, setOpenBookings] = useState(false);
 
     return (
-        <div className="p-6 mt-40 max-w-7xl mx-auto">
-            {/* Back Button */}
+        <div className="flex flex-col md:flex-row min-h-screen mt-42">
+        {/* Back Button */}
+        <Sidebar
+    sidebarOpen={sidebarOpen}
+    openSpaces={openSpaces}
+    setOpenSpaces={setOpenSpaces}
+    openBookings={openBookings}
+    setOpenBookings={setOpenBookings}
+  />
+  <main className="flex-1 max-w-4xl mx-auto p-6">
             <div className="mb-2">
-                <Link
-                    href="/vendor/dashboard"
-                    className="inline-flex items-center gap-2 text-[#6BB7BE] hover:text-[#5AA4A9] text-sm font-medium"
-                >
-                    <span className="text-xl">←</span> Back to Dashboard
-                </Link>
+               
             </div>
             {/* Header */}
             <div className="flex justify-between items-center mb-6">
@@ -94,7 +101,9 @@ const OfficeSpaces = () => {
             ) : (
                 <p className="text-center text-gray-500">No office spaces found.</p>
             )}
+            </main>
         </div>
+
     );
 };
 

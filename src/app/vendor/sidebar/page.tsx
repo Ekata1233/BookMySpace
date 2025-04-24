@@ -1,0 +1,160 @@
+"use client";
+
+import Link from "next/link";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  ChevronDown,
+  ChevronUp,
+  Plus,
+  CalendarDays,
+  Settings,
+} from "lucide-react";
+import { usePathname } from "next/navigation";
+
+interface SidebarProps {
+  sidebarOpen: boolean;
+  openSpaces: boolean;
+  setOpenSpaces: (value: boolean) => void;
+  openBookings: boolean;
+  setOpenBookings: (value: boolean) => void;
+}
+
+const Sidebar = ({
+  sidebarOpen,
+  openSpaces,
+  setOpenSpaces,
+  openBookings,
+  setOpenBookings,
+}: SidebarProps) => {
+  const pathname = usePathname();
+  const isActive = (href: string) => pathname === href;
+
+  return (
+    <aside
+      className={`bg-[#6bb7be] text-white w-64 p-4 space-y-4 transition-all duration-300 ease-in-out md:block ${
+        sidebarOpen ? "block" : "hidden"
+      } md:relative absolute z-20`}
+    >
+      <h2 className="text-3xl pt-7 font-extrabold text-white mb-8 tracking-wider">
+        Vendor Panel
+      </h2>
+
+      <nav className="space-y-4">
+        {/* Dashboard */}
+        <Link
+          href="/dashboard"
+          className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
+            ${
+              isActive("/dashboard")
+                ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
+                : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
+            }`}
+        >
+          <LayoutDashboard className="w-6 h-6" />
+          Dashboard
+        </Link>
+
+        {/* Spaces Dropdown */}
+        <div>
+          <button
+            onClick={() => setOpenSpaces(!openSpaces)}
+            className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
+          >
+            <FolderKanban className="w-6 h-6" />
+            Spaces
+            <span className="ml-auto">
+              {openSpaces ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </span>
+          </button>
+
+          {openSpaces && (
+            <div className="ml-10 mt-1 space-y-2">
+              <Link
+                href="/vendor/addSpace"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/spaces/add") && "text-[#6bb7be]"
+                }`}
+              >
+                <Plus className="w-5 h-5" />
+                Add Space
+              </Link>
+
+              <Link
+                href="/vendor/mySpaces"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/mySpaces") && "text-[#6bb7be]"
+                }`}
+              >
+                <FolderKanban className="w-5 h-5" />
+                My Spaces
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Bookings Dropdown */}
+        <div>
+          <button
+            onClick={() => setOpenBookings(!openBookings)}
+            className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
+          >
+            <CalendarDays className="w-6 h-6" />
+            Bookings
+            <span className="ml-auto">
+              {openBookings ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </span>
+          </button>
+
+          {openBookings && (
+            <div className="ml-10 mt-1 space-y-2">
+              <Link
+                href="/vendor/bookings/upcomingBookings"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/bookings/upcoming") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Upcoming
+              </Link>
+
+              <Link
+                href="/vendor/bookings/completedBookings"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/bookings/completed") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Completed
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Settings */}
+        <Link
+          href="/dashboard/settings"
+          className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
+            ${
+              isActive("/dashboard/settings")
+                ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
+                : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
+            }`}
+        >
+          <Settings className="w-6 h-6" />
+          Settings
+        </Link>
+      </nav>
+    </aside>
+  );
+};
+
+export default Sidebar;
