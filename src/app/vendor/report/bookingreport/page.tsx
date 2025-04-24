@@ -1,5 +1,5 @@
 'use client';
-import Sidebar from '@/app/componants/sidebar/page';
+import Sidebar from '@/app/componants/sidebar/Sidebar';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 

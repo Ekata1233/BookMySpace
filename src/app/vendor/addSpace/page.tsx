@@ -16,7 +16,7 @@ import {
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import Link from "next/link";
-import Sidebar from "@/app/componants/sidebar/page";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const OfficeSpaceForm = () => {
   const { addOfficeSpace } = useOfficeSpaces();

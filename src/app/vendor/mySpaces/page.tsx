@@ -1,5 +1,5 @@
 "use client";
-import Sidebar from "@/app/componants/sidebar/page";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";

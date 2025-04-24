@@ -1,5 +1,5 @@
 'use client';
-import Sidebar from '@/app/componants/sidebar/page';
+import Sidebar from '@/app/componants/sidebar/Sidebar';
 import React, { useState } from 'react';
 
 const AccountInfo = () => {
