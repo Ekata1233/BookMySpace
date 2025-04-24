@@ -1,7 +1,13 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
+import Sidebar from '../../sidebar/page';
 
 const AccountInfo = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [openSpaces, setOpenSpaces] = useState(false);
+  const [openBookings, setOpenBookings] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
+  const [openAccount, setOpenAccount] = useState(false);
   const accountStats = {
     totalEarnings: '₹50,000',
     withdrawableBalance: '₹12,000',
@@ -12,7 +18,22 @@ const AccountInfo = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen mt-42">
+    <div className='flex flex-col md:flex-row min-h-screen mt-42'>
+      <Sidebar
+  sidebarOpen={sidebarOpen}
+  openSpaces={openSpaces}
+  setOpenSpaces={setOpenSpaces}
+  openBookings={openBookings}
+  setOpenBookings={setOpenBookings}
+  openReport={openReport} // ✅ Pass this
+  setOpenReport={setOpenReport} 
+  openAccount={openAccount} // ✅ Add this
+  setOpenAccount={setOpenAccount} // ✅ Add this
+/>
+      <main className="flex-1 max-w-4xl mx-auto p-6">
+
+    <div className="p-6 bg-gray-100 min-h-screen ">
+        
       <h2 className="text-2xl font-bold mb-6">Financial Overview</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -134,6 +155,9 @@ const AccountInfo = () => {
           </table>
         </div>
       </div>
+      
+    </div>
+    </main>
     </div>
   );
 };

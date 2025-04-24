@@ -20,6 +20,8 @@ interface SidebarProps {
   setOpenBookings: (value: boolean) => void;
   openReport: boolean; // ✅ Add this
   setOpenReport: (value: boolean) => void; // ✅ And this
+  openAccount:boolean;
+  setOpenAccount: (value: boolean) => void;
 }
 
 const Sidebar = ({
@@ -30,6 +32,8 @@ const Sidebar = ({
   setOpenBookings,
   openReport,
   setOpenReport,
+  openAccount,
+  setOpenAccount
 }: SidebarProps) => {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
@@ -146,13 +150,13 @@ const Sidebar = ({
         {/* account Dropdown */}
         <div>
           <button
-            onClick={() => setOpenBookings(!openBookings)}
+            onClick={() => setOpenAccount(!openAccount)}
             className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
           >
             <CalendarDays className="w-6 h-6" />
             Account
             <span className="ml-auto">
-              {openBookings ? (
+              {openAccount? (
                 <ChevronUp className="w-4 h-4" />
               ) : (
                 <ChevronDown className="w-4 h-4" />
@@ -160,7 +164,7 @@ const Sidebar = ({
             </span>
           </button>
 
-          {openBookings && (
+          {openAccount && (
             <div className="ml-10 mt-1 space-y-2">
               <Link
                 href="/vendor/accountManagement/accountInfo"

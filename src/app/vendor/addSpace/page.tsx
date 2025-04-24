@@ -24,6 +24,8 @@ const OfficeSpaceForm = () => {
 const [openSpaces, setOpenSpaces] = useState(false);
 const [openBookings, setOpenBookings] = useState(false);
 const [openReport, setOpenReport] = useState(false);
+  const [openAccount, setOpenAccount] = useState(false);
+
   const [formData, setFormData] = useState({
     officeSpaceName: "",
     city: "",
@@ -208,6 +210,8 @@ const [openReport, setOpenReport] = useState(false);
   setOpenBookings={setOpenBookings}
   openReport={openReport} // ✅ Pass this
   setOpenReport={setOpenReport} 
+  openAccount={openAccount} // ✅ Add this
+  setOpenAccount={setOpenAccount} // ✅ Add this
 />
 
       <main className="flex-1 max-w-4xl mx-auto p-6">

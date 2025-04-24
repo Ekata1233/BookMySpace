@@ -15,6 +15,7 @@ const UpcomingBookings = () => {
     const [openSpaces, setOpenSpaces] = useState(false);
     const [openBookings, setOpenBookings] = useState(false);
     const [openReport, setOpenReport] = useState(false);
+    const [openAccount, setOpenAccount] = useState(false);
 
     const getOfficeDetails = (id: any) => {
         return officeSpaces.find((office) => office._id === id);
@@ -36,6 +37,8 @@ const UpcomingBookings = () => {
                 setOpenBookings={setOpenBookings}
                 openReport={openReport} // ✅ Pass this
                 setOpenReport={setOpenReport} 
+                openAccount={openAccount} // ✅ Add this
+        setOpenAccount={setOpenAccount} // ✅ Add this
             />
             {/* Back Button */}
             <main className="flex-1 max-w-4xl mx-auto p-6">

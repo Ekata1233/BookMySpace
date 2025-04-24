@@ -1,10 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
+import Sidebar from "../../sidebar/page";
 
 const BankInfo = () => {
     const { addVendorBankDetail, updateVendorBankDetail, vendorBankDetails } = useVendorBankDetails();
-
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [openSpaces, setOpenSpaces] = useState(false);
+    const [openBookings, setOpenBookings] = useState(false);
+    const [openReport, setOpenReport] = useState(false);
+      const [openAccount, setOpenAccount] = useState(false);
+    
     const [form, setForm] = useState({
         bankName: "",
         accountHolder: "",
@@ -90,7 +96,23 @@ const BankInfo = () => {
     };
 
     return (
-        <div className="my-10 mt-45 p-6 max-w-4xl mx-auto bg-white shadow-xl rounded-md border border-[#6BB7BE]">
+        <div className="flex flex-col md:flex-row min-h-screen mt-42">
+           
+                <Sidebar
+  sidebarOpen={sidebarOpen}
+  openSpaces={openSpaces}
+  setOpenSpaces={setOpenSpaces}
+  openBookings={openBookings}
+  setOpenBookings={setOpenBookings}
+  openReport={openReport} // ✅ Pass this
+  setOpenReport={setOpenReport} 
+  openAccount={openAccount} // ✅ Add this
+        setOpenAccount={setOpenAccount} // ✅ Add this
+/>
+<main className="flex-1 max-w-4xl mx-auto p-6">
+        <div className="my-10 f p-6 max-w-4xl mx-auto bg-white shadow-xl rounded-md border border-[#6BB7BE]">
+            
+            
             <h2 className="text-3xl font-bold text-[#6BB7BE] mb-6 text-center tracking-wide">🏦 Bank Information</h2>
 
             {!showForm && existingDetails && (
@@ -153,6 +175,9 @@ const BankInfo = () => {
                     </div>
                 </form>
             )}
+           
+        </div>
+        </main>
         </div>
     );
 };
