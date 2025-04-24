@@ -19,11 +19,11 @@ import Link from "next/link";
 import Sidebar from "../sidebar/page";
 
 const OfficeSpaceForm = () => {
-  const { addOfficeSpace } = useOfficeSpaces(); 
+  const { addOfficeSpace } = useOfficeSpaces();
   const [sidebarOpen, setSidebarOpen] = useState(true);
-const [openSpaces, setOpenSpaces] = useState(false);
-const [openBookings, setOpenBookings] = useState(false);
-const [openReport, setOpenReport] = useState(false);
+  const [openSpaces, setOpenSpaces] = useState(false);
+  const [openBookings, setOpenBookings] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -203,221 +203,222 @@ const [openReport, setOpenReport] = useState(false);
     <div className="flex flex-col md:flex-row min-h-screen mt-42">
       {/* Back Button */}
       <Sidebar
-  sidebarOpen={sidebarOpen}
-  openSpaces={openSpaces}
-  setOpenSpaces={setOpenSpaces}
-  openBookings={openBookings}
-  setOpenBookings={setOpenBookings}
-  openReport={openReport} // ✅ Pass this
-  setOpenReport={setOpenReport} 
-  openAccount={openAccount} // ✅ Add this
-  setOpenAccount={setOpenAccount} // ✅ Add this
-/>
+
+        sidebarOpen={sidebarOpen}
+        openSpaces={openSpaces}
+        setOpenSpaces={setOpenSpaces}
+        openBookings={openBookings}
+        setOpenBookings={setOpenBookings}
+        openReport={openReport} // ✅ Pass this
+        setOpenReport={setOpenReport}
+        openAccount={openAccount} // ✅ Add this
+        setOpenAccount={setOpenAccount} // ✅ Add this
+      />
 
       <main className="flex-1 max-w-4xl mx-auto p-6">
-      <div className="mb-4">
-       
-      </div>
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 py-5">
-        ADD OFFICE SPACE
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Label className="text-[#6BB7BE] my-2">Office Space Name</Label>
-        <Input
-          type="text"
-          name="officeSpaceName"
-          value={formData.officeSpaceName}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Abc Pvt Ltd"
-          required
-          className="rounded-none w-full py-5"
-        />
+        <div className="mb-4">
 
-        <Label className="text-[#6BB7BE] my-2">Select Category</Label>
-        <Select onValueChange={(value) => handleChange("category", value)}>
-          <SelectTrigger className="rounded-none w-full py-5">
-            <SelectValue placeholder="Office Space" />
-          </SelectTrigger>
-          <SelectContent className="w-full">
-            {categories.map((cat) => (
-              <SelectItem key={cat} value={cat}>
-                {cat}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        </div>
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 py-5">
+          ADD OFFICE SPACE
+        </h1>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Label className="text-[#6BB7BE] my-2">Office Space Name</Label>
+          <Input
+            type="text"
+            name="officeSpaceName"
+            value={formData.officeSpaceName}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="Abc Pvt Ltd"
+            required
+            className="rounded-none w-full py-5"
+          />
 
-        <Label className="text-[#6BB7BE] my-2">City</Label>
-        <Input
-          type="text"
-          name="city"
-          value={formData.city}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Pune"
-          required
-          className="rounded-none w-full py-5"
-        />
+          <Label className="text-[#6BB7BE] my-2">Select Category</Label>
+          <Select onValueChange={(value) => handleChange("category", value)}>
+            <SelectTrigger className="rounded-none w-full py-5">
+              <SelectValue placeholder="Office Space" />
+            </SelectTrigger>
+            <SelectContent className="w-full">
+              {categories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <Label className="text-[#6BB7BE] my-2">State</Label>
-        <Input
-          type="text"
-          name="state"
-          value={formData.state}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Maharashtra"
-          required
-          className="rounded-none w-full py-5"
-        />
+          <Label className="text-[#6BB7BE] my-2">City</Label>
+          <Input
+            type="text"
+            name="city"
+            value={formData.city}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="Pune"
+            required
+            className="rounded-none w-full py-5"
+          />
 
-        <Label className="text-[#6BB7BE] my-2">Pincode</Label>
-        <Input
-          type="text"
-          name="pincode"
-          value={formData.pincode}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="411 038"
-          required
-          className="rounded-none w-full py-5"
-        />
+          <Label className="text-[#6BB7BE] my-2">State</Label>
+          <Input
+            type="text"
+            name="state"
+            value={formData.state}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="Maharashtra"
+            required
+            className="rounded-none w-full py-5"
+          />
 
-        <Label className="text-[#6BB7BE] my-2">Select Location</Label>
-        <div>
-          <LoadScript
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-          >
-            <GoogleMap
-              mapContainerStyle={mapContainerStyle}
-              center={
-                formData.lat && formData.lng
-                  ? { lat: formData.lat, lng: formData.lng }
-                  : defaultCenter
-              }
-              zoom={13}
-              onClick={(e) => {
-                const lat = e.latLng?.lat();
-                const lng = e.latLng?.lng();
-                if (lat && lng) {
-                  handleChange("lat", lat);
-                  handleChange("lng", lng);
-                }
-              }}
+          <Label className="text-[#6BB7BE] my-2">Pincode</Label>
+          <Input
+            type="text"
+            name="pincode"
+            value={formData.pincode}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="411 038"
+            required
+            className="rounded-none w-full py-5"
+          />
+
+          <Label className="text-[#6BB7BE] my-2">Select Location</Label>
+          <div>
+            <LoadScript
+              googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
             >
-              {formData.lat && formData.lng && (
-                <Marker position={{ lat: formData.lat, lng: formData.lng }} />
-              )}
-            </GoogleMap>
-          </LoadScript>
-        </div>
-
-        <Label className="text-[#6BB7BE] my-2">Description (In Short)</Label>
-        <Textarea
-          name="description"
-          value={formData.description}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Description..."
-          required
-          className="rounded-none w-full"
-        />
-
-        <Label className="text-[#6BB7BE] my-2">
-          Extra Description (In Detail)
-        </Label>
-        <Textarea
-          name="extraDescription"
-          value={formData.extraDescription}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="Extra Description...."
-          required
-          className="rounded-none w-full"
-        />
-
-        <div className="text-gray-600 my-5">
-          <Label className="text-[#6BB7BE] my-2">Select Amenities</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {amenitiesList.map((amenity) => (
-              <div key={amenity} className="flex items-center space-x-2">
-                <Checkbox
-                  id={amenity}
-                  checked={formData.amenities.includes(amenity)}
-                  onCheckedChange={() => handleAmenityChange(amenity)}
-                />
-                <Label htmlFor={amenity}>{amenity}</Label>
-              </div>
-            ))}
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={
+                  formData.lat && formData.lng
+                    ? { lat: formData.lat, lng: formData.lng }
+                    : defaultCenter
+                }
+                zoom={13}
+                onClick={(e) => {
+                  const lat = e.latLng?.lat();
+                  const lng = e.latLng?.lng();
+                  if (lat && lng) {
+                    handleChange("lat", lat);
+                    handleChange("lng", lng);
+                  }
+                }}
+              >
+                {formData.lat && formData.lng && (
+                  <Marker position={{ lat: formData.lat, lng: formData.lng }} />
+                )}
+              </GoogleMap>
+            </LoadScript>
           </div>
-        </div>
 
-        <Label className="text-[#6BB7BE] my-2">Price</Label>
-        <Input
-          type="number"
-          name="rate"
-          value={formData.rate}
-          onChange={(e) => handleChange(e.target.name, e.target.value)}
-          placeholder="1500"
-          required
-          className="rounded-none w-full py-5"
-        />
-        <div className="text-gray-700">
-          <Label className="text-[#6BB7BE] my-2">Office Start From </Label>
-          <Input
-            type="time"
-            name="startTime"
-            value={formData.startTime}
+          <Label className="text-[#6BB7BE] my-2">Description (In Short)</Label>
+          <Textarea
+            name="description"
+            value={formData.description}
             onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="Description..."
             required
-            className="rounded-none w-full py-5"
+            className="rounded-none w-full"
           />
 
-          <Label className="text-[#6BB7BE] my-2">office Start To</Label>
-          <Input
-            type="time"
-            name="endTime"
-            value={formData.endTime}
-            onChange={(e) => handleChange(e.target.name, e.target.value)}
-            required
-            className="rounded-none w-full py-5"
-          />
-        </div>
-
-        <Label className="text-[#6BB7BE] my-2">Select Thumbnail Image</Label>
-        <Input
-          type="file"
-          name="thumbnailImage"
-          onChange={handleFileChange}
-          className="rounded-none w-full text-gray-700 mt-3"
-        />
-
-        <Label className="text-[#6BB7BE] my-2">Select 4 Images</Label>
-        <Input
-          type="file"
-          name="multiImages"
-          multiple
-          onChange={handleMultiFileChange}
-          className="rounded-none w-full text-gray-700 mt-3"
-        />
-
-        <Label className="text-[#6BB7BE] my-2">Newly Open ?</Label>
-        <div className="flex items-center space-x-2 py-2">
-          <Checkbox
-            id="isNewlyOpen"
-            checked={formData.isNewlyOpen}
-            onCheckedChange={(checked) => handleChange("isNewlyOpen", checked)}
-          />
-          <Label htmlFor="isNewlyOpen " className="text-gray-700">
-            Newly Open
+          <Label className="text-[#6BB7BE] my-2">
+            Extra Description (In Detail)
           </Label>
-        </div>
+          <Textarea
+            name="extraDescription"
+            value={formData.extraDescription}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="Extra Description...."
+            required
+            className="rounded-none w-full"
+          />
 
-        <Button
-          type="submit"
-          className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
-        >
-          Submit
-        </Button>
-      </form>
-        </main>
+          <div className="text-gray-600 my-5">
+            <Label className="text-[#6BB7BE] my-2">Select Amenities</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {amenitiesList.map((amenity) => (
+                <div key={amenity} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={amenity}
+                    checked={formData.amenities.includes(amenity)}
+                    onCheckedChange={() => handleAmenityChange(amenity)}
+                  />
+                  <Label htmlFor={amenity}>{amenity}</Label>
+                </div>
+              ))}
+            </div>
+          </div>
 
-      
+          <Label className="text-[#6BB7BE] my-2">Price</Label>
+          <Input
+            type="number"
+            name="rate"
+            value={formData.rate}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="1500"
+            required
+            className="rounded-none w-full py-5"
+          />
+          <div className="text-gray-700">
+            <Label className="text-[#6BB7BE] my-2">Office Start From </Label>
+            <Input
+              type="time"
+              name="startTime"
+              value={formData.startTime}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              required
+              className="rounded-none w-full py-5"
+            />
+
+            <Label className="text-[#6BB7BE] my-2">office Start To</Label>
+            <Input
+              type="time"
+              name="endTime"
+              value={formData.endTime}
+              onChange={(e) => handleChange(e.target.name, e.target.value)}
+              required
+              className="rounded-none w-full py-5"
+            />
+          </div>
+
+          <Label className="text-[#6BB7BE] my-2">Select Thumbnail Image</Label>
+          <Input
+            type="file"
+            name="thumbnailImage"
+            onChange={handleFileChange}
+            className="rounded-none w-full text-gray-700 mt-3"
+          />
+
+          <Label className="text-[#6BB7BE] my-2">Select 4 Images</Label>
+          <Input
+            type="file"
+            name="multiImages"
+            multiple
+            onChange={handleMultiFileChange}
+            className="rounded-none w-full text-gray-700 mt-3"
+          />
+
+          <Label className="text-[#6BB7BE] my-2">Newly Open ?</Label>
+          <div className="flex items-center space-x-2 py-2">
+            <Checkbox
+              id="isNewlyOpen"
+              checked={formData.isNewlyOpen}
+              onCheckedChange={(checked) => handleChange("isNewlyOpen", checked)}
+            />
+            <Label htmlFor="isNewlyOpen " className="text-gray-700">
+              Newly Open
+            </Label>
+          </div>
+
+          <Button
+            type="submit"
+            className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
+          >
+            Submit
+          </Button>
+        </form>
+      </main>
+
+
     </div>
   );
 };
