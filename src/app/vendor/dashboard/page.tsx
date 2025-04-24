@@ -82,7 +82,6 @@ const page = () => {
             Dashboard
           </Link>
 
-          {/* Spaces Dropdown */}
           <div>
             <button
               onClick={() => setOpenSpaces(!openSpaces)}
