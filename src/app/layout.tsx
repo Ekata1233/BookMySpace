@@ -11,6 +11,7 @@ import { OfficeTourProvider } from "./context/OfficeTourContext";
 import { ExploreOfficeProvider } from "./context/ExploreOfficeContext";
 import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
+import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,13 +37,14 @@ export default function RootLayout({
               <OfficeSpaceProvider>
                 <OfficeTourProvider>
                   <WorkBusinessProvider>
-                  <ExploreOfficeProvider>
-                    <VendorProvider>
-                      <Header />
-                      {children}
-                      <Footer />
-                    </VendorProvider>
-                  </ExploreOfficeProvider>
+                    <ExploreOfficeProvider>
+                      <VendorProvider>
+                        <VendorBankDetailsProvider><Header />
+                          {children}
+                          <Footer /></VendorBankDetailsProvider>
+
+                      </VendorProvider>
+                    </ExploreOfficeProvider>
                   </WorkBusinessProvider>
                 </OfficeTourProvider>
               </OfficeSpaceProvider>

@@ -34,7 +34,7 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
       console.error('Failed to fetch work business:', error);
     }
   };
-console.log("workbusiness data : ",workBusinessData);
+
 
   const createWorkBusiness = async (data: FormData) => {
     try {

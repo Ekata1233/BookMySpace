@@ -81,8 +81,6 @@ const Header = () => {
   const { officeSpaces, setFilteredOfficeSpaces } = useOfficeSpaces();
   const [searchInput, setSearchInput] = useState("");
 
-  console.log("vendor info : ", vendor)
-
   useEffect(() => {
     const timer = setTimeout(() => {
       const filtered = officeSpaces.filter((space: any) =>
