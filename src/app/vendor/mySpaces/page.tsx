@@ -1,10 +1,10 @@
 "use client";
+import Sidebar from "@/app/componants/sidebar/page";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
-import Sidebar from "../sidebar/page";
 
 const OfficeSpaces = () => {
     const { officeSpaces } = useOfficeSpaces();

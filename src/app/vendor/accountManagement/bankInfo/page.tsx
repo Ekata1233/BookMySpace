@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
-import Sidebar from "../../sidebar/page";
+import Sidebar from "@/app/componants/sidebar/page";
 
 const BankInfo = () => {
     const { addVendorBankDetail, updateVendorBankDetail, vendorBankDetails } = useVendorBankDetails();

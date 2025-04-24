@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import Sidebar from '../../sidebar/page';
+import Sidebar from '@/app/componants/sidebar/page';
 
 const UpcomingBookings = () => {
     const { officeSpaces } = useOfficeSpaces();

@@ -1,7 +1,7 @@
 'use client';
+import Sidebar from '@/app/componants/sidebar/page';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
-import Sidebar from '../../sidebar/page';
 
 const TransitionPage = () => {
   const [search, setSearch] = useState('');
