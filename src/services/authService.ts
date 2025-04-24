@@ -22,7 +22,7 @@ export class AuthService {
       return { message: "User created successfully", status: 201 };
     } catch (error) {
       console.error("Signup Error:", error);
-      return { error: "Internal Server Error", status: 500 };
+      return { error: "Internal Server Error 6", status: 500 };
     }
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
       return { message: "Login successful", token, user: { name: user.name, email: user.email, id: user._id } };
     } catch (error) {
       console.log("Login Error:");
-      return { error: "Internal Server Error", status: 500 };
+      // return { error: "Internal Server Error 7", status: 500 };
     }
   }
   static async getAllUsers() {
@@ -56,7 +56,7 @@ export class AuthService {
       return { users, status: 200 };
     } catch (error) {
       console.error("Get All Users Error:", error);
-      return { error: "Internal Server Error", status: 500 };
+      return { error: "Internal Server Error 8", status: 500 };
     }
   }
   

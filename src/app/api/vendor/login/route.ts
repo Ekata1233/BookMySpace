@@ -41,6 +41,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ token, vendor: vendorData }, { status: 200 });
   } catch (error: any) {
     console.error("🔴 Login Error:", error.message || error); // More detailed logging
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error 4" }, { status: 500 });
   }
 }

@@ -17,7 +17,7 @@ import {
   CalendarDays,
   Sofa,
   Library,
-  Building2, RefreshCw 
+  Building2, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -50,6 +50,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useOfficeSpaces } from "../context/OfficeSpaceContext";
+import { useVendor } from "../context/VendorContext";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -74,14 +75,17 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { vendor, logoutVendor } = useVendor();
   const [open, setOpen] = useState<boolean>(false);
 
   const { officeSpaces, setFilteredOfficeSpaces } = useOfficeSpaces();
   const [searchInput, setSearchInput] = useState("");
 
+  console.log("vendor info : ", vendor)
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      const filtered = officeSpaces.filter((space:any) =>
+      const filtered = officeSpaces.filter((space: any) =>
         space.city.toLowerCase().includes(searchInput.toLowerCase())
       );
       setFilteredOfficeSpaces(filtered);
@@ -89,7 +93,7 @@ const Header = () => {
 
     return () => clearTimeout(timer);
   }, [searchInput, officeSpaces, setFilteredOfficeSpaces]);
-  
+
 
   useEffect(() => {
     const storedIndex = localStorage.getItem("activeIndex");
@@ -275,7 +279,7 @@ const Header = () => {
                 Contact
               </Link>
 
-              {user ? (
+              {/* {user ? (
                 <Sheet open={open} onOpenChange={setOpen}>
                   <SheetTrigger className="cursor-pointer">
                     <User className="h-10 w-10 blue ms-6" />
@@ -292,7 +296,7 @@ const Header = () => {
                         router.push("/my-account");
                         setOpen(false);
                       }}
-                      
+
                       className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-[#6BB7BE] hover:text-white border border-[#6BB7BE] px-14 font-bold bg-white hover:bg-[#6BB7BE] font-medium"
                     >
                       My Account
@@ -314,6 +318,118 @@ const Header = () => {
                   <User className="h-10 w-10 blue ms-6" />
                 </Link>
               )}
+
+              {vendor ? (
+                <Sheet open={open} onOpenChange={setOpen}>
+                  <SheetTrigger className="cursor-pointer">
+                    <User className="h-10 w-10 blue ms-6" />
+                  </SheetTrigger>
+                  <SheetContent className="p-4 bg-white">
+                    <SheetTitle className="sr-only">vendor Account</SheetTitle>
+
+                    <div className="text-center">
+                      <h3 className="text-lg font-bold">{vendor.contactName}</h3>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-semibold">{vendor.companyName}</h3>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        router.push("/vendor/dashboard");
+                        setOpen(false);
+                      }}
+
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-[#6BB7BE] hover:text-white border border-[#6BB7BE] px-14 font-bold bg-white hover:bg-[#6BB7BE] font-medium"
+                    >
+                      My Account
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        logoutVendor();
+                        setOpen(false);
+                      }}
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-14 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
+                    >
+                      Logout
+                    </button>
+                  </SheetContent>
+                </Sheet>
+              ) : (
+                <Link href="/auth">
+                  <User className="h-10 w-10 blue ms-6" />
+                </Link>
+              )} */}
+              {user ? (
+                <Sheet open={open} onOpenChange={setOpen}>
+                  <SheetTrigger className="cursor-pointer">
+                    <User className="h-10 w-10 blue ms-6" />
+                  </SheetTrigger>
+                  <SheetContent className="p-4 bg-white">
+                    <SheetTitle className="sr-only">User Account</SheetTitle>
+                    <div className="text-center">
+                      <h3 className="text-lg font-semibold">{user.name}</h3>
+                    </div>
+                    <button
+                      onClick={() => {
+                        router.push("/my-account");
+                        setOpen(false);
+                      }}
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-[#6BB7BE] hover:text-white border border-[#6BB7BE] px-14 font-bold bg-white hover:bg-[#6BB7BE] font-medium"
+                    >
+                      My Account
+                    </button>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setOpen(false);
+                      }}
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-14 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
+                    >
+                      Logout
+                    </button>
+                  </SheetContent>
+                </Sheet>
+              ) : vendor ? (
+                <Sheet open={open} onOpenChange={setOpen}>
+                  <SheetTrigger className="cursor-pointer">
+                    <User className="h-10 w-10 blue ms-6" />
+                  </SheetTrigger>
+                  <SheetContent className="p-4 bg-white">
+                    <SheetTitle className="sr-only">Vendor Account</SheetTitle>
+                    <div className="text-center">
+                      <h3 className="text-lg font-bold">{vendor.contactName}</h3>
+                    </div>
+                    <div className="text-center">
+                      <h3 className="text-lg font-semibold">{vendor.companyName}</h3>
+                    </div>
+                    <button
+                      onClick={() => {
+                        router.push("/vendor/dashboard");
+                        setOpen(false);
+                      }}
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-[#6BB7BE] hover:text-white border border-[#6BB7BE] px-14 font-bold bg-white hover:bg-[#6BB7BE] font-medium"
+                    >
+                      My Account
+                    </button>
+                    <button
+                      onClick={() => {
+                        logoutVendor();
+                        setOpen(false);
+                      }}
+                      className="h-10 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-14 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium"
+                    >
+                      Logout
+                    </button>
+                  </SheetContent>
+                </Sheet>
+              ) : (
+                <Link href="/auth">
+                  <User className="h-10 w-10 blue ms-6" />
+                </Link>
+              )}
+
             </div>
 
             <Link href="/auth" className="md:hidden text-gray-800 ml-2">
@@ -324,11 +440,10 @@ const Header = () => {
           <div className="relative w-full py-5">
             <div className="flex items-center">
               <button
-                className={`hidden sm:flex items-center justify-center w-8 h-8 mr-1 rounded-full ${
-                  isBeginning
-                    ? "text-gray-300 cursor-default"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
+                className={`hidden sm:flex items-center justify-center w-8 h-8 mr-1 rounded-full ${isBeginning
+                  ? "text-gray-300 cursor-default"
+                  : "text-gray-700 hover:bg-gray-100"
+                  }`}
                 onClick={() => !isBeginning && swiperRef.current?.slidePrev()}
                 disabled={isBeginning}
                 aria-label="Previous navigation"
@@ -395,10 +510,9 @@ const Header = () => {
                               relative 
                               transition-colors 
                               flex flex-col items-center
-                              ${
-                                pathname === path
-                                  ? "text-gray-900 font-semibold"
-                                  : ""
+                              ${pathname === path
+                                ? "text-gray-900 font-semibold"
+                                : ""
                               }
                             `}
                             onClick={() => handleLinkClick(index)}
@@ -419,11 +533,10 @@ const Header = () => {
               </div>
 
               <button
-                className={`hidden sm:flex items-center justify-center w-8 h-8 ml-1 rounded-full ${
-                  isEnd
-                    ? "text-gray-300 cursor-default"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
+                className={`hidden sm:flex items-center justify-center w-8 h-8 ml-1 rounded-full ${isEnd
+                  ? "text-gray-300 cursor-default"
+                  : "text-gray-700 hover:bg-gray-100"
+                  }`}
                 onClick={() => !isEnd && swiperRef.current?.slideNext()}
                 disabled={isEnd}
                 aria-label="Next navigation"
