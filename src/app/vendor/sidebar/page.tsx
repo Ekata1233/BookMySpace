@@ -18,6 +18,8 @@ interface SidebarProps {
   setOpenSpaces: (value: boolean) => void;
   openBookings: boolean;
   setOpenBookings: (value: boolean) => void;
+  openReport: boolean; // ✅ Add this
+  setOpenReport: (value: boolean) => void; // ✅ And this
 }
 
 const Sidebar = ({
@@ -26,6 +28,8 @@ const Sidebar = ({
   setOpenSpaces,
   openBookings,
   setOpenBookings,
+  openReport,
+  setOpenReport,
 }: SidebarProps) => {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
@@ -140,18 +144,46 @@ const Sidebar = ({
         </div>
 
         {/* Settings */}
-        <Link
-          href="/dashboard/settings"
-          className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
-            ${
-              isActive("/dashboard/settings")
-                ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
-                : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
-            }`}
-        >
-          <Settings className="w-6 h-6" />
-          Settings
-        </Link>
+        <div>
+          <button
+            onClick={() => setOpenReport(!openReport)}
+            className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
+          >
+            <CalendarDays className="w-6 h-6" />
+            Reports
+            <span className="ml-auto">
+              {openReport ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </span>
+          </button>
+
+          {openReport && (
+            <div className="ml-10 mt-1 space-y-2">
+              <Link
+                href="/vendor/report/transitionreport"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/report/transition") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Transition Report
+              </Link>
+
+              <Link
+                href="/vendor/report/bookingreport"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/report/booking") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Booking Report
+              </Link>
+            </div>
+          )}
+        </div>
       </nav>
     </aside>
   );
