@@ -143,6 +143,48 @@ const Sidebar = ({
           )}
         </div>
 
+        {/* account Dropdown */}
+        <div>
+          <button
+            onClick={() => setOpenBookings(!openBookings)}
+            className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
+          >
+            <CalendarDays className="w-6 h-6" />
+            Account
+            <span className="ml-auto">
+              {openBookings ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
+            </span>
+          </button>
+
+          {openBookings && (
+            <div className="ml-10 mt-1 space-y-2">
+              <Link
+                href="/vendor/accountManagement/accountInfo"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/accountManagement/accountInfo") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Account Information
+              </Link>
+
+              <Link
+                href="/vendor/accountManagement/bankInfo"
+                className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
+                  isActive("/dashboard/accountManagement/bankInfo") && "text-[#6bb7be]"
+                }`}
+              >
+                <CalendarDays className="w-5 h-5" />
+                Bank Information
+              </Link>
+            </div>
+          )}
+        </div>
+
         {/* Settings */}
         <div>
           <button
