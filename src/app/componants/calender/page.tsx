@@ -282,7 +282,7 @@ const TimeCalendar = () => {
     console.log("time options : ", timeOptions);
   }
 
-  const userId = userInfo?._id;
+  const userId = userInfo?.id;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 

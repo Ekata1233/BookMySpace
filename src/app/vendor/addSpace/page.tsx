@@ -200,7 +200,7 @@ const OfficeSpaceForm = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen mt-42">
+    <div className="flex flex-col md:flex-row min-h-screen mt-42 ">
       {/* Back Button */}
       <Sidebar
 

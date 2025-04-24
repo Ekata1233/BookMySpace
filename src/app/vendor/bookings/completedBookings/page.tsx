@@ -14,12 +14,31 @@ const CompletedBookings = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [openSpaces, setOpenSpaces] = useState(false);
     const [openBookings, setOpenBookings] = useState(false);
-        const [openReport, setOpenReport] = useState(false);
-    
+    const [openReport, setOpenReport] = useState(false);
     const [openAccount, setOpenAccount] = useState(false);
 
+    const vendorData = localStorage.getItem("vendor");
+
+    let vendorId = null;
+
+    if (vendorData) {
+        try {
+            const parsedVendor = JSON.parse(vendorData);
+            vendorId = parsedVendor._id;
+            console.log("Vendor ID:", vendorId);
+        } catch (error) {
+            console.error("Error parsing vendor data:", error);
+        }
+    }
+
+    const filteredOfficeSpaces = officeSpaces.filter(
+        (space) => space.vendorId === vendorId
+    );
+
+    console.log("filteredOfficeSpaces officeSpaces booking : ", filteredOfficeSpaces)
+
     const getOfficeDetails = (id: any) => {
-        return officeSpaces.find((office) => office._id === id);
+        return filteredOfficeSpaces.find((office) => office._id === id);
     };
 
     // Get today's date
@@ -27,6 +46,8 @@ const CompletedBookings = () => {
 
     // Filter bookings to only include past ones (before today)
     const pastBookings = bookings.filter((booking) => new Date(booking.date).getTime() < today);
+
+    console.log("completed booking : ", pastBookings)
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen mt-42">
@@ -39,12 +60,12 @@ const CompletedBookings = () => {
                 openAccount={openAccount} // ✅ Add this
                 setOpenAccount={setOpenAccount} // ✅ Add this
                 openReport={openReport} // ✅ Pass this
-                setOpenReport={setOpenReport} 
+                setOpenReport={setOpenReport}
             />
             {/* Back Button */}
             <main className="flex-1 max-w-4xl mx-auto p-6">
                 <div className="mb-2">
-                    
+
                 </div>
 
                 {/* Heading */}

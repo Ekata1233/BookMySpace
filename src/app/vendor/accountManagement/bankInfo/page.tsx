@@ -96,7 +96,7 @@ const BankInfo = () => {
     };
 
     return (
-        <div className="flex flex-col md:flex-row min-h-screen mt-42">
+        <div className="flex flex-col md:flex-row min-h-screen mt-42 bg-gray-100">
            
                 <Sidebar
   sidebarOpen={sidebarOpen}
