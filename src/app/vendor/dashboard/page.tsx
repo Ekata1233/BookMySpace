@@ -16,13 +16,14 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import Sidebar from "../sidebar/page";
+import Sidebar from "@/app/componants/sidebar/page";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
   const pathname = usePathname();
+        const [openAccount, setOpenAccount] = useState(false);
     
       const [openReport, setOpenReport] = useState(false);
 
@@ -71,6 +72,9 @@ const page = () => {
                 setOpenBookings={setOpenBookings}
                 openReport={openReport} // ✅ Pass this
                 setOpenReport={setOpenReport} 
+                openAccount={openAccount} // ✅ Add this
+                setOpenAccount={setOpenAccount} // ✅ Add this
+                    
             />
 
       {/* Main content */}
