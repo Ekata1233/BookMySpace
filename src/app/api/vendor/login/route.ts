@@ -1,32 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
-import Vendor from "@/models/vendor";
+// src/app/api/vendor/login/route.ts
+import { NextRequest, NextResponse } from 'next/server';
+import Vendor from '../../../../models/vendor';
+import { connectToDatabase } from '@/lib/db';
 import jwt from "jsonwebtoken";
-import { connectToDatabase } from "@/lib/db";
+import bcrypt from 'bcryptjs';
 
 const JWT_SECRET = process.env.JWT_SECRET || "$ecretKey123";
 
 export async function POST(req: NextRequest) {
   try {
-    await connectToDatabase(); // ⬅️ important!
+    await connectToDatabase(); // ✅ Ensure DB is connected
 
     const body = await req.json();
     const { workEmail, password } = body;
-
-    console.log("password of vendor : ", password)
 
     if (!workEmail || !password) {
       return NextResponse.json({ error: "Missing credentials" }, { status: 400 });
     }
 
     const vendor = await Vendor.findOne({ workEmail });
-    console.log(" vendor details : ", vendor)
+
     if (!vendor) {
       return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
     }
 
-    const isMatch = await vendor.comparePassword(password);
-    console.log("Password match:", isMatch); // Should log true or false
-    // ⬅️ clean and model-based
+    const isMatch = await bcrypt.compare(password, vendor.password);
+
     if (!isMatch) {
       return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
     }
@@ -37,11 +36,11 @@ export async function POST(req: NextRequest) {
       { expiresIn: "7d" }
     );
 
-    const { password: _, ...vendorData } = vendor.toObject();
+    const { password: _, ...vendorData } = vendor.toObject(); // Remove password from response
 
     return NextResponse.json({ token, vendor: vendorData }, { status: 200 });
   } catch (error: any) {
-    console.error("Vendor Login Error:", error.message || error);
-    return NextResponse.json({ error: "Login failed" }, { status: 500 });
+    console.error("🔴 Login Error:", error.message || error); // More detailed logging
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

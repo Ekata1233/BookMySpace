@@ -119,7 +119,7 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
         alert("Login successful!");
         router.push("/vendor/dashboard");
       } else {
-        alert("Vendor Login Failed!");
+        // alert("Vendor Login Failed!");
       }
     } catch (error) {
       console.error("Login error:", error);
