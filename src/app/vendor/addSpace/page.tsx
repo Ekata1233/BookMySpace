@@ -16,9 +16,14 @@ import {
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import Link from "next/link";
+import Sidebar from "../sidebar/page";
 
 const OfficeSpaceForm = () => {
-  const { addOfficeSpace } = useOfficeSpaces();
+  const { addOfficeSpace } = useOfficeSpaces(); 
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+const [openSpaces, setOpenSpaces] = useState(false);
+const [openBookings, setOpenBookings] = useState(false);
+const [openReport, setOpenReport] = useState(false);
   const [formData, setFormData] = useState({
     officeSpaceName: "",
     city: "",
@@ -193,15 +198,21 @@ const OfficeSpaceForm = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 mt-40">
+    <div className="flex flex-col md:flex-row min-h-screen mt-42">
       {/* Back Button */}
+      <Sidebar
+  sidebarOpen={sidebarOpen}
+  openSpaces={openSpaces}
+  setOpenSpaces={setOpenSpaces}
+  openBookings={openBookings}
+  setOpenBookings={setOpenBookings}
+  openReport={openReport} // ✅ Pass this
+  setOpenReport={setOpenReport} 
+/>
+
+      <main className="flex-1 max-w-4xl mx-auto p-6">
       <div className="mb-4">
-        <Link
-          href="/vendor/dashboard"
-          className="inline-flex items-center gap-2 text-[#6BB7BE] hover:text-[#5AA4A9] text-sm font-medium"
-        >
-          <span className="text-xl">←</span> Back to Dashboard
-        </Link>
+       
       </div>
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 py-5">
         ADD OFFICE SPACE
@@ -400,6 +411,9 @@ const OfficeSpaceForm = () => {
           Submit
         </Button>
       </form>
+        </main>
+
+      
     </div>
   );
 };
