@@ -18,6 +18,7 @@ interface VendorBankDetails {
   accountType: "Savings" | "Current";
   phone?: string;
   bankProof?: string | null;
+  upiId?: string | null;
   verification: "Pending" | "Verified";
   vendorId: string;
   isDeleted?: boolean;

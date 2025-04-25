@@ -20,6 +20,7 @@ const BankInfo = () => {
     branchName: "",
     accountType: "Savings" as "Savings" | "Current",
     phone: "",
+    upiId: "",
     bankProof: null,
     verification: "Pending" as "Pending" | "Verified",
   });
@@ -51,6 +52,7 @@ const BankInfo = () => {
           branchName: match.branchName || "",
           accountType: match.accountType || "Savings",
           phone: match.phone || "",
+          upiId: match.upiId || "",
           bankProof: null,
           verification: match.verification || "Pending",
         });
@@ -78,6 +80,12 @@ const BankInfo = () => {
 
     if (!vendorId) {
       alert("Vendor ID not found!");
+      return;
+    }
+
+    const upiIdRegex = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+$/;
+    if (form.upiId && !upiIdRegex.test(form.upiId)) {
+      alert("Please enter a valid UPI ID.");
       return;
     }
 
@@ -145,6 +153,10 @@ const BankInfo = () => {
                 <div>
                   <strong>Phone Number:</strong>{" "}
                   {existingDetails.phone || "N/A"}
+                </div>
+                <div>
+                  <strong>UPI ID:</strong>{" "}
+                  {existingDetails.upiId || "N/A"}
                 </div>
                 <div className="flex items-center gap-2">
                   <span
@@ -245,6 +257,14 @@ const BankInfo = () => {
                   value={form.phone}
                   onChange={handleChange}
                   placeholder="Linked Phone (optional)"
+                  className="border border-[#6BB7BE] p-2 rounded"
+                />
+                <input
+                  type="text"
+                  name="upiId"
+                  value={form.upiId}
+                  onChange={handleChange}
+                  placeholder="UPI ID"
                   className="border border-[#6BB7BE] p-2 rounded"
                 />
                 <input

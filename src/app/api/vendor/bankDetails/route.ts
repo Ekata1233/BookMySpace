@@ -41,6 +41,7 @@ export async function POST(req: Request) {
       branchName,
       accountType,
       phone,
+      upiId,
       bankProof,
       verification,
       vendorId,
@@ -53,7 +54,8 @@ export async function POST(req: Request) {
       !accountNumber ||
       !ifscCode ||
       !accountType ||
-      !vendorId
+      !vendorId ||
+      !upiId
     ) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
@@ -87,6 +89,7 @@ export async function POST(req: Request) {
       branchName,
       accountType,
       phone,
+      upiId,
       bankProof,
       verification,
       vendorId,
