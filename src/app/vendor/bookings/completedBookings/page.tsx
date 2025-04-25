@@ -1,7 +1,7 @@
 "use client";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -16,22 +16,27 @@ const CompletedBookings = () => {
   const [openBookings, setOpenBookings] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
+
   const [vendorId, setVendorId] = useState<string | null>(null);
-  const vendorData = localStorage.getItem("vendor");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const vendorData = localStorage.getItem("vendor");
+
+      let vendorId = null;
+
       if (vendorData) {
         try {
           const parsedVendor = JSON.parse(vendorData);
-          setVendorId(parsedVendor._id);
+          vendorId = parsedVendor._id;
+          console.log("Vendor ID:", vendorId);
+          setVendorId(vendorId); // Set vendorId in state
         } catch (error) {
           console.error("Error parsing vendor data:", error);
         }
       }
     }
-  }, []);
+  }, []); // Only runs on the client side
 
   const filteredOfficeSpaces = officeSpaces.filter(
     (space: any) => space.vendorId === vendorId,
