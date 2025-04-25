@@ -12,7 +12,7 @@ const TransitionPage = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
-const {bookings}=useRazo
+
   const transitions = [
     { id: "T001", user: "Alice", status: "Completed" },
     { id: "T002", user: "Bob", status: "Pending" },
