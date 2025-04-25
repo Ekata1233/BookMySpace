@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import testConnection from "@/lib/db";
 import BookSpace from "@/models/bookSpace";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
+}
 // GET: Fetch all bookings
 export async function GET() {
   await testConnection();
@@ -9,12 +17,12 @@ export async function GET() {
     const bookings = await BookSpace.find({});
     return NextResponse.json(
       { success: true, data: bookings },
-      { status: 200 },
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
