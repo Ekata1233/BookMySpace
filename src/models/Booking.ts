@@ -7,6 +7,7 @@ const RazorpayBookingSchema = new mongoose.Schema({
   startTime: { type: String, required: true },
   duration: { type: Number, required: true },
   totalPay: { type: Number, required: true },
+  razorpayOrderId: { type: String, required: true }, 
 });
 
 // 👇 This controls the MongoDB collection name
