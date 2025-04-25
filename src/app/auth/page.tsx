@@ -81,10 +81,9 @@ const Auth = () => {
         vendorResult.status === "fulfilled" &&
         userResult.status === "rejected"
       ) {
-  
-  
-      if (vendorResult.status === "fulfilled" && userResult.status === "rejected") {
-        // Only vendor login succeeded
+
+
+
         router.push("/");
       } else if (
         userResult.status === "fulfilled" &&
