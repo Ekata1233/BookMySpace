@@ -40,6 +40,11 @@ const VendorBankDetailsSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    upiId: {
+      type: String,
+      trim: true,
+      match: /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+$/, 
+    },
     bankProof: {
       type: String, // path or URL of uploaded file
       default: "",
