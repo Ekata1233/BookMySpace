@@ -1,7 +1,7 @@
 "use client";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -16,20 +16,22 @@ const CompletedBookings = () => {
   const [openBookings, setOpenBookings] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
-
+  const [vendorId, setVendorId] = useState<string | null>(null);
   const vendorData = localStorage.getItem("vendor");
 
-  let vendorId = null;
-
-  if (vendorData) {
-    try {
-      const parsedVendor = JSON.parse(vendorData);
-      vendorId = parsedVendor._id;
-      console.log("Vendor ID:", vendorId);
-    } catch (error) {
-      console.error("Error parsing vendor data:", error);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          setVendorId(parsedVendor._id);
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
     }
-  }
+  }, []);
 
   const filteredOfficeSpaces = officeSpaces.filter(
     (space: any) => space.vendorId === vendorId,
