@@ -35,8 +35,9 @@ const BookingTablePage = () => {
   const today = new Date().setHours(0, 0, 0, 0);
   const pastBookings = bookings.filter((booking) => new Date(booking.date).getTime() < today);
 
+  // Corrected to use _id instead of id
   const filteredBookings = pastBookings.filter((booking) => {
-    const bookingId = booking.id || '';
+    const bookingId = booking._id || ''; // Using _id instead of id
     return bookingId.toLowerCase().includes(search.toLowerCase());
   });
 
@@ -56,9 +57,9 @@ const BookingTablePage = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredBookings.map((b, index) => ({
         SL: index + 1,
-        'Booking ID': b.id,
+        'Booking ID': b._id, // Corrected to _id
         'Customer Info': getUserNameById(b.userId),
-        'Booking Amount': b.amount,
+        'Booking Amount': b.totalPay, // Corrected to match displayed field
       }))
     );
     const wb = XLSX.utils.book_new();
@@ -122,9 +123,9 @@ const BookingTablePage = () => {
                   return (
                     <tr key={booking._id} className="border-t hover:bg-gray-100">
                       <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
-                      <td className="px-6 py-4 rounded-none">{booking._id}</td>
+                      <td className="px-6 py-4 rounded-none">{booking._id}</td> {/* Corrected to _id */}
                       <td className="px-6 py-4 rounded-none">{customerName}</td>
-                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td>
+                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td> {/* Corrected to totalPay */}
                       <td className="px-6 py-4 rounded-none">
                         {office ? `${office.officeSpaceName} (${office.category})` : 'N/A'}
                       </td>

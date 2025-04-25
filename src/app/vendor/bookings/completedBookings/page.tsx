@@ -1,13 +1,13 @@
 "use client";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
 
-const CompletedBookings = () => {
+const UpcomingBookings = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { bookings } = useBookSpaces();
   const router = useRouter();
@@ -17,19 +17,26 @@ const CompletedBookings = () => {
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
 
-  const vendorData = localStorage.getItem("vendor");
+  const [vendorId, setVendorId] = useState<string | null>(null);
 
-  let vendorId = null;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
 
-  if (vendorData) {
-    try {
-      const parsedVendor = JSON.parse(vendorData);
-      vendorId = parsedVendor._id;
-      console.log("Vendor ID:", vendorId);
-    } catch (error) {
-      console.error("Error parsing vendor data:", error);
+      let vendorId = null;
+
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          vendorId = parsedVendor._id;
+          console.log("Vendor ID:", vendorId);
+          setVendorId(vendorId); // Set vendorId in state
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
     }
-  }
+  }, []); // Only runs on the client side
 
   const filteredOfficeSpaces = officeSpaces.filter(
     (space: any) => space.vendorId === vendorId,
@@ -47,12 +54,12 @@ const CompletedBookings = () => {
   // Get today's date
   const today = new Date().setHours(0, 0, 0, 0); // To compare only the date part, ignoring time
 
-  // Filter bookings to only include past ones (before today)
-  const pastBookings = bookings.filter(
-    (booking) => new Date(booking.date).getTime() < today,
+  // Filter bookings to only include upcoming ones (after today)
+  const upcomingBookings = bookings.filter(
+    (booking) => new Date(booking.date).getTime() >= today,
   );
 
-  console.log("completed booking : ", pastBookings);
+  console.log("upcoming booking : ", upcomingBookings);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42">
@@ -73,11 +80,11 @@ const CompletedBookings = () => {
 
         {/* Heading */}
         <h1 className="text-2xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">
-          Completed Bookings
+          Upcoming Bookings
         </h1>
 
         {/* Bookings Table */}
-        {pastBookings.length > 0 ? (
+        {upcomingBookings.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-gray-900 uppercase tracking-wider">
@@ -95,7 +102,7 @@ const CompletedBookings = () => {
                 </tr>
               </thead>
               <tbody>
-                {pastBookings.map((booking) => {
+                {upcomingBookings.map((booking) => {
                   const office = getOfficeDetails(booking.officeId);
                   if (!office) return null;
 
@@ -127,7 +134,7 @@ const CompletedBookings = () => {
           </div>
         ) : (
           <p className="text-center text-gray-500 mt-10 text-base">
-            No completed bookings available at the moment.
+            No upcoming bookings available at the moment.
           </p>
         )}
       </main>
@@ -135,4 +142,4 @@ const CompletedBookings = () => {
   );
 };
 
-export default CompletedBookings;
+export default UpcomingBookings;

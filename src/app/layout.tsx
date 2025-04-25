@@ -14,6 +14,7 @@ import { VendorProvider } from "./context/VendorContext";
 import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 import { CountProvider } from "./context/CountContext";
 import { UserProvider } from "./context/UserContext";
+import { BookingProvider } from "./context/BookingContext";
 
 const poppins = Poppins({
   subsets: ["latin"],

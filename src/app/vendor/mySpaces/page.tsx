@@ -18,19 +18,23 @@ const OfficeSpaces = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const { setOfficeSpaceCount } = useCounts();
 
-  const vendorData = localStorage.getItem("vendor");
+  const [vendorId, setVendorId] = useState<string | null>(null);
 
-  let vendorId = null;
+  // Use useEffect to get vendor ID from localStorage on the client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
 
-  if (vendorData) {
-    try {
-      const parsedVendor = JSON.parse(vendorData);
-      vendorId = parsedVendor._id;
-      console.log("Vendor ID:", vendorId);
-    } catch (error) {
-      console.error("Error parsing vendor data:", error);
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          setVendorId(parsedVendor._id);
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
     }
-  }
+  }, []);
 
   // Filter office spaces based on the vendorId
   const filteredOfficeSpaces = officeSpaces.filter(
@@ -39,7 +43,7 @@ const OfficeSpaces = () => {
 
   useEffect(() => {
     setOfficeSpaceCount(filteredOfficeSpaces.length);
-  }, []);
+  }, [filteredOfficeSpaces, setOfficeSpaceCount]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42 bg-gray-100">
