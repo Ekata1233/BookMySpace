@@ -62,12 +62,9 @@ const OfficeDetails = () => {
   const mainSlug = pathSegments[0] || "";
   const pageName = pathSegments[pathSegments.length - 1] || "";
 
-  // console.log("pathe name : ", mainSlug);
-console.log("Path Name : ",pathname);
 
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
-  console.log("Matched Office Space: ", MatchedOfficeSpace);
 
   if (!MatchedOfficeSpace) {
     return (
@@ -100,7 +97,6 @@ console.log("Path Name : ",pathname);
     if (id) {
       router.push(`/${mainSlug}/${id}/book`);
     }
-    console.log("Proceed to book slot...");
   };
 
   return (

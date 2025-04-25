@@ -44,7 +44,6 @@ export class AuthService {
 
       return { message: "Login successful", token, user: { name: user.name, email: user.email, id: user._id } };
     } catch (error) {
-      console.log("Login Error:");
       // return { error: "Internal Server Error 7", status: 500 };
     }
   }

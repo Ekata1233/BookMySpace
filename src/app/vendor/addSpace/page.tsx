@@ -59,7 +59,6 @@ const OfficeSpaceForm = () => {
 
   const vendorId = vendorInfo?._id;
 
-  console.log("Vendor Id : ", vendorId);
 
   const mapContainerStyle = {
     width: "100%",
@@ -170,8 +169,6 @@ const OfficeSpaceForm = () => {
     formData.multiImages.forEach((file) => {
       formDataToSend.append("multiImages", file);
     });
-
-    console.log("form data to send : ", formDataToSend);
 
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData

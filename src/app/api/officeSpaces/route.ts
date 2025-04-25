@@ -25,8 +25,6 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
 
-    console.log("form data of office space: ", formData);
-
     const officeSpaceName = formData.get("officeSpaceName") as string;
     const city = formData.get("city") as string;
     const state = formData.get("state") as string;
@@ -53,7 +51,6 @@ export async function POST(req: Request) {
     // Ensure 'public/uploads' directory exists
     const uploadDir = path.join(process.cwd(), "public/uploads");
     if (!existsSync(uploadDir)) {
-      console.log("Creating uploads directory...");
       await mkdir(uploadDir, { recursive: true });
     }
 

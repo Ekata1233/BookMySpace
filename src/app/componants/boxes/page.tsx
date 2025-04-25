@@ -48,7 +48,6 @@ const Boxes = () => {
       try {
         const response = await axios.get<{ success: boolean; data: Box[] }>("/api/boxes");
         if (response.data.success) {
-          console.log("Fetched Boxes:", response.data.data);
           setBoxes(response.data.data);
         }
       } catch (error) {

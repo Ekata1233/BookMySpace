@@ -35,7 +35,7 @@ function FAQs() {
         },
     ];
     return (
-        <div className="mt-42 px-4 md:px-30">
+        <div className="mt-30 px-4 md:px-30">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start py-30">
                 {/* Left column */}
                 <div>
@@ -49,7 +49,7 @@ function FAQs() {
                         <FaPhoneAlt style={{ color: "#6BB7BE" }} />
                         <span className='text-lg font-semibold text-gray-800'>Get In Touch</span> +91 9272003735
                     </p>
-                    <Button className="text-base sm:text-md md:text-lg lg:text-lg text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-3 py-5 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none mt-4">
+                    <Button className="text-base sm:text-md md:text-lg lg:text-lg text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-3 py-5 bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none mt-4" >
                         Get In Touch
                     </Button>
                 </div>

@@ -23,7 +23,8 @@ export default function Home() {
       {/* <Loader /> */}
       <ExploreOffice />
       <OurAmenites />
-      <div className="mt-0">
+      <div className="-mt-30">
+
         <FAQs/>
       </div>
     </main>

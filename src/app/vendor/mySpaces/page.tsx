@@ -22,7 +22,6 @@ const OfficeSpaces = () => {
                 try {
                     const parsedVendor = JSON.parse(vendorData);
                     setVendorId(parsedVendor._id);
-                    console.log("Vendor ID:", parsedVendor._id);
                 } catch (error) {
                     console.error("Error parsing vendor data:", error);
                 }

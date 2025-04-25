@@ -28,7 +28,7 @@ const Auth = () => {
   const router = useRouter();
   const { vendorLogin } = useVendor();
 
-  console.log("Current user:", user);
+
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,8 +79,6 @@ const Auth = () => {
         vendorLogin(email, password),
       ]);
   
-      console.log("User status:", userResult.status);
-      console.log("Vendor status:", vendorResult.status);
   
       if (vendorResult.status === "fulfilled" && userResult.status === "rejected") {
         // Only vendor login succeeded
