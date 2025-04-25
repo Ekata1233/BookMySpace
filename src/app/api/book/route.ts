@@ -17,12 +17,12 @@ export async function GET() {
     const bookings = await BookSpace.find({});
     return NextResponse.json(
       { success: true, data: bookings },
-      { status: 200 },
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
