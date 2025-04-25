@@ -23,9 +23,9 @@ const page = () => {
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
   const pathname = usePathname();
-        const [openAccount, setOpenAccount] = useState(false);
-    
-      const [openReport, setOpenReport] = useState(false);
+  const [openAccount, setOpenAccount] = useState(false);
+
+  const [openReport, setOpenReport] = useState(false);
 
   const isActive = (href: string) => pathname === href;
   const navItems = [
@@ -65,17 +65,17 @@ const page = () => {
     <div className="flex h-screen mt-42">
       {/* Sidebar */}
       <Sidebar
-                sidebarOpen={sidebarOpen}
-                openSpaces={openSpaces}
-                setOpenSpaces={setOpenSpaces}
-                openBookings={openBookings}
-                setOpenBookings={setOpenBookings}
-                openReport={openReport} // ✅ Pass this
-                setOpenReport={setOpenReport} 
-                openAccount={openAccount} // ✅ Add this
-                setOpenAccount={setOpenAccount} // ✅ Add this
-                    
-            />
+        sidebarOpen={sidebarOpen}
+        openSpaces={openSpaces}
+        setOpenSpaces={setOpenSpaces}
+        openBookings={openBookings}
+        setOpenBookings={setOpenBookings}
+        openReport={openReport} // ✅ Pass this
+        setOpenReport={setOpenReport}
+        openAccount={openAccount} // ✅ Add this
+        setOpenAccount={setOpenAccount} // ✅ Add this
+
+      />
 
       {/* Main content */}
       <main className="flex-1 bg-gray-100 p-6 overflow-auto">

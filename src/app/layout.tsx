@@ -13,6 +13,7 @@ import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
 import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 import { UserProvider } from "./context/UserContext";
+import { BookingProvider } from "./context/BookingContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,6 +41,7 @@ export default function RootLayout({
                   <WorkBusinessProvider>
                     <ExploreOfficeProvider>
                       <VendorProvider>
+                        <BookingProvider>
                         <VendorBankDetailsProvider>
                           <UserProvider>
                             <Header />
@@ -47,7 +49,7 @@ export default function RootLayout({
                             <Footer />
                           </UserProvider>
                         </VendorBankDetailsProvider>
-
+                        </BookingProvider>
                       </VendorProvider>
                     </ExploreOfficeProvider>
                   </WorkBusinessProvider>

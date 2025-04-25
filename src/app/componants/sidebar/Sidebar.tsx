@@ -57,10 +57,10 @@ const Sidebar = ({
       <nav className="space-y-4">
         {/* Dashboard */}
         <Link
-          href="/dashboard"
+          href="/vendor/dashboard"
           className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
             ${
-              isActive("/dashboard")
+              isActive("/vendor/dashboard")
                 ? "bg-gradient-to-r from-[#6bb7be]/30 to-transparent text-white border-l-4 border-[#6bb7be]"
                 : "text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] hover:shadow-lg hover:shadow-[#6bb7be]/20"
             }`}

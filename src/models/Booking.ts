@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const BookingSchema = new mongoose.Schema({
+const RazorpayBookingSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   officeId: { type: String, required: true },
   date: { type: String, required: true },
@@ -9,5 +9,7 @@ const BookingSchema = new mongoose.Schema({
   totalPay: { type: Number, required: true },
 });
 
-const Booking = mongoose.models.Booking || mongoose.model("Booking", BookingSchema);
-export default Booking;
+// 👇 This controls the MongoDB collection name
+const RazorpayBooking = mongoose.models.RazorpayBooking || mongoose.model("RazorpayBooking", RazorpayBookingSchema);
+
+export default RazorpayBooking;
