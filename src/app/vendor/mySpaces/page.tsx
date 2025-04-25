@@ -4,7 +4,9 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
+
 import { useCounts } from "@/app/context/CountContext";
 
 const OfficeSpaces = () => {
@@ -16,28 +18,31 @@ const OfficeSpaces = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const { setOfficeSpaceCount } = useCounts();
 
-  const vendorData = localStorage.getItem("vendor");
-  let vendorId = null;
+  const [vendorId, setVendorId] = useState<string | null>(null);
 
-  if (vendorData) {
-    try {
-      const parsedVendor = JSON.parse(vendorData);
-      vendorId = parsedVendor._id;
-      console.log("Vendor ID:", vendorId);
-    } catch (error) {
-      console.error("Error parsing vendor data:", error);
+  // Use useEffect to get vendor ID from localStorage on the client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
+
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          setVendorId(parsedVendor._id);
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
     }
-  }
+  }, []);
 
-  // Ensure officeSpaces exists and filter safely
-  const filteredOfficeSpaces = officeSpaces?.filter(
-    (space: any) => space.vendorId === vendorId
-  ) || []; // Default to an empty array if officeSpaces is undefined
+  // Filter office spaces based on the vendorId
+  const filteredOfficeSpaces = officeSpaces.filter(
+    (space: any) => space.vendorId === vendorId,
+  );
 
   useEffect(() => {
-    if (filteredOfficeSpaces.length > 0) {
-      setOfficeSpaceCount(filteredOfficeSpaces.length);
-    }
+    setOfficeSpaceCount(filteredOfficeSpaces.length);
   }, [filteredOfficeSpaces, setOfficeSpaceCount]);
 
   return (
@@ -49,9 +54,9 @@ const OfficeSpaces = () => {
         setOpenSpaces={setOpenSpaces}
         openBookings={openBookings}
         setOpenBookings={setOpenBookings}
-        openReport={openReport}
+        openReport={openReport} // ✅ Pass this
         setOpenReport={setOpenReport}
-        openAccount={openAccount}
+        openAccount={openAccount} // ✅ Add this
         setOpenAccount={setOpenAccount}
       />
 
