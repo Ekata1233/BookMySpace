@@ -13,6 +13,7 @@ import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
 import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 import { CountProvider } from "./context/CountContext";
+import { UserProvider } from "./context/UserContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,13 +41,11 @@ export default function RootLayout({
                   <WorkBusinessProvider>
                     <ExploreOfficeProvider>
                       <VendorProvider>
-                        <VendorBankDetailsProvider>
-                          <CountProvider>
-                            <Header />
+                        <CountProvider>
+                          <VendorBankDetailsProvider> <UserProvider><Header />
                             {children}
-                            <Footer />
-                          </CountProvider>
-                        </VendorBankDetailsProvider>
+                            <Footer /></UserProvider></VendorBankDetailsProvider></CountProvider>
+
                       </VendorProvider>
                     </ExploreOfficeProvider>
                   </WorkBusinessProvider>

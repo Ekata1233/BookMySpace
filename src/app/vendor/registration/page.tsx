@@ -110,8 +110,6 @@ const VendorRegistration = () => {
       const res = await axios.post("/api/vendor/registration", formPayload);
       const { id: order_id } = res.data.order_id;
 
-      console.log("order id : ", order_id);
-
       const options = {
         key: "rzp_test_4IVVmy5cqABEUR",
         amount: 1999 * 100,

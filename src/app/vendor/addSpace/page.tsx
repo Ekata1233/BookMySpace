@@ -16,7 +16,7 @@ import {
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import Link from "next/link";
-import Sidebar from "../sidebar/page";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const OfficeSpaceForm = () => {
   const { addOfficeSpace } = useOfficeSpaces();
@@ -59,7 +59,6 @@ const OfficeSpaceForm = () => {
 
   const vendorId = vendorInfo?._id;
 
-  console.log("Vendor Id : ", vendorId);
 
   const mapContainerStyle = {
     width: "100%",
@@ -170,8 +169,6 @@ const OfficeSpaceForm = () => {
     formData.multiImages.forEach((file) => {
       formDataToSend.append("multiImages", file);
     });
-
-    console.log("form data to send : ", formDataToSend);
 
     try {
       await addOfficeSpace(formDataToSend); // Make sure your function handles FormData

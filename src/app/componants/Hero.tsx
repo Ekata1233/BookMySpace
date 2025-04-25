@@ -21,8 +21,7 @@ const Hero = () => {
   const router = useRouter();
 
   const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // Add your search logic here
+
   };
 
   console.log("office spaces : ", officeSpaces);

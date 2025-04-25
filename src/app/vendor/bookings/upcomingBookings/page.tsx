@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import Sidebar from "../../sidebar/page";
 import { useCounts } from "@/app/context/CountContext";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const UpcomingBookings = () => {
   const { officeSpaces } = useOfficeSpaces();

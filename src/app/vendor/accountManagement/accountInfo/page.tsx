@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Sidebar from "../../sidebar/page";
 import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const AccountInfo = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);

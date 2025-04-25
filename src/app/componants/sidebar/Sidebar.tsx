@@ -9,6 +9,12 @@ import {
   Plus,
   CalendarDays,
   Settings,
+  Landmark,
+  Banknote,
+  FileText,
+  BookCopy,
+  Clock,
+  CheckCircle,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -72,11 +78,7 @@ const Sidebar = ({
             <FolderKanban className="w-6 h-6" />
             Spaces
             <span className="ml-auto">
-              {openSpaces ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
+              {openSpaces ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </span>
           </button>
 
@@ -114,11 +116,7 @@ const Sidebar = ({
             <CalendarDays className="w-6 h-6" />
             Bookings
             <span className="ml-auto">
-              {openBookings ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
+              {openBookings ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </span>
           </button>
 
@@ -130,7 +128,7 @@ const Sidebar = ({
                   isActive("/dashboard/bookings/upcoming") && "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <Clock  className="w-5 h-5" />
                 Upcoming
               </Link>
 
@@ -140,20 +138,20 @@ const Sidebar = ({
                   isActive("/dashboard/bookings/completed") && "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <CheckCircle className="w-5 h-5" />
                 Completed
               </Link>
             </div>
           )}
         </div>
 
-        {/* account Dropdown */}
+        {/* Account Dropdown */}
         <div>
           <button
             onClick={() => setOpenAccount(!openAccount)}
             className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
           >
-            <CalendarDays className="w-6 h-6" />
+            <Settings className="w-6 h-6" />
             Account
             <span className="ml-auto">
               {openAccount ? (
@@ -161,6 +159,7 @@ const Sidebar = ({
               ) : (
                 <ChevronDown className="w-4 h-4" />
               )}
+              {openAccount ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </span>
           </button>
 
@@ -173,7 +172,7 @@ const Sidebar = ({
                   "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <Landmark className="w-5 h-5" />
                 Account Information
               </Link>
 
@@ -184,27 +183,23 @@ const Sidebar = ({
                   "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <Banknote className="w-5 h-5" />
                 Bank Information
               </Link>
             </div>
           )}
         </div>
 
-        {/* Settings */}
+        {/* Reports Dropdown */}
         <div>
           <button
             onClick={() => setOpenReport(!openReport)}
             className="flex items-center w-full gap-4 px-5 py-4 text-lg font-bold text-white hover:bg-[#6bb7be]/20 hover:border-l-4 hover:border-[#6bb7be] transition-all"
           >
-            <CalendarDays className="w-6 h-6" />
+            <FileText className="w-6 h-6" />
             Reports
             <span className="ml-auto">
-              {openReport ? (
-                <ChevronUp className="w-4 h-4" />
-              ) : (
-                <ChevronDown className="w-4 h-4" />
-              )}
+              {openReport ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </span>
           </button>
 
@@ -216,7 +211,7 @@ const Sidebar = ({
                   isActive("/dashboard/report/transition") && "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <FileText className="w-5 h-5" />
                 Transition Report
               </Link>
 
@@ -226,7 +221,7 @@ const Sidebar = ({
                   isActive("/dashboard/report/booking") && "text-[#6bb7be]"
                 }`}
               >
-                <CalendarDays className="w-5 h-5" />
+                <BookCopy className="w-5 h-5" />
                 Booking Report
               </Link>
             </div>

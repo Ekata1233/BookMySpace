@@ -12,8 +12,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // console.log("Body of razorpay : ", body)
-
     const options = {
       amount: body.totalPay * 100, // Razorpay uses paise
       currency: "INR",
@@ -22,7 +20,11 @@ export async function POST(req: Request) {
 
     const order = await razorpay.orders.create(options);
 
-    return NextResponse.json({ orderId: order.id });
+    // Include both orderId and totalPay in the response
+    return NextResponse.json({
+      orderId: order.id,
+      totalPay: body.totalPay, // This will return the total amount as sent in the request
+    });
   } catch (error) {
     console.error("Razorpay order creation failed:", error);
     return NextResponse.json(

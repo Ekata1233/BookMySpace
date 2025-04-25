@@ -35,7 +35,6 @@ const OfficeSpaces: React.FC = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const pageName = pathSegments[pathSegments.length - 1] || "";
 
-  console.log("office filteredOfficeSpaces : ", filteredOfficeSpaces);
 
   const normalizedPageCategory = pageName?.replace(/-/g, " ").toLowerCase();
 
@@ -113,7 +112,6 @@ const OfficeSpaces: React.FC = () => {
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
   if (loading) return <Loader />;
 
-  console.log("Sample space:", officeSpaces[0]);
 
   return (
     <div className="my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">

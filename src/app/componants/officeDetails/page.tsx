@@ -67,7 +67,6 @@ const OfficeDetails = () => {
 
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
-  console.log("Matched Office Space: ", MatchedOfficeSpace);
 
   if (!MatchedOfficeSpace) {
     return (
@@ -100,7 +99,6 @@ const OfficeDetails = () => {
     if (id) {
       router.push(`/${mainSlug}/${id}/book`);
     }
-    console.log("Proceed to book slot...");
   };
 
   return (

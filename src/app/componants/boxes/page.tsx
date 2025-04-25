@@ -50,7 +50,6 @@ const Boxes = () => {
           "/api/boxes",
         );
         if (response.data.success) {
-          console.log("Fetched Boxes:", response.data.data);
           setBoxes(response.data.data);
         }
       } catch (error) {

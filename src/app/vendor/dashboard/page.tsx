@@ -16,8 +16,8 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import Sidebar from "../sidebar/page";
 import { useCounts } from "@/app/context/CountContext";
+import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);

@@ -23,8 +23,9 @@ export default function Home() {
       {/* <Loader /> */}
       <ExploreOffice />
       <OurAmenites />
-      <div className="mt-0">
-        <FAQs />
+      <div className="-mt-30">
+
+        <FAQs/>
       </div>
     </main>
   );

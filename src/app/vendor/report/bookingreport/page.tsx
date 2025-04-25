@@ -1,34 +1,44 @@
-"use client";
-import { useState } from "react";
-import * as XLSX from "xlsx";
-import Sidebar from "../../sidebar/page";
+'use client';
+import { useBookSpaces } from '@/app/context/BookSpaceContext';
+import { useOfficeSpaces } from '@/app/context/OfficeSpaceContext';
+import { useState } from 'react';
+import * as XLSX from 'xlsx';
+import Sidebar from '@/app/componants/sidebar/Sidebar';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/context/authContext';
+import { useUsers } from '@/app/context/UserContext';
 
 const BookingTablePage = () => {
-  const [search, setSearch] = useState("");
+  const { officeSpaces } = useOfficeSpaces();
+  const { bookings } = useBookSpaces();
+  const { users } = useUsers();
+  const router = useRouter();
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
+  const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const bookings = [
-    { id: "B001", customer: "John Doe", amount: 1200 },
-    { id: "B002", customer: "Jane Smith", amount: 950 },
-    { id: "B003", customer: "Alice Johnson", amount: 1500 },
-    { id: "B004", customer: "Mike Brown", amount: 1100 },
-    { id: "B005", customer: "Sara Davis", amount: 900 },
-    { id: "B006", customer: "Tom Wilson", amount: 1300 },
-    { id: "B007", customer: "Emma Watson", amount: 1050 },
-    { id: "B008", customer: "Chris Lee", amount: 1400 },
-    { id: "B009", customer: "Olivia Clark", amount: 1250 },
-    { id: "B010", customer: "Liam Miller", amount: 1350 },
-  ];
+  const getOfficeDetails = (id: any) => {
+    return officeSpaces.find((office) => office._id === id);
+  };
 
-  const filteredBookings = bookings.filter((booking) =>
-    booking.id.toLowerCase().includes(search.toLowerCase()),
-  );
+  const getUserNameById = (userId: string) => {
+    const user = users.find((u) => u._id === userId);
+    return user ? user.name : 'N/A';
+  };
+
+  const today = new Date().setHours(0, 0, 0, 0);
+  const pastBookings = bookings.filter((booking) => new Date(booking.date).getTime() < today);
+
+  const filteredBookings = pastBookings.filter((booking) => {
+    const bookingId = booking.id || '';
+    return bookingId.toLowerCase().includes(search.toLowerCase());
+  });
 
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -46,10 +56,10 @@ const BookingTablePage = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredBookings.map((b, index) => ({
         SL: index + 1,
-        "Booking ID": b.id,
-        "Customer Info": b.customer,
-        "Booking Amount": b.amount,
-      })),
+        'Booking ID': b.id,
+        'Customer Info': getUserNameById(b.userId),
+        'Booking Amount': b.amount,
+      }))
     );
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Bookings");
@@ -81,7 +91,7 @@ const BookingTablePage = () => {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-              setCurrentPage(1); // Reset to first page on search
+              setCurrentPage(1);
             }}
           />
           <button
@@ -101,31 +111,30 @@ const BookingTablePage = () => {
                 <th className="px-6 py-3 rounded-none">Booking ID</th>
                 <th className="px-6 py-3 rounded-none">Customer Info</th>
                 <th className="px-6 py-3 rounded-none">Booking Amount</th>
+                <th className="px-6 py-3 rounded-none">Office Name</th>
               </tr>
             </thead>
             <tbody>
               {currentBookings.length > 0 ? (
-                currentBookings.map((booking, index) => (
-                  <tr key={booking.id} className="border-t hover:bg-gray-100">
-                    <td className="px-6 py-4 rounded-none">
-                      {indexOfFirstItem + index + 1}
-                    </td>
-                    <td className="px-6 py-4 rounded-none">{booking.id}</td>
-                    <td className="px-6 py-4 rounded-none">
-                      {booking.customer}
-                    </td>
-                    <td className="px-6 py-4 rounded-none">
-                      ${booking.amount}
-                    </td>
-                  </tr>
-                ))
+                currentBookings.map((booking, index) => {
+                  const office = getOfficeDetails(booking.officeId);
+                  const customerName = getUserNameById(booking.userId);
+                  return (
+                    <tr key={booking._id} className="border-t hover:bg-gray-100">
+                      <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
+                      <td className="px-6 py-4 rounded-none">{booking._id}</td>
+                      <td className="px-6 py-4 rounded-none">{customerName}</td>
+                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td>
+                      <td className="px-6 py-4 rounded-none">
+                        {office ? `${office.officeSpaceName} (${office.category})` : 'N/A'}
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td
-                    colSpan={4}
-                    className="text-center px-6 py-4 text-gray-500 rounded-none"
-                  >
-                    No bookings found.
+                  <td colSpan={5} className="text-center px-6 py-4 text-gray-500 rounded-none">
+                    No past bookings found.
                   </td>
                 </tr>
               )}
@@ -140,11 +149,8 @@ const BookingTablePage = () => {
                 <button
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
-                  className={`px-3 py-1 border rounded-none ${
-                    currentPage === i + 1
-                      ? "bg-[#6BB7BE] text-white"
-                      : "bg-white text-gray-700"
-                  }`}
+                  className={`px-3 py-1 border rounded-none ${currentPage === i + 1 ? 'bg-[#6BB7BE] text-white' : 'bg-white text-gray-700'
+                    }`}
                 >
                   {i + 1}
                 </button>
