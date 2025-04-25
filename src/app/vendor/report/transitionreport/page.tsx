@@ -1,7 +1,9 @@
-"use client";
+'use client'; // This line marks the file as a client component
+
+import { useEffect, useState } from "react";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
-import { useState } from "react";
 import * as XLSX from "xlsx";
+import { useUsers } from "@/app/context/UserContext";
 
 const TransitionPage = () => {
   const [search, setSearch] = useState("");
@@ -11,32 +13,41 @@ const TransitionPage = () => {
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { users } = useUsers();
+
   const itemsPerPage = 6;
 
-  const transitions = [
-    { id: "T001", user: "Alice", status: "Completed" },
-    { id: "T002", user: "Bob", status: "Pending" },
-    { id: "T003", user: "Charlie", status: "Failed" },
-    { id: "T004", user: "David", status: "Completed" },
-    { id: "T005", user: "Eva", status: "Pending" },
-    { id: "T006", user: "Frank", status: "Completed" },
-    { id: "T007", user: "Grace", status: "Failed" },
-    { id: "T008", user: "Helen", status: "Completed" },
-    { id: "T009", user: "Ivy", status: "Pending" },
-    { id: "T010", user: "Jack", status: "Completed" },
-  ];
+  // Fetch Razorpay bookings
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch('/api/razorpay');
+      if (!response.ok) {
+        throw new Error('Failed to fetch Razorpay bookings');
+      }
+      const data = await response.json();
+      setBookings(data);
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const filteredTransitions = transitions.filter((transition) =>
-    transition.id.toLowerCase().includes(search.toLowerCase()),
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const filteredBookings = bookings.filter((booking) =>
+    booking.razorpayOrderId && booking.razorpayOrderId.toLowerCase().includes(search.toLowerCase())
   );
 
-  const totalPages = Math.ceil(filteredTransitions.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTransitions = filteredTransitions.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
+  const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -44,23 +55,34 @@ const TransitionPage = () => {
 
   const handleDownload = () => {
     const ws = XLSX.utils.json_to_sheet(
-      filteredTransitions.map((t, index) => ({
+      filteredBookings.map((booking, index) => ({
         SL: index + 1,
-        "Transition ID": t.id,
-        User: t.user,
-        Status: t.status,
-      })),
+        "Razorpay Order ID": booking.razorpayOrderId,
+        User: booking.userId, // This can be updated as well to show user name
+        Office: booking.officeId,
+        Date: booking.date,
+        "Start Time": booking.startTime,
+        Duration: booking.duration,
+        "Total Pay": booking.totalPay,
+      }))
     );
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Transitions");
-    XLSX.writeFile(wb, "transitions.xlsx");
+    XLSX.utils.book_append_sheet(wb, ws, "Razorpay Bookings");
+    XLSX.writeFile(wb, "razorpay_bookings.xlsx");
+  };
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading message while fetching data
+  }
+
+  // Function to get the user name by userId
+  const getUserName = (userId: string) => {
+    const user = users.find(user => user._id === userId);
+    return user ? user.name : "Unknown"; // Return the name if found, else return "Unknown"
   };
 
   return (
-    <div
-      className="flex flex-col md:flex-row min-h-screen mt-42"
-      style={{ backgroundColor: "#f5f5f5" }}
-    >
+    <div className="flex flex-col md:flex-row min-h-screen mt-42" style={{ backgroundColor: "#f5f5f5" }}>
       <Sidebar
         sidebarOpen={sidebarOpen}
         openSpaces={openSpaces}
@@ -76,7 +98,7 @@ const TransitionPage = () => {
         <div className="flex justify-between items-center mb-6">
           <input
             type="text"
-            placeholder="Search Transition ID"
+            placeholder="Search Razorpay Order ID"
             className="px-4 py-2 border border-gray-300 rounded-none w-1/3"
             value={search}
             onChange={(e) => {
@@ -104,31 +126,19 @@ const TransitionPage = () => {
               </tr>
             </thead>
             <tbody>
-              {currentTransitions.length > 0 ? (
-                currentTransitions.map((transition, index) => (
-                  <tr
-                    key={transition.id}
-                    className="border-t hover:bg-gray-100"
-                  >
-                    <td className="px-6 py-4 rounded-none">
-                      {indexOfFirstItem + index + 1}
-                    </td>
-                    <td className="px-6 py-4 rounded-none">{transition.id}</td>
-                    <td className="px-6 py-4 rounded-none">
-                      {transition.user}
-                    </td>
-                    <td className="px-6 py-4 rounded-none">
-                      {transition.status}
-                    </td>
+              {currentBookings.length > 0 ? (
+                currentBookings.map((booking, index) => (
+                  <tr key={booking.razorpayOrderId} className="border-t hover:bg-gray-100">
+                    <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
+                    <td className="px-6 py-4 rounded-none">{booking.razorpayOrderId}</td>
+                    <td className="px-6 py-4 rounded-none">{getUserName(booking.userId)}</td>
+                    <td className="px-6 py-4 rounded-none blue">Completed</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan={4}
-                    className="text-center px-6 py-4 text-gray-500 rounded-none"
-                  >
-                    No transitions found.
+                  <td colSpan={8} className="text-center px-6 py-4 text-gray-500 rounded-none">
+                    No bookings found.
                   </td>
                 </tr>
               )}
@@ -144,9 +154,7 @@ const TransitionPage = () => {
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
                   className={`px-3 py-1 border rounded-none ${
-                    currentPage === i + 1
-                      ? "bg-[#6BB7BE] text-white"
-                      : "bg-white text-gray-700"
+                    currentPage === i + 1 ? "bg-[#6BB7BE] text-white" : "bg-white text-gray-700"
                   }`}
                 >
                   {i + 1}
