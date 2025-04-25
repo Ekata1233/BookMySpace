@@ -19,19 +19,22 @@ const UpcomingBookings = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const { setUpcomingBookingCount } = useCounts();
 
-  const vendorData = localStorage.getItem("vendor");
+  const [vendorId, setVendorId] = useState<string | null>(null);
 
-  let vendorId = null;
-
-  if (vendorData) {
-    try {
-      const parsedVendor = JSON.parse(vendorData);
-      vendorId = parsedVendor._id;
-      console.log("Vendor ID:", vendorId);
-    } catch (error) {
-      console.error("Error parsing vendor data:", error);
+  // Use useEffect to handle localStorage access only on the client side
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          setVendorId(parsedVendor._id); // Set the vendor ID in state
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
     }
-  }
+  }, []); // Run only once when the component is mounted on the client side
 
   const filteredOfficeSpaces = officeSpaces.filter(
     (space: any) => space.vendorId === vendorId,
@@ -60,7 +63,7 @@ const UpcomingBookings = () => {
 
   useEffect(() => {
     setUpcomingBookingCount(validFutureBookings.length);
-  }, []);
+  }, [validFutureBookings, setUpcomingBookingCount]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42">
@@ -85,7 +88,7 @@ const UpcomingBookings = () => {
         </h1>
 
         {/* Bookings Table */}
-        {futureBookings.length > 0 ? (
+        {validFutureBookings.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-gray-900 uppercase tracking-wider">
@@ -103,7 +106,7 @@ const UpcomingBookings = () => {
                 </tr>
               </thead>
               <tbody>
-                {futureBookings.map((booking) => {
+                {validFutureBookings.map((booking) => {
                   const office = getOfficeDetails(booking.officeId);
                   if (!office) return null;
 
