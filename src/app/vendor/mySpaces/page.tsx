@@ -4,9 +4,7 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
-
 import { useCounts } from "@/app/context/CountContext";
 
 const OfficeSpaces = () => {
@@ -19,7 +17,6 @@ const OfficeSpaces = () => {
   const { setOfficeSpaceCount } = useCounts();
 
   const vendorData = localStorage.getItem("vendor");
-
   let vendorId = null;
 
   if (vendorData) {
@@ -32,14 +29,16 @@ const OfficeSpaces = () => {
     }
   }
 
-  // Filter office spaces based on the vendorId
-  const filteredOfficeSpaces = officeSpaces.filter(
-    (space: any) => space.vendorId === vendorId,
-  );
+  // Ensure officeSpaces exists and filter safely
+  const filteredOfficeSpaces = officeSpaces?.filter(
+    (space: any) => space.vendorId === vendorId
+  ) || []; // Default to an empty array if officeSpaces is undefined
 
   useEffect(() => {
-    setOfficeSpaceCount(filteredOfficeSpaces.length);
-  }, []);
+    if (filteredOfficeSpaces.length > 0) {
+      setOfficeSpaceCount(filteredOfficeSpaces.length);
+    }
+  }, [filteredOfficeSpaces, setOfficeSpaceCount]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42 bg-gray-100">
@@ -50,9 +49,9 @@ const OfficeSpaces = () => {
         setOpenSpaces={setOpenSpaces}
         openBookings={openBookings}
         setOpenBookings={setOpenBookings}
-        openReport={openReport} // ✅ Pass this
+        openReport={openReport}
         setOpenReport={setOpenReport}
-        openAccount={openAccount} // ✅ Add this
+        openAccount={openAccount}
         setOpenAccount={setOpenAccount}
       />
 
