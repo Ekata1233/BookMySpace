@@ -16,16 +16,20 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useCounts } from "@/app/context/CountContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
-  const pathname = usePathname();
+  const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
 
-  const [openReport, setOpenReport] = useState(false);
+  const pathname = usePathname();
+  const { officeSpaceCount, upcomingBookingCount } = useCounts();
+  console.log("Vendor officeSpaceCount:", officeSpaceCount);
+  console.log("Vendor upcomingBookingCount:", upcomingBookingCount);
 
   const isActive = (href: string) => pathname === href;
   const navItems = [
@@ -54,7 +58,7 @@ const page = () => {
       color: "from-[#6bb7be] to-[#3e8f96]",
     },
     {
-      title: "New Messages",
+      title: "Completed Bookings",
       value: "7",
       icon: <MailCheck className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#31878f]",
@@ -73,8 +77,7 @@ const page = () => {
         openReport={openReport} // ✅ Pass this
         setOpenReport={setOpenReport}
         openAccount={openAccount} // ✅ Add this
-        setOpenAccount={setOpenAccount} // ✅ Add this
-
+        setOpenAccount={setOpenAccount}
       />
 
       {/* Main content */}

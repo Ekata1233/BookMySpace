@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     console.error("Razorpay order creation failed:", error);
     return NextResponse.json(
       { error: "Failed to create Razorpay order" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,12 +1,12 @@
-import React from 'react'
+import React from "react";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion"
-import { Button } from '@/components/ui/button'
-import { FaPhoneAlt } from 'react-icons/fa';
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { FaPhoneAlt } from "react-icons/fa";
 function FAQs() {
     const faqData = [
         {
@@ -54,30 +54,28 @@ function FAQs() {
                     </Button>
                 </div>
 
-                {/* Right column */}
-                <div className="space-y-4 w-full">
-                    <Accordion type="single" collapsible className="w-full space-y-4">
-                        {faqData.map((item, index) => (
-                            <AccordionItem
-                                key={index}
-                                value={`item-${index + 1}`}
-                                className="border-l-4 border-[#6BB7BE] rounded-md shadow-sm hover:shadow-md transition duration-300"
-                            >
-                                <AccordionTrigger className="flex justify-between items-center w-full bg-white px-5 py-4 text-lg font-semibold text-gray-800 border-b border-gray-200">
-                                    <span>{item.question}</span>
-                                </AccordionTrigger>
-                                <AccordionContent className="bg-gray-50 px-5 py-4 text-gray-700">
-                                    {item.answer}
-                                </AccordionContent>
-                            </AccordionItem>
-                        ))}
-                    </Accordion>
-                </div>
-            </div>
+        {/* Right column */}
+        <div className="space-y-4 w-full">
+          <Accordion type="single" collapsible className="w-full space-y-4">
+            {faqData.map((item, index) => (
+              <AccordionItem
+                key={index}
+                value={`item-${index + 1}`}
+                className="border-l-4 border-[#6BB7BE] rounded-md shadow-sm hover:shadow-md transition duration-300"
+              >
+                <AccordionTrigger className="flex justify-between items-center w-full bg-white px-5 py-4 text-lg font-semibold text-gray-800 border-b border-gray-200">
+                  <span>{item.question}</span>
+                </AccordionTrigger>
+                <AccordionContent className="bg-gray-50 px-5 py-4 text-gray-700">
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
-
-
-    )
+      </div>
+    </div>
+  );
 }
 
-export default FAQs
+export default FAQs;

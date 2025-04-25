@@ -6,7 +6,7 @@ const nextConfig = {
     RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
   },
   images: {
-    domains: ['ik.imagekit.io'],
+    domains: ["ik.imagekit.io"],
   },
 };
 

@@ -10,12 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "../context/authContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -68,22 +63,32 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     const formData = new FormData(e.currentTarget as HTMLFormElement);
     const email = formData.get("email-login") as string;
     const password = formData.get("password-login") as string;
-  
+
     try {
       const [userResult, vendorResult] = await Promise.allSettled([
         login(email, password),
         vendorLogin(email, password),
       ]);
+
+      console.log("User status:", userResult.status);
+      console.log("Vendor status:", vendorResult.status);
+
+      if (
+        vendorResult.status === "fulfilled" &&
+        userResult.status === "rejected"
+      ) {
   
   
-      if (vendorResult.status === "fulfilled" && userResult.status === "rejected") {
         // Only vendor login succeeded
         router.push("/");
-      } else if (userResult.status === "fulfilled" && vendorResult.status === "rejected") {
+      } else if (
+        userResult.status === "fulfilled" &&
+        vendorResult.status === "rejected"
+      ) {
         // Only user login succeeded
         router.push("/");
       } else {
@@ -97,8 +102,6 @@ const Auth = () => {
       setLoading(false);
     }
   };
-  
-  
 
   return (
     <div className="flex items-center justify-center py-45 mt-10">

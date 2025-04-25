@@ -18,7 +18,11 @@ const Contact = () => {
     inquiry: "",
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -28,12 +32,19 @@ const Contact = () => {
     try {
       await addContact(formData); // Save contact to the database
       alert("Contact saved successfully!");
-      setFormData({ name: "", email: "", company: "", phone: "", requirement: "", inquiry: "" }); 
+      setFormData({
+        name: "",
+        email: "",
+        company: "",
+        phone: "",
+        requirement: "",
+        inquiry: "",
+      });
     } catch (error) {
       console.error("Error saving contact:", error);
       alert("Failed to save contact.");
     }
-  }; 
+  };
 
   return (
     <div className="mt-54 mx-2 sm:mx-8 md:mx-8 lg:mx-10 xl:mx-30 2xl:mx-44">
@@ -49,7 +60,10 @@ const Contact = () => {
         </p>
 
         <div className="text-gray-700 m-5 w-5/6 mx-auto border shadow-lg mb-20">
-          <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8">
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 p-8"
+          >
             {/* Left Column */}
             <div className="flex flex-col space-y-4">
               <div>

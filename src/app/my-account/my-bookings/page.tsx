@@ -1,5 +1,4 @@
-
-'use client';
+"use client";
 import { useAuth } from "@/app/context/authContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
@@ -19,7 +18,7 @@ const MyBooking = () => {
   const formatTimeRange = (
     date: string,
     startTime: string,
-    duration: number
+    duration: number,
   ) => {
     const [hours, minutes] = startTime.split(":").map(Number);
     const start = new Date(date);
@@ -58,7 +57,7 @@ const MyBooking = () => {
               .filter((booking) => booking.userId === user?._id)
               .map((booking, index) => {
                 const matchedOffice = officeSpaces.find(
-                  (office) => office._id === booking.officeId
+                  (office) => office._id === booking.officeId,
                 );
 
                 return (
@@ -99,7 +98,7 @@ const MyBooking = () => {
                           {formatTimeRange(
                             booking.date,
                             booking.startTime,
-                            booking.duration
+                            booking.duration,
                           )}
                         </p>
                       </div>

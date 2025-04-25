@@ -97,7 +97,7 @@ const MeetingRooms = () => {
           </div>
         </div>
       </div>
-<RentSteps/>
+      <RentSteps />
       {/* Boxes Component positioned below */}
       <div className="relative z-0 mt-20">
         <Offices />

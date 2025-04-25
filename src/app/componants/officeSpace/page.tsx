@@ -26,7 +26,7 @@ export interface OfficeSpace {
 }
 
 const OfficeSpaces: React.FC = () => {
-  const { officeSpaces,filteredOfficeSpaces, loading } = useOfficeSpaces();
+  const { officeSpaces, filteredOfficeSpaces, loading } = useOfficeSpaces();
   const [selected, setSelected] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
@@ -74,7 +74,7 @@ const OfficeSpaces: React.FC = () => {
 
   const handleCityChange = (city: string) => {
     setSelectedCities((prev) =>
-      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city]
+      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city],
     );
   };
 
@@ -82,7 +82,7 @@ const OfficeSpaces: React.FC = () => {
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
-        : [...prev, category]
+        : [...prev, category],
     );
   };
 
@@ -92,27 +92,25 @@ const OfficeSpaces: React.FC = () => {
   const displaySpaces = pageFilteredSpaces.filter((space) => {
     const cityMatch =
       selectedCities.length === 0 || selectedCities.includes(space.city);
-  
+
     const categoryMatch =
       selectedCategories.length === 0 ||
       (space.category &&
         selectedCategories.some((cat) =>
           Array.isArray(space.category)
             ? space.category.includes(cat)
-            : space.category === cat
+            : space.category === cat,
         ));
-  
+
     const isApproved = space.isAdminApprove === true;
-  
+
     const isInFilteredOfficeSpaces = filteredOfficeSpaceIds.includes(space._id);
-  
+
     return cityMatch && categoryMatch && isApproved && isInFilteredOfficeSpaces;
   });
-  
 
   const visibleSpaces = showAll ? displaySpaces : displaySpaces.slice(0, 3);
   if (loading) return <Loader />;
-
 
 
   return (
@@ -205,7 +203,6 @@ const OfficeSpaces: React.FC = () => {
                       src={space.thumbnailImage}
                       alt={space.officeSpaceName}
                       className="w-full lg:h-[300px] sm:h-auto  object-cover"
-
                       width={300}
                       height={200}
                     />

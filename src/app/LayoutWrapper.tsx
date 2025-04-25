@@ -1,1 +1,5 @@
-export default function LayoutWrapper ({children}:{children:React.ReactNode}){}
+export default function LayoutWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {}

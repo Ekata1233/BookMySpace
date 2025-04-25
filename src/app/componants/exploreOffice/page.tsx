@@ -20,7 +20,10 @@ const ExploreOffice = () => {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {offices.map((office, index) => (
-          <div key={index} className="relative bg-gray-200 group overflow-hidden">
+          <div
+            key={index}
+            className="relative bg-gray-200 group overflow-hidden"
+          >
             <Image
               src={office.image}
               alt={office.name}

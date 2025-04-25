@@ -2,7 +2,8 @@ import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/user";
 import { connectToDatabase } from "@/lib/db";
 
-const SECRET_KEY = process.env.JWT_SECRET as string;if (!SECRET_KEY) {
+const SECRET_KEY = process.env.JWT_SECRET as string;
+if (!SECRET_KEY) {
   throw new Error("JWT_SECRET is not defined in environment variables");
 }
 
@@ -34,15 +35,20 @@ export class AuthService {
       // if (!user) return { error: "User not found", status: 404 };
 
       const isValidPassword = await user.comparePassword(password);
-      if (!isValidPassword) return { error: "Invalid credentials", status: 401 };
+      if (!isValidPassword)
+        return { error: "Invalid credentials", status: 401 };
 
       const token = jwt.sign(
         { id: user._id, email: user.email, role: user.role },
         SECRET_KEY,
-        { expiresIn: "1h" }
+        { expiresIn: "1h" },
       );
 
-      return { message: "Login successful", token, user: { name: user.name, email: user.email, id: user._id } };
+      return {
+        message: "Login successful",
+        token,
+        user: { name: user.name, email: user.email, id: user._id },
+      };
     } catch (error) {
       // return { error: "Internal Server Error 7", status: 500 };
     }
@@ -50,7 +56,7 @@ export class AuthService {
   static async getAllUsers() {
     try {
       await connectToDatabase();
-  
+
       const users = await User.find({}, { password: 0 }); // Exclude password field
       return { users, status: 200 };
     } catch (error) {
@@ -58,5 +64,4 @@ export class AuthService {
       return { error: "Internal Server Error 8", status: 500 };
     }
   }
-  
 }

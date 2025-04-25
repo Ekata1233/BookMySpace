@@ -6,7 +6,7 @@ const ExploreOfficeSchema = new mongoose.Schema(
     address: { type: String, required: true },
     image: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.ExploreOffice ||

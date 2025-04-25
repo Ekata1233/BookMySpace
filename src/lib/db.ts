@@ -22,11 +22,13 @@ export async function connectToDatabase() {
   //   });
   // }
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI!, {
-      dbName: "BookMySpace",
-    }).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
+    cached.promise = mongoose
+      .connect(MONGODB_URI!, {
+        dbName: "BookMySpace",
+      })
+      .then((mongooseInstance) => {
+        return mongooseInstance;
+      });
   }
   cached.conn = await cached.promise;
   (global as any).mongoose = cached;
@@ -36,10 +38,10 @@ export default async function testConnection() {
   try {
     // Attempt to connect to the database
     await connectToDatabase();
-    console.log('MongoDB connection successful!');
-    return { success: true, message: 'Connection successful!' };
+    console.log("MongoDB connection successful!");
+    return { success: true, message: "Connection successful!" };
   } catch (error) {
-    console.error('MongoDB connection error:', error);
-    return { success: false, message: 'Connection failed!' };
+    console.error("MongoDB connection error:", error);
+    return { success: false, message: "Connection failed!" };
   }
 }

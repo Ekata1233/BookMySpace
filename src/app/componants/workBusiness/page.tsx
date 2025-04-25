@@ -16,20 +16,21 @@ const WorkBusiness = () => {
 
   return (
     <div>
-       <div className="mx-auto px-4 pt-10 pb-6">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center pt-12">
-              Work Wherever Business Takes You
-              </h1>
-              <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-500 text-center font-semibold py-5">
-              Workspaces that move with your business—flexible, global, and ready when you are.
-              </h1>
-             
-            </div>
+      <div className="mx-auto px-4 pt-10 pb-6">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center pt-12">
+          Work Wherever Business Takes You
+        </h1>
+        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-500 text-center font-semibold py-5">
+          Workspaces that move with your business—flexible, global, and ready
+          when you are.
+        </h1>
+      </div>
       {workBusinessData.map((item, index) => (
         <div
           key={item._id}
-          className={`container mx-auto px-4 sm:px-6 lg:px-8 py-8 ${index === 1 ? " sm:my-0" : ""
-            }`}
+          className={`container mx-auto px-4 sm:px-6 lg:px-8 py-8 ${
+            index === 1 ? " sm:my-0" : ""
+          }`}
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
             {index % 2 === 0 ? (
@@ -50,7 +51,6 @@ const WorkBusiness = () => {
                     src={item.imageBottom}
                     alt="Bottom Image"
                     className="w-[280px] h-[280px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] shadow-lg transform -translate-x-11 sm:translate-x-4 md:-translate-x-7 lg:-translate-x-20 xl:-translate-x-10 translate-y-30 md:translate-y-20 z-10"
-
                   />
                 </div>
 
@@ -66,13 +66,15 @@ const WorkBusiness = () => {
                     </p>
                   </div>
                   <div className="flex text-4xl mt-4 mb-4 text-gray-600">
-                    <LuLaptopMinimalCheck className="my-2 me-3"size={55} />
+                    <LuLaptopMinimalCheck className="my-2 me-3" size={55} />
                     <p className="text-sm sm:text-base md:text-lg leading-relaxed">
                       {item.description2}
                     </p>
                   </div>
                   <div className="flex my-4 text-sm text-[#6BB7BE]">
-                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">Contact Us</p>
+                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">
+                      Contact Us
+                    </p>
                     <FaArrowRight className="m-2" />
                   </div>
                 </div>
@@ -95,7 +97,6 @@ const WorkBusiness = () => {
                     src={item.imageBottom}
                     alt="Bottom Image"
                     className="w-[280px] h-[280px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] shadow-lg transform -translate-x-11 sm:translate-x-4 md:-translate-x-7 lg:-translate-x-20 xl:-translate-x-10 translate-y-30 md:translate-y-20 z-10"
-
                   />
                 </div>
 
@@ -117,15 +118,15 @@ const WorkBusiness = () => {
                     </p>
                   </div>
                   <div className="flex my-4 text-sm text-[#6BB7BE]">
-                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">Contact Us</p>
+                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">
+                      Contact Us
+                    </p>
                     <FaArrowRight className="m-2" />
                   </div>
                 </div>
               </>
             )}
           </div>
-
-
         </div>
       ))}
     </div>

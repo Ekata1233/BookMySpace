@@ -5,7 +5,7 @@ import { LuLaptopMinimalCheck } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
 
 const ThirdWorkBusiness = () => {
-  return ( 
+  return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 mb-28 sm:mb-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
         {/* Text Section */}

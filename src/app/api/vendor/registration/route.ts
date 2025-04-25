@@ -46,12 +46,18 @@ export async function POST(req: NextRequest) {
       !password ||
       agreed === undefined
     ) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 },
+      );
     }
 
     const existingVendor = await Vendor.findOne({ workEmail });
     if (existingVendor) {
-      return NextResponse.json({ error: "Vendor with this email already exists" }, { status: 409 });
+      return NextResponse.json(
+        { error: "Vendor with this email already exists" },
+        { status: 409 },
+      );
     }
 
     const newVendor = new Vendor({
@@ -80,7 +86,7 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign(
       { id: savedVendor._id, email: savedVendor.workEmail },
       JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     const { password: _, ...vendorData } = savedVendor.toObject();
@@ -88,6 +94,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ token, vendor: vendorData }, { status: 201 });
   } catch (error: any) {
     console.error("🔴 Registration Error:", error.message || error);
-    return NextResponse.json({ error: "Internal Server Error 5" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error 5" },
+      { status: 500 },
+    );
   }
 }

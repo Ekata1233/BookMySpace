@@ -24,8 +24,8 @@ interface SidebarProps {
   setOpenSpaces: (value: boolean) => void;
   openBookings: boolean;
   setOpenBookings: (value: boolean) => void;
-  openReport: boolean;
-  setOpenReport: (value: boolean) => void;
+  openReport: boolean; // ✅ Add this
+  setOpenReport: (value: boolean) => void; // ✅ And this
   openAccount: boolean;
   setOpenAccount: (value: boolean) => void;
 }
@@ -154,6 +154,11 @@ const Sidebar = ({
             <Settings className="w-6 h-6" />
             Account
             <span className="ml-auto">
+              {openAccount ? (
+                <ChevronUp className="w-4 h-4" />
+              ) : (
+                <ChevronDown className="w-4 h-4" />
+              )}
               {openAccount ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </span>
           </button>
@@ -163,7 +168,8 @@ const Sidebar = ({
               <Link
                 href="/vendor/accountManagement/accountInfo"
                 className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
-                  isActive("/dashboard/accountManagement/accountInfo") && "text-[#6bb7be]"
+                  isActive("/dashboard/accountManagement/accountInfo") &&
+                  "text-[#6bb7be]"
                 }`}
               >
                 <Landmark className="w-5 h-5" />
@@ -173,7 +179,8 @@ const Sidebar = ({
               <Link
                 href="/vendor/accountManagement/bankInfo"
                 className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
-                  isActive("/dashboard/accountManagement/bankInfo") && "text-[#6bb7be]"
+                  isActive("/dashboard/accountManagement/bankInfo") &&
+                  "text-[#6bb7be]"
                 }`}
               >
                 <Banknote className="w-5 h-5" />

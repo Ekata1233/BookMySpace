@@ -95,11 +95,11 @@ const TimeCalendar = () => {
         hour12: false,
       });
       timeOptions.push(formatted);
-      current.setHours(current.getHours() + 1);      
+      current.setHours(current.getHours() + 1);
     }
   }
 
-  const userId = userInfo?._id;
+  const userId = userInfo?.id;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -138,7 +138,7 @@ const TimeCalendar = () => {
     const bookingDate = date?.toLocaleDateString("en-CA");
     const startTimeFormatted = `${selectedHour.padStart(
       2,
-      "0"
+      "0",
     )}:${selectedMinute}`;
 
     const bookingData = {
@@ -285,8 +285,8 @@ const TimeCalendar = () => {
                         isBooked
                           ? "bg-red-400 text-white cursor-not-allowed"
                           : time.startsWith(selectedHour)
-                          ? "bg-[#6BB7BE] text-white cursor-pointer"
-                          : "hover:bg-gray-100"
+                            ? "bg-[#6BB7BE] text-white cursor-pointer"
+                            : "hover:bg-gray-100"
                       }`}
                       onClick={() => {
                         if (!isBooked) {

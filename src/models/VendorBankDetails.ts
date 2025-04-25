@@ -50,11 +50,11 @@ const VendorBankDetailsSchema = new mongoose.Schema(
       default: "Pending",
     },
     isDeleted: {
-        type: Boolean,
-        default: false, // default is false, indicating the record is not deleted
-      }
+      type: Boolean,
+      default: false, // default is false, indicating the record is not deleted
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.models.VendorBankDetails ||

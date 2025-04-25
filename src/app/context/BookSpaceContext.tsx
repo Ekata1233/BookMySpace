@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import axios from "axios";
 
 // Define the shape of a single booking
@@ -23,7 +29,9 @@ interface BookSpaceContextType {
 }
 
 // Create the context
-const BookSpaceContext = createContext<BookSpaceContextType | undefined>(undefined);
+const BookSpaceContext = createContext<BookSpaceContextType | undefined>(
+  undefined,
+);
 
 // Provider component
 export const BookSpaceProvider = ({ children }: { children: ReactNode }) => {
@@ -32,7 +40,9 @@ export const BookSpaceProvider = ({ children }: { children: ReactNode }) => {
   // Fetch all bookings
   const fetchBookings = async () => {
     try {
-      const response = await axios.get<{ success: boolean; data: BookSpace[] }>("/api/book");
+      const response = await axios.get<{ success: boolean; data: BookSpace[] }>(
+        "/api/book",
+      );
       setBookings(response.data.data);
     } catch (error) {
       console.error("Error fetching bookings:", error);
@@ -42,7 +52,10 @@ export const BookSpaceProvider = ({ children }: { children: ReactNode }) => {
   // Add a new booking
   const addBooking = async (newBooking: BookSpace) => {
     try {
-      const response = await axios.post<{ success: boolean; data: BookSpace }>("/api/book", newBooking);
+      const response = await axios.post<{ success: boolean; data: BookSpace }>(
+        "/api/book",
+        newBooking,
+      );
       setBookings((prev) => [...prev, response.data.data]);
     } catch (error) {
       console.error("Error adding booking:", error);
@@ -54,7 +67,9 @@ export const BookSpaceProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <BookSpaceContext.Provider value={{ bookings, addBooking, refreshBookings: fetchBookings }}>
+    <BookSpaceContext.Provider
+      value={{ bookings, addBooking, refreshBookings: fetchBookings }}
+    >
       {children}
     </BookSpaceContext.Provider>
   );

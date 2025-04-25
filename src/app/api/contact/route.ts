@@ -9,12 +9,13 @@ export async function POST(req: Request) {
   await testConnection();
 
   try {
-    const { name, email, company, phone, requirement, inquiry } = await req.json();
+    const { name, email, company, phone, requirement, inquiry } =
+      await req.json();
 
     if (!name || !email || !phone || !requirement || !inquiry) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,12 +31,12 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { success: true, data: newContact },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400 }
+      { status: 400 },
     );
   }
 }
@@ -45,13 +46,13 @@ export async function GET() {
     const contacts = await Contact.find({});
     return NextResponse.json(
       { success: true, data: contacts },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.error("Error:", error.message);
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

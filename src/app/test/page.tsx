@@ -1,18 +1,15 @@
 "use client";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const TestConnection = () => {
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const checkConnection = async () => {
       try {
-
-
-        
-        const response = await fetch('/api/route');
+        const response = await fetch("/api/route");
 
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status}`);
@@ -21,7 +18,7 @@ const TestConnection = () => {
         const data = await response.json();
         setStatus(data.message);
       } catch (error: any) {
-        setStatus('Error connecting to database');
+        setStatus("Error connecting to database");
         setError(error.message);
       } finally {
         setLoading(false);

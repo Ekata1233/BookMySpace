@@ -28,15 +28,13 @@ const OurAmenites = () => {
       <div className="px-8 sm:px-12 md:px-22 lg:px-32 xl:px-60">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-            
-
             <div className="flex flex-col items-center text-center my-3">
-              <PiOfficeChair  className="text-6xl text-[#6BB7BE]" />
+              <PiOfficeChair className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Work Desk</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <PiBuildingOffice   className="text-6xl text-[#6BB7BE]" />
+              <PiBuildingOffice className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Private Cabins</p>
             </div>
 
@@ -46,47 +44,47 @@ const OurAmenites = () => {
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <FaWifi  className="text-6xl text-[#6BB7BE]" />
+              <FaWifi className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">High Speed Internet</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <FiUsers  className="text-6xl text-[#6BB7BE]" />
+              <FiUsers className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Conference Rooms</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <TiMessages  className="text-6xl text-[#6BB7BE]" />
+              <TiMessages className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Discussion Rooms</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <IoWomanOutline  className="text-6xl text-[#6BB7BE]" />
+              <IoWomanOutline className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Office Assistance</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <FaUsersViewfinder  className="text-6xl text-[#6BB7BE]" />
+              <FaUsersViewfinder className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Meeting Rooms</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <LuCable  className="text-6xl text-[#6BB7BE]" />
+              <LuCable className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Power Backup</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <GrShieldSecurity  className="text-6xl text-[#6BB7BE]" />
+              <GrShieldSecurity className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Security</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <LiaBroomSolid   className="text-6xl text-[#6BB7BE]" />
+              <LiaBroomSolid className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Housekeeping</p>
             </div>
 
             <div className="flex flex-col items-center text-center my-3">
-              <TbToolsKitchen2  className="text-6xl text-[#6BB7BE]" />
+              <TbToolsKitchen2 className="text-6xl text-[#6BB7BE]" />
               <p className="font-semibold my-2">Pantry</p>
             </div>
           </div>

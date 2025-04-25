@@ -19,7 +19,7 @@ const UserSchema = new Schema<IUser>(
     phone: { type: String, required: true },
     address: { type: String, required: true },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Hash password before saving
@@ -30,8 +30,11 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Compare password method
-UserSchema.methods.comparePassword = async function (candidatePassword: string) {
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string,
+) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-export default mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+export default mongoose.models.User ||
+  mongoose.model<IUser>("User", UserSchema);

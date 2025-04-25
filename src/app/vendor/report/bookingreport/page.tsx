@@ -35,15 +35,19 @@ const BookingTablePage = () => {
   const today = new Date().setHours(0, 0, 0, 0);
   const pastBookings = bookings.filter((booking) => new Date(booking.date).getTime() < today);
 
+  // Corrected to use _id instead of id
   const filteredBookings = pastBookings.filter((booking) => {
-    const bookingId = booking.id || '';
+    const bookingId = booking._id || ''; // Using _id instead of id
     return bookingId.toLowerCase().includes(search.toLowerCase());
   });
 
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
+  const currentBookings = filteredBookings.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -53,18 +57,21 @@ const BookingTablePage = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredBookings.map((b, index) => ({
         SL: index + 1,
-        'Booking ID': b.id,
+        'Booking ID': b._id, // Corrected to _id
         'Customer Info': getUserNameById(b.userId),
-        'Booking Amount': b.amount,
+        'Booking Amount': b.totalPay, // Corrected to match displayed field
       }))
     );
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Bookings');
-    XLSX.writeFile(wb, 'bookings.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, "Bookings");
+    XLSX.writeFile(wb, "bookings.xlsx");
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen mt-42" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+    <div
+      className="flex flex-col md:flex-row min-h-screen mt-42"
+      style={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}
+    >
       <Sidebar
         sidebarOpen={sidebarOpen}
         openSpaces={openSpaces}
@@ -91,7 +98,7 @@ const BookingTablePage = () => {
           <button
             onClick={handleDownload}
             className="px-4 py-2 rounded-none text-white"
-            style={{ backgroundColor: '#6BB7BE' }}
+            style={{ backgroundColor: "#6BB7BE" }}
           >
             Download Excel
           </button>
@@ -99,7 +106,7 @@ const BookingTablePage = () => {
 
         <div className="overflow-x-auto bg-white shadow-md rounded-none">
           <table className="min-w-full table-auto">
-            <thead style={{ backgroundColor: '#6BB7BE' }}>
+            <thead style={{ backgroundColor: "#6BB7BE" }}>
               <tr className="text-white text-left">
                 <th className="px-6 py-3 rounded-none">SL</th>
                 <th className="px-6 py-3 rounded-none">Booking ID</th>
@@ -116,9 +123,9 @@ const BookingTablePage = () => {
                   return (
                     <tr key={booking._id} className="border-t hover:bg-gray-100">
                       <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
-                      <td className="px-6 py-4 rounded-none">{booking._id}</td>
+                      <td className="px-6 py-4 rounded-none">{booking._id}</td> {/* Corrected to _id */}
                       <td className="px-6 py-4 rounded-none">{customerName}</td>
-                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td>
+                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td> {/* Corrected to totalPay */}
                       <td className="px-6 py-4 rounded-none">
                         {office ? `${office.officeSpaceName} (${office.category})` : 'N/A'}
                       </td>

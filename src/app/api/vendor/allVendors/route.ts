@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import testConnection from "@/lib/db";
-import User from "@/models/user";
+import vendor from "@/models/vendor";
 
 testConnection();
 
@@ -12,7 +12,7 @@ const corsHeaders = {
 
 export async function GET() {
   try {
-    const users = await User.find({}, "-password");
+    const users = await vendor.find({}, "-password");
     return NextResponse.json(
       { success: true, data: users },
       { status: 200, headers: corsHeaders }

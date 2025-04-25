@@ -9,9 +9,9 @@ import { existsSync } from "fs";
 testConnection();
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 // ✅ Handle preflight requests
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     if (!officeSpaceName || !city || !description || isNaN(rate)) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -104,12 +104,12 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { success: true, data: newOfficeSpace },
-      { status: 201, headers: corsHeaders }
+      { status: 201, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }
@@ -119,13 +119,13 @@ export async function GET() {
     const newOfficeSpace = await officeSpaces.find({});
     return NextResponse.json(
       { success: true, data: newOfficeSpace },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     console.error("Error:", error.message);
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders },
     );
   }
 }

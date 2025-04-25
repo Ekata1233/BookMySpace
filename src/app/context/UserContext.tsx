@@ -11,15 +11,44 @@ interface User {
     role: "user" | "vendor";
 }
 
+interface Vendor {
+    _id: string;
+    companyName: string;
+    workEmail: string;
+    phone: string;
+    website?: string;
+    businessType: "Individual" | "Company";
+    address: string;
+    message: string;
+    logo: string;
+    contactName: string;
+    contactMobile: number;
+    contactEmail: string;
+    documentType: "GST" | "License" | "Other";
+    documentNo: number;
+    documentImage: string;
+    agreed: boolean;
+    userId?: string;
+    paid?: boolean;
+    order_id?: string;
+    amount?: number;
+    status?: string;
+    createdAt?: string;
+    updatedAt?: string;
+  }
+
 interface UserContextType {
     users: User[];
     refreshUsers: () => Promise<void>;
+    vendors: Vendor[];
+    refreshVendors: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [users, setUsers] = useState<User[]>([]);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
 
     const fetchUsers = async () => {
         try {
@@ -30,12 +59,23 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    useEffect(() => {
+    const fetchVendors = async () => {
+        try {
+          const response = await axios.get<{ success: boolean; data: Vendor[] }>("/api/vendor/allVendors");
+          setVendors(response.data.data);
+        } catch (error) {
+          console.error("Error fetching vendors:", error);
+        }
+      };
+    
+      useEffect(() => {
         fetchUsers();
+        fetchVendors();
     }, []);
+    
 
     return (
-        <UserContext.Provider value={{ users, refreshUsers: fetchUsers }}>
+        <UserContext.Provider value={{ users, refreshUsers: fetchUsers,vendors, refreshVendors: fetchVendors }}>
             {children}
         </UserContext.Provider>
     );

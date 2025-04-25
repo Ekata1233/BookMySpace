@@ -19,13 +19,33 @@ const MyAccount = () => {
   const renderContent = () => {
     switch (activeTab) {
       case "personal":
-        return <div className="text-sm sm:text-base"> <PersonalInfo />  </div>;
+        return (
+          <div className="text-sm sm:text-base">
+            {" "}
+            <PersonalInfo />{" "}
+          </div>
+        );
       case "bookings":
-        return <div className="text-sm sm:text-base"> <MyBooking/>  </div>;
+        return (
+          <div className="text-sm sm:text-base">
+            {" "}
+            <MyBooking />{" "}
+          </div>
+        );
       case "appointments":
-        return <div className="text-sm sm:text-base">  <UpcomingAppointments/> </div>;
+        return (
+          <div className="text-sm sm:text-base">
+            {" "}
+            <UpcomingAppointments />{" "}
+          </div>
+        );
       case "payments":
-        return <div className="text-sm sm:text-base"> <PaymentHistory/>  </div>;
+        return (
+          <div className="text-sm sm:text-base">
+            {" "}
+            <PaymentHistory />{" "}
+          </div>
+        );
       default:
         return null;
     }
@@ -34,8 +54,8 @@ const MyAccount = () => {
   return (
     <div className="mt-50 mb-8 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 max-w-screen-xl mx-auto w-full">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 my-5">
-          MY ACCOUNT
-        </h1>
+        MY ACCOUNT
+      </h1>
 
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 sm:gap-8 mb-6 border-b border-gray-300">
@@ -55,9 +75,7 @@ const MyAccount = () => {
       </div>
 
       {/* Tab Content */}
-      <div className="w-full  rounded-none p-4 sm:p-6">
-        {renderContent()}
-      </div>
+      <div className="w-full  rounded-none p-4 sm:p-6">{renderContent()}</div>
     </div>
   );
 };

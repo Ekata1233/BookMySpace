@@ -12,6 +12,7 @@ import { ExploreOfficeProvider } from "./context/ExploreOfficeContext";
 import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
 import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
+import { CountProvider } from "./context/CountContext";
 import { UserProvider } from "./context/UserContext";
 import { BookingProvider } from "./context/BookingContext";
 
@@ -41,15 +42,11 @@ export default function RootLayout({
                   <WorkBusinessProvider>
                     <ExploreOfficeProvider>
                       <VendorProvider>
-                        <BookingProvider>
-                        <VendorBankDetailsProvider>
-                          <UserProvider>
-                            <Header />
+                        <CountProvider>
+                          <VendorBankDetailsProvider> <UserProvider><Header />
                             {children}
-                            <Footer />
-                          </UserProvider>
-                        </VendorBankDetailsProvider>
-                        </BookingProvider>
+                            <Footer /></UserProvider></VendorBankDetailsProvider></CountProvider>
+
                       </VendorProvider>
                     </ExploreOfficeProvider>
                   </WorkBusinessProvider>
