@@ -3,12 +3,12 @@ import mongoose from "mongoose";
 const bookSpaceSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User", 
+    ref: "User",
     required: true,
   },
   officeId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "OfficeSpace", 
+    ref: "OfficeSpace",
     required: true,
   },
   date: {
@@ -16,17 +16,17 @@ const bookSpaceSchema = new mongoose.Schema({
     required: true,
   },
   startTime: {
-    type: String, 
+    type: String,
     required: true,
   },
   duration: {
-    type: Number, 
+    type: Number,
     required: true,
     min: 1,
-    max: 8, 
+    max: 8,
   },
   totalPay: {
-    type : Number,
+    type: Number,
     required: true,
   },
   createdAt: {
@@ -35,6 +35,7 @@ const bookSpaceSchema = new mongoose.Schema({
   },
 });
 
-const BookSpace = mongoose.models.BookSpace || mongoose.model("BookSpace", bookSpaceSchema);
+const BookSpace =
+  mongoose.models.BookSpace || mongoose.model("BookSpace", bookSpaceSchema);
 
 export default BookSpace;

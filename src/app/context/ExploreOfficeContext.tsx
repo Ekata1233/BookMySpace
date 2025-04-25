@@ -19,7 +19,11 @@ interface ContextType {
 
 const ExploreOfficeContext = createContext<ContextType | null>(null);
 
-export const ExploreOfficeProvider = ({ children }: { children: React.ReactNode }) => {
+export const ExploreOfficeProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [offices, setOffices] = useState<Office[]>([]);
 
   const fetchOffices = async () => {
@@ -33,7 +37,10 @@ export const ExploreOfficeProvider = ({ children }: { children: React.ReactNode 
 
   const addOffice = async (formData: FormData) => {
     try {
-      const res = await axios.post<{ data: Office }>("/api/explore-office", formData);
+      const res = await axios.post<{ data: Office }>(
+        "/api/explore-office",
+        formData,
+      );
       setOffices((prev) => [...prev, res.data.data]);
     } catch (error) {
       console.error("Failed to add office:", error);
@@ -42,8 +49,13 @@ export const ExploreOfficeProvider = ({ children }: { children: React.ReactNode 
 
   const updateOffice = async (id: string, data: Office) => {
     try {
-      const res = await axios.put<{ data: Office }>(`/api/explore-office/${id}`, data);
-      setOffices((prev) => prev.map((item) => (item._id === id ? res.data.data : item)));
+      const res = await axios.put<{ data: Office }>(
+        `/api/explore-office/${id}`,
+        data,
+      );
+      setOffices((prev) =>
+        prev.map((item) => (item._id === id ? res.data.data : item)),
+      );
     } catch (error) {
       console.error("Failed to update office:", error);
     }
@@ -73,6 +85,9 @@ export const ExploreOfficeProvider = ({ children }: { children: React.ReactNode 
 
 export const useExploreOffice = () => {
   const context = useContext(ExploreOfficeContext);
-  if (!context) throw new Error("useExploreOffice must be used within ExploreOfficeProvider");
+  if (!context)
+    throw new Error(
+      "useExploreOffice must be used within ExploreOfficeProvider",
+    );
   return context;
 };

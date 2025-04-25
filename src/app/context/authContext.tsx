@@ -60,19 +60,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-  
+
     const data = await res.json();
-  
+
     if (res.ok) {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("token", data.token); 
+      localStorage.setItem("token", data.token);
       router.push("/");
     } else {
       alert(data.error);
     }
   };
-  
 
   // Logout function
   const logout = () => {
@@ -81,13 +80,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("token");
     router.push("/auth");
   };
-  
-
 
   const getUser = async () => {
     const token = localStorage.getItem("token");
     if (!token) return;
-  
+
     const res = await fetch("/api/auth/me", {
       method: "GET",
       headers: {
@@ -95,7 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     if (res.ok) {
       const data = await res.json();
       setUser(data.user);
@@ -105,7 +102,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       logout(); // optional: clear token if invalid
     }
   };
-  
 
   useEffect(() => {
     getUser();

@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import Box from '@/models/box';
-import { connectToDatabase } from '../../../../lib/db';
+import { NextResponse } from "next/server";
+import Box from "@/models/box";
+import { connectToDatabase } from "../../../../lib/db";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 // ✅ Handle preflight
@@ -21,23 +21,25 @@ export async function PUT(request: Request, context: any) {
     const { id } = context.params;
     const updateData = await request.json();
 
-    const updatedBox = await Box.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedBox = await Box.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
 
     if (!updatedBox) {
       return NextResponse.json(
-        { success: false, message: 'Box not found' },
-        { status: 404, headers: corsHeaders }
+        { success: false, message: "Box not found" },
+        { status: 404, headers: corsHeaders },
       );
     }
 
     return NextResponse.json(
       { success: true, data: updatedBox },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }
@@ -52,24 +54,24 @@ export async function DELETE(request: Request, context: any) {
     const deletedBox = await Box.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true }
+      { new: true },
     );
 
     if (!deletedBox) {
       return NextResponse.json(
-        { success: false, message: 'Box not found' },
-        { status: 404, headers: corsHeaders }
+        { success: false, message: "Box not found" },
+        { status: 404, headers: corsHeaders },
       );
     }
 
     return NextResponse.json(
       { success: true, data: deletedBox },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }

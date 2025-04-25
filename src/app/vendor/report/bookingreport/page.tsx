@@ -1,10 +1,10 @@
-'use client';
-import { useState } from 'react';
-import * as XLSX from 'xlsx';
-import Sidebar from '../../sidebar/page';
+"use client";
+import { useState } from "react";
+import * as XLSX from "xlsx";
+import Sidebar from "../../sidebar/page";
 
 const BookingTablePage = () => {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
@@ -14,26 +14,29 @@ const BookingTablePage = () => {
   const itemsPerPage = 6;
 
   const bookings = [
-    { id: 'B001', customer: 'John Doe', amount: 1200 },
-    { id: 'B002', customer: 'Jane Smith', amount: 950 },
-    { id: 'B003', customer: 'Alice Johnson', amount: 1500 },
-    { id: 'B004', customer: 'Mike Brown', amount: 1100 },
-    { id: 'B005', customer: 'Sara Davis', amount: 900 },
-    { id: 'B006', customer: 'Tom Wilson', amount: 1300 },
-    { id: 'B007', customer: 'Emma Watson', amount: 1050 },
-    { id: 'B008', customer: 'Chris Lee', amount: 1400 },
-    { id: 'B009', customer: 'Olivia Clark', amount: 1250 },
-    { id: 'B010', customer: 'Liam Miller', amount: 1350 },
+    { id: "B001", customer: "John Doe", amount: 1200 },
+    { id: "B002", customer: "Jane Smith", amount: 950 },
+    { id: "B003", customer: "Alice Johnson", amount: 1500 },
+    { id: "B004", customer: "Mike Brown", amount: 1100 },
+    { id: "B005", customer: "Sara Davis", amount: 900 },
+    { id: "B006", customer: "Tom Wilson", amount: 1300 },
+    { id: "B007", customer: "Emma Watson", amount: 1050 },
+    { id: "B008", customer: "Chris Lee", amount: 1400 },
+    { id: "B009", customer: "Olivia Clark", amount: 1250 },
+    { id: "B010", customer: "Liam Miller", amount: 1350 },
   ];
 
   const filteredBookings = bookings.filter((booking) =>
-    booking.id.toLowerCase().includes(search.toLowerCase())
+    booking.id.toLowerCase().includes(search.toLowerCase()),
   );
 
   const totalPages = Math.ceil(filteredBookings.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentBookings = filteredBookings.slice(indexOfFirstItem, indexOfLastItem);
+  const currentBookings = filteredBookings.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -43,18 +46,21 @@ const BookingTablePage = () => {
     const ws = XLSX.utils.json_to_sheet(
       filteredBookings.map((b, index) => ({
         SL: index + 1,
-        'Booking ID': b.id,
-        'Customer Info': b.customer,
-        'Booking Amount': b.amount,
-      }))
+        "Booking ID": b.id,
+        "Customer Info": b.customer,
+        "Booking Amount": b.amount,
+      })),
     );
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Bookings');
-    XLSX.writeFile(wb, 'bookings.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, "Bookings");
+    XLSX.writeFile(wb, "bookings.xlsx");
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen mt-42" style={{ backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+    <div
+      className="flex flex-col md:flex-row min-h-screen mt-42"
+      style={{ backgroundColor: "#f5f5f5", minHeight: "100vh" }}
+    >
       <Sidebar
         sidebarOpen={sidebarOpen}
         openSpaces={openSpaces}
@@ -81,7 +87,7 @@ const BookingTablePage = () => {
           <button
             onClick={handleDownload}
             className="px-4 py-2 rounded-none text-white"
-            style={{ backgroundColor: '#6BB7BE' }}
+            style={{ backgroundColor: "#6BB7BE" }}
           >
             Download Excel
           </button>
@@ -89,7 +95,7 @@ const BookingTablePage = () => {
 
         <div className="overflow-x-auto bg-white shadow-md rounded-none">
           <table className="min-w-full table-auto">
-            <thead style={{ backgroundColor: '#6BB7BE' }}>
+            <thead style={{ backgroundColor: "#6BB7BE" }}>
               <tr className="text-white text-left">
                 <th className="px-6 py-3 rounded-none">SL</th>
                 <th className="px-6 py-3 rounded-none">Booking ID</th>
@@ -101,15 +107,24 @@ const BookingTablePage = () => {
               {currentBookings.length > 0 ? (
                 currentBookings.map((booking, index) => (
                   <tr key={booking.id} className="border-t hover:bg-gray-100">
-                    <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
+                    <td className="px-6 py-4 rounded-none">
+                      {indexOfFirstItem + index + 1}
+                    </td>
                     <td className="px-6 py-4 rounded-none">{booking.id}</td>
-                    <td className="px-6 py-4 rounded-none">{booking.customer}</td>
-                    <td className="px-6 py-4 rounded-none">${booking.amount}</td>
+                    <td className="px-6 py-4 rounded-none">
+                      {booking.customer}
+                    </td>
+                    <td className="px-6 py-4 rounded-none">
+                      ${booking.amount}
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="text-center px-6 py-4 text-gray-500 rounded-none">
+                  <td
+                    colSpan={4}
+                    className="text-center px-6 py-4 text-gray-500 rounded-none"
+                  >
                     No bookings found.
                   </td>
                 </tr>
@@ -126,7 +141,9 @@ const BookingTablePage = () => {
                   key={i + 1}
                   onClick={() => handlePageChange(i + 1)}
                   className={`px-3 py-1 border rounded-none ${
-                    currentPage === i + 1 ? 'bg-[#6BB7BE] text-white' : 'bg-white text-gray-700'
+                    currentPage === i + 1
+                      ? "bg-[#6BB7BE] text-white"
+                      : "bg-white text-gray-700"
                   }`}
                 >
                   {i + 1}

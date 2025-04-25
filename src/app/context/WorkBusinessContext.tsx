@@ -1,8 +1,14 @@
 // src/app/context/WorkBusinessContext.tsx
-'use client';
+"use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import axios from 'axios';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
+import axios from "axios";
 
 export interface WorkBusinessType {
   _id: string;
@@ -21,27 +27,30 @@ interface WorkBusinessContextProps {
   deleteWorkBusiness: (id: string) => Promise<void>;
 }
 
-const WorkBusinessContext = createContext<WorkBusinessContextProps | undefined>(undefined);
+const WorkBusinessContext = createContext<WorkBusinessContextProps | undefined>(
+  undefined,
+);
 
 export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
-  const [workBusinessData, setWorkBusinessData] = useState<WorkBusinessType[]>([]);
+  const [workBusinessData, setWorkBusinessData] = useState<WorkBusinessType[]>(
+    [],
+  );
 
   const fetchWorkBusiness = async () => {
     try {
-      const res = await axios.get('/api/workbusiness');
+      const res = await axios.get("/api/workbusiness");
       setWorkBusinessData(res.data);
     } catch (error) {
-      console.error('Failed to fetch work business:', error);
+      console.error("Failed to fetch work business:", error);
     }
   };
 
-
   const createWorkBusiness = async (data: FormData) => {
     try {
-      await axios.post('/api/workbusiness', data);
+      await axios.post("/api/workbusiness", data);
       fetchWorkBusiness();
     } catch (error) {
-      console.error('Failed to create work business:', error);
+      console.error("Failed to create work business:", error);
     }
   };
 
@@ -50,7 +59,7 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
       await axios.put(`/api/workbusiness/${id}`, data);
       fetchWorkBusiness();
     } catch (error) {
-      console.error('Failed to update work business:', error);
+      console.error("Failed to update work business:", error);
     }
   };
 
@@ -59,7 +68,7 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
       await axios.delete(`/api/workbusiness/${id}`);
       fetchWorkBusiness();
     } catch (error) {
-      console.error('Failed to delete work business:', error);
+      console.error("Failed to delete work business:", error);
     }
   };
   useEffect(() => {
@@ -84,7 +93,9 @@ export const WorkBusinessProvider = ({ children }: { children: ReactNode }) => {
 export const useWorkBusiness = (): WorkBusinessContextProps => {
   const context = useContext(WorkBusinessContext);
   if (!context) {
-    throw new Error('useWorkBusiness must be used within a WorkBusinessProvider');
+    throw new Error(
+      "useWorkBusiness must be used within a WorkBusinessProvider",
+    );
   }
   return context;
 };

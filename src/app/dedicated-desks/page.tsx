@@ -64,12 +64,13 @@ const DedicatedDesks = () => {
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className=" text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-            Secure your own dedicated desk in a shared workspace, offering a professional environment, high-speed internet, and 24/7 access—perfect for focused work.
+              Secure your own dedicated desk in a shared workspace, offering a
+              professional environment, high-speed internet, and 24/7
+              access—perfect for focused work.
             </p>
           </div>
         </div>
 
-        
         {/* Search Box */}
         <div className="py-4 px-6 sm:px-14 flex flex-col items-center bg-gray-100 w-full">
           <div className="flex flex-col sm:flex-row justify-around items-center w-full gap-3">
@@ -90,15 +91,13 @@ const DedicatedDesks = () => {
             </Button>
 
             <div className="text-sm sm:text-base md:text-lg leading-relaxed font-bold text-gray-700 py-2 flex gap-2">
-            <LuPhoneCall className="font-bold mt-1" />
-              <p className=" ">
-               Call us +91 9272003735
-              </p>
+              <LuPhoneCall className="font-bold mt-1" />
+              <p className=" ">Call us +91 9272003735</p>
             </div>
           </div>
         </div>
       </div>
-<RentSteps/>
+      <RentSteps />
       {/* Boxes Component positioned below */}
       <div className="relative z-0 mt-20">
         <Offices />

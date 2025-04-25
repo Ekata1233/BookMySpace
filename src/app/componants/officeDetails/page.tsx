@@ -36,7 +36,7 @@ export interface OfficeSpace {
 
 const amenityIcons = {
   "Work Desk": PiOfficeChair,
-  "Private Cabins": PiBuildingOffice ,
+  "Private Cabins": PiBuildingOffice,
   "24x7 Availability": LuAlarmClock,
   "Power Backup": LuCable,
   HouseKeeping: LiaBroomSolid,
@@ -52,9 +52,9 @@ const amenityIcons = {
 const OfficeDetails = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { user } = useAuth();
-  
+
   const router = useRouter();
-    const params = useParams();
+  const params = useParams();
   const id = params?.id;
 
   const pathname = usePathname();
@@ -63,7 +63,7 @@ const OfficeDetails = () => {
   const pageName = pathSegments[pathSegments.length - 1] || "";
 
   // console.log("pathe name : ", mainSlug);
-console.log("Path Name : ",pathname);
+  console.log("Path Name : ", pathname);
 
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 

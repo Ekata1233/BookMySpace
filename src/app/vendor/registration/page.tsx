@@ -38,7 +38,7 @@ const VendorRegistration = () => {
     agreed: false,
     amount: 0,
   });
-  const router= useRouter();
+  const router = useRouter();
 
   const handlelogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -82,7 +82,7 @@ const VendorRegistration = () => {
 
     try {
       const formPayload = new FormData();
-    
+
       formPayload.append("companyName", formData.companyName);
       formPayload.append("workEmail", formData.workEmail);
       formPayload.append("phone", formData.phone);
@@ -99,14 +99,14 @@ const VendorRegistration = () => {
       formPayload.append("confirmPassword", formData.confirmPassword);
       formPayload.append("agreed", formData.agreed ? "true" : "false");
       formPayload.append("amount", formData.amount.toString());
-  
+
       if (formData.logo) {
         formPayload.append("logo", formData.logo);
       }
       if (formData.documentImage) {
         formPayload.append("documentImage", formData.documentImage);
       }
-     
+
       const res = await axios.post("/api/vendor/registration", formPayload);
       const { id: order_id } = res.data.order_id;
 
@@ -142,7 +142,7 @@ const VendorRegistration = () => {
   const handlePaymentSuccess = async () => {
     try {
       alert("Registration completed!");
-      router.push("/")
+      router.push("/");
     } catch (err) {
       alert("Registration completed!");
     }

@@ -46,7 +46,9 @@ const Boxes = () => {
   useEffect(() => {
     const fetchBoxes = async () => {
       try {
-        const response = await axios.get<{ success: boolean; data: Box[] }>("/api/boxes");
+        const response = await axios.get<{ success: boolean; data: Box[] }>(
+          "/api/boxes",
+        );
         if (response.data.success) {
           console.log("Fetched Boxes:", response.data.data);
           setBoxes(response.data.data);
@@ -62,12 +64,22 @@ const Boxes = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-4 py-4 px-2 my-10">
       {boxes.map((item) => (
-        <div key={item._id} className="text-dark p-6 shadow-md text-center flex flex-col items-center">
-          {iconMap[item.icon] || <FaLightbulb className="text-4xl mb-2 text-gray-500" />}
-          <a href={item.link} className="text-sm sm:text-base md:text-lg blue underline my-4 ">
+        <div
+          key={item._id}
+          className="text-dark p-6 shadow-md text-center flex flex-col items-center"
+        >
+          {iconMap[item.icon] || (
+            <FaLightbulb className="text-4xl mb-2 text-gray-500" />
+          )}
+          <a
+            href={item.link}
+            className="text-sm sm:text-base md:text-lg blue underline my-4 "
+          >
             {item.text}
           </a>
-          <p className="text-md whitespace-pre-line text-gray-600">{item.description}</p>
+          <p className="text-md whitespace-pre-line text-gray-600">
+            {item.description}
+          </p>
         </div>
       ))}
     </div>

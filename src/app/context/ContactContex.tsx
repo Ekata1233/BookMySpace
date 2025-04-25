@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import axios from "axios";
 
 // Define Contact Type
@@ -42,7 +48,10 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
   // Add Contact
   const addContact = async (newContact: Contact) => {
     try {
-      const response = await axios.post<{ data: Contact }>("/api/contact", newContact);
+      const response = await axios.post<{ data: Contact }>(
+        "/api/contact",
+        newContact,
+      );
       setContacts((prev) => [...prev, response.data.data]);
     } catch (error) {
       console.error("Error adding contact:", error);
@@ -54,7 +63,9 @@ export const ContactProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <ContactContext.Provider value={{ contacts, addContact, refreshContacts: fetchContacts }}>
+    <ContactContext.Provider
+      value={{ contacts, addContact, refreshContacts: fetchContacts }}
+    >
       {children}
     </ContactContext.Provider>
   );

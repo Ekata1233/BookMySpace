@@ -1,5 +1,5 @@
 "use client";
-import React from 'react';
+import React from "react";
 
 const Loader = () => {
   return (
@@ -12,7 +12,8 @@ const Loader = () => {
 
       <style jsx>{`
         @keyframes extraBounce {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {

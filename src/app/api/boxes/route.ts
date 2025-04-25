@@ -5,9 +5,9 @@ import Box from "@/models/box";
 testConnection();
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
 // ✅ Handle preflight requests
@@ -20,12 +20,12 @@ export async function GET() {
     const boxes = await Box.find({ isDeleted: false });
     return NextResponse.json(
       { success: true, data: boxes },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders },
     );
   }
 }
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     if (!icon || !link || !text || !description) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -45,12 +45,12 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { success: true, data: newBox },
-      { status: 201, headers: corsHeaders }
+      { status: 201, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }

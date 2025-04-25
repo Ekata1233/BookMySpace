@@ -1,10 +1,10 @@
-'use client';
+"use client";
 import { useAuth } from "@/app/context/authContext";
 import React from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 
 const PersonalInfo = () => {
-    const { user } = useAuth();
+  const { user } = useAuth();
   return (
     <div className="px-3 ">
       <div className="w-full border border-gray-200 rounded-none shadow-md overflow-hidden">

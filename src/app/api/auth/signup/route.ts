@@ -6,7 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 function withCors(response: NextResponse) {
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  response.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization",
+  );
   return response;
 }
 
@@ -16,12 +19,12 @@ export async function POST(req: Request) {
     const userData = await req.json();
     const response = await AuthService.signup(userData);
     return withCors(
-      NextResponse.json(response, { status: response.status || 201 })
+      NextResponse.json(response, { status: response.status || 201 }),
     );
   } catch (error) {
     console.error("Signup Error:", error);
     return withCors(
-      NextResponse.json({ error: "Internal Server Error 2" }, { status: 500 })
+      NextResponse.json({ error: "Internal Server Error 2" }, { status: 500 }),
     );
   }
 }
@@ -34,7 +37,7 @@ export async function GET() {
   } catch (error) {
     console.error("Fetch Users Error:", error);
     return withCors(
-      NextResponse.json({ error: "Internal Server Error 3" }, { status: 500 })
+      NextResponse.json({ error: "Internal Server Error 3" }, { status: 500 }),
     );
   }
 }

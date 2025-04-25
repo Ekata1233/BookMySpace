@@ -24,7 +24,7 @@ export default function Home() {
       <ExploreOffice />
       <OurAmenites />
       <div className="mt-0">
-        <FAQs/>
+        <FAQs />
       </div>
     </main>
   );

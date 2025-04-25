@@ -30,7 +30,7 @@ export interface IVendor extends Document {
 const VendorSchema: Schema = new Schema(
   {
     companyName: { type: String, required: true },
-    workEmail: { type: String, required: true ,unique: true, lowercase: true },
+    workEmail: { type: String, required: true, unique: true, lowercase: true },
     phone: { type: String, required: true },
     website: { type: String },
     businessType: {
@@ -46,7 +46,12 @@ const VendorSchema: Schema = new Schema(
     },
     contactName: { type: String, required: true },
     contactMobile: { type: Number, required: true },
-    contactEmail: { type: String, required: true,unique: true, lowercase: true },
+    contactEmail: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
     documentType: {
       type: String,
       enum: ["GST", "License", "Other"],
@@ -65,7 +70,7 @@ const VendorSchema: Schema = new Schema(
     amount: { type: Number },
     status: { type: String, default: "pending" },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 VendorSchema.pre<IVendor>("save", async function (next) {
@@ -75,12 +80,12 @@ VendorSchema.pre<IVendor>("save", async function (next) {
   next();
 });
 
-
 // Compare password method
-VendorSchema.methods.comparePassword = async function (candidatePassword: string) {
+VendorSchema.methods.comparePassword = async function (
+  candidatePassword: string,
+) {
   return bcrypt.compare(candidatePassword, this.password);
 };
-
 
 export default mongoose.models.Vendor ||
   mongoose.model<IVendor>("Vendor", VendorSchema);

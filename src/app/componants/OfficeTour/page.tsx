@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 interface OfficeTourItem {
   _id: string;
@@ -17,13 +17,13 @@ const OfficeTour = () => {
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const res = await fetch('/api/office-tours');
+        const res = await fetch("/api/office-tours");
         const data = await res.json();
         if (data.success) {
           setTours(data.data);
         }
       } catch (err) {
-        console.error('Error fetching office tours:', err);
+        console.error("Error fetching office tours:", err);
       }
     };
 
@@ -34,7 +34,7 @@ const OfficeTour = () => {
     <div>
       <div className="mx-auto px-4">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center pt-12">
-          Top-Tier Business Offices & Coworking Hubs in 
+          Top-Tier Business Offices & Coworking Hubs in
         </h1>
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-gray-500 text-center font-semibold py-5">
           Empowering Workspaces That Scale with Your Success
@@ -62,11 +62,15 @@ const OfficeTour = () => {
               <div className="absolute inset-0 bg-black/50"></div>
 
               {/* Title */}
-              <h2 className="absolute  w-full px-8 py-5 text-center break-words title-overlay">{item.title}</h2>
+              <h2 className="absolute  w-full px-8 py-5 text-center break-words title-overlay">
+                {item.title}
+              </h2>
 
               {/* Hover Description */}
               <div className="hover-text text-base md:text-lg lg:text-xl xl:text-xl text-center px-4 md:px-6 break-words">
-                <p className="absolute  w-full px-8 py-5 text-center break-words ">{item.description}</p>
+                <p className="absolute  w-full px-8 py-5 text-center break-words ">
+                  {item.description}
+                </p>
               </div>
             </div>
           ))}

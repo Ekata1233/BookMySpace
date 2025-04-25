@@ -83,9 +83,13 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       formDataToSend.append("amount", String(formData.amount));
 
       // 🚀 Submit to your API
-      const response = await axios.post("/api/vendor/registration", formDataToSend, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "/api/vendor/registration",
+        formDataToSend,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
 
       const data = response.data;
 
@@ -97,7 +101,8 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       toast.success("Vendor registered & logged in! 🚀");
       router.push("/"); // or wherever you want to send them
     } catch (error: any) {
-      const errMsg = error.response?.data?.error || "Vendor registration failed";
+      const errMsg =
+        error.response?.data?.error || "Vendor registration failed";
       toast.error(errMsg);
     }
   };
@@ -138,7 +143,7 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchVendor = async () => {
     const token = localStorage.getItem("vendorToken");
     if (!token) return;
-  
+
     try {
       const res = await fetch("/api/vendor/me", {
         method: "GET",
@@ -147,10 +152,10 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       const data = await res.json();
       console.log("Fetch vendor result:", res.status, data);
-  
+
       if (res.ok) {
         setVendor(data.vendor);
         localStorage.setItem("vendor", JSON.stringify(data.vendor));
@@ -162,14 +167,21 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       console.error("Fetch vendor error:", error);
     }
   };
-  
+
   useEffect(() => {
     fetchVendor();
   }, []);
 
   return (
     <VendorContext.Provider
-      value={{ vendor, formData, setFormData, submitVendor, logoutVendor, vendorLogin }}
+      value={{
+        vendor,
+        formData,
+        setFormData,
+        submitVendor,
+        logoutVendor,
+        vendorLogin,
+      }}
     >
       {children}
     </VendorContext.Provider>

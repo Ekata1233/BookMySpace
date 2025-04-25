@@ -59,7 +59,7 @@ const MapComponent: React.FC = () => {
 
   if (!apiKey) {
     throw new Error(
-      "Google Maps API key is not defined in environment variables."
+      "Google Maps API key is not defined in environment variables.",
     );
   }
 
@@ -86,7 +86,7 @@ const MapComponent: React.FC = () => {
                     setClickedOffice(office);
                   }}
                 />
-              )
+              ),
           )}
 
           {activeOffice && activeOffice.lat && activeOffice.lng && (

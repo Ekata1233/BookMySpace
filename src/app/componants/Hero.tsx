@@ -9,7 +9,6 @@ import Boxes from "./boxes/page";
 import { useRouter } from "next/navigation";
 import { useOfficeSpaces } from "../context/OfficeSpaceContext";
 
-
 const images = ["/hero1.jpeg", "/hero_2.jpeg", "/hero_3.jpeg", "/hero_4.jpeg"];
 const tabs = ["Office Space", "Coworking", "Virtual space", "Meeting Rooms"];
 
@@ -26,12 +25,12 @@ const Hero = () => {
     // Add your search logic here
   };
 
-  console.log("office spaces : ", officeSpaces)
+  console.log("office spaces : ", officeSpaces);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      const filtered = officeSpaces.filter((space:any) =>
-        space.category.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = officeSpaces.filter((space: any) =>
+        space.category.toLowerCase().includes(searchTerm.toLowerCase()),
       );
       setFilteredOfficeSpaces(filtered);
     }, 200); // 500ms debounce
@@ -89,11 +88,10 @@ const Hero = () => {
                   .replace(/[^a-z\-]/g, "");
                 router.push(`/${url}`);
               }}
-              
               className={cn(
                 "relative pb-2 text-lg font-medium text-gray-600 transition-all",
                 activeTab === tab &&
-                  "text-[#6BB7BE] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[3px] after:bg-[#6BB7BE]"
+                  "text-[#6BB7BE] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[3px] after:bg-[#6BB7BE]",
               )}
             >
               {tab}

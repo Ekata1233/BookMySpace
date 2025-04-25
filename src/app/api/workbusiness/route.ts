@@ -26,10 +26,16 @@ export async function POST(req: NextRequest) {
     const imageTopFile = formData.get("imageTop") as File;
     const imageBottomFile = formData.get("imageBottom") as File;
 
-    if (!title || !description1 || !description2 || !imageTopFile || !imageBottomFile) {
+    if (
+      !title ||
+      !description1 ||
+      !description2 ||
+      !imageTopFile ||
+      !imageBottomFile
+    ) {
       return NextResponse.json(
         { error: "All fields are required" },
-        { status: 400, headers: corsHeaders }
+        { status: 400, headers: corsHeaders },
       );
     }
 
@@ -60,7 +66,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "Failed to create" },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders },
     );
   }
 }
@@ -74,7 +80,7 @@ export async function GET() {
   } catch (error: any) {
     return NextResponse.json(
       { error: error.message || "Failed to fetch" },
-      { status: 500, headers: corsHeaders }
+      { status: 500, headers: corsHeaders },
     );
   }
 }

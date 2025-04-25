@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useAuth } from "@/app/context/authContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
@@ -11,14 +11,14 @@ import {
 } from "react-icons/fa";
 
 const PaymentHistory = () => {
-    const { user } = useAuth();
+  const { user } = useAuth();
   const { officeSpaces } = useOfficeSpaces();
   const { bookings } = useBookSpaces();
 
   const formatTimeRange = (
     date: string,
     startTime: string,
-    duration: number
+    duration: number,
   ) => {
     const [hours, minutes] = startTime.split(":").map(Number);
     const start = new Date(date);
@@ -69,7 +69,7 @@ const PaymentHistory = () => {
           {pastBookings.length > 0 ? (
             pastBookings.map((booking, index) => {
               const matchedOffice = officeSpaces.find(
-                (office) => office._id === booking.officeId
+                (office) => office._id === booking.officeId,
               );
 
               return (
@@ -110,7 +110,7 @@ const PaymentHistory = () => {
                         {formatTimeRange(
                           booking.date,
                           booking.startTime,
-                          booking.duration
+                          booking.duration,
                         )}
                       </p>
                     </div>
@@ -137,7 +137,7 @@ const PaymentHistory = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PaymentHistory
+export default PaymentHistory;

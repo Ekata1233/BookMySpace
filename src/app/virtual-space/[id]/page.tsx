@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import OfficeDetails from "@/app/componants/officeDetails/page";
 import { useParams } from "next/navigation";
@@ -9,7 +9,6 @@ const IdVirtualSpace = () => {
   const { id } = params;
   return (
     <div className=" mt-50">
-      
       <OfficeDetails />
     </div>
   );

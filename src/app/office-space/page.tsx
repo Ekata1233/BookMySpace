@@ -20,9 +20,9 @@ const Officespace = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const totalSlides = images.length;
 
-    const pathname = usePathname();
-    const pathSegments = pathname.split("/").filter(Boolean);
-    const pageName = pathSegments[pathSegments.length - 1]
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const pageName = pathSegments[pathSegments.length - 1];
 
   const router = useRouter();
 
@@ -68,9 +68,10 @@ const Officespace = () => {
               <span className="text-[#6BB7BE] font-extrabold">.</span>
             </h1>
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 py-2">
-              Looking for a fully-serviced private office? Our move-in-ready spaces offer privacy, 
-              flexibility, and access to meeting rooms, kitchen facilities, and business lounges—perfect 
-              for teams of any size.
+              Looking for a fully-serviced private office? Our move-in-ready
+              spaces offer privacy, flexibility, and access to meeting rooms,
+              kitchen facilities, and business lounges—perfect for teams of any
+              size.
             </p>
           </div>
         </div>

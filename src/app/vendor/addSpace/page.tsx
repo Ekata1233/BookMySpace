@@ -145,14 +145,14 @@ const OfficeSpaceForm = () => {
       today.getMonth(),
       today.getDate(),
       Number(startHour),
-      Number(startMinute)
+      Number(startMinute),
     );
     const endDate = new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate(),
       Number(endHour),
-      Number(endMinute)
+      Number(endMinute),
     );
 
     // Format date as "YYYY-MM-DDTHH:mm:ss" to keep local time
@@ -203,7 +203,6 @@ const OfficeSpaceForm = () => {
     <div className="flex flex-col md:flex-row min-h-screen mt-42 ">
       {/* Back Button */}
       <Sidebar
-
         sidebarOpen={sidebarOpen}
         openSpaces={openSpaces}
         setOpenSpaces={setOpenSpaces}
@@ -216,9 +215,7 @@ const OfficeSpaceForm = () => {
       />
 
       <main className="flex-1 max-w-4xl mx-auto p-6">
-        <div className="mb-4">
-
-        </div>
+        <div className="mb-4"></div>
         <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 py-5">
           ADD OFFICE SPACE
         </h1>
@@ -402,7 +399,9 @@ const OfficeSpaceForm = () => {
             <Checkbox
               id="isNewlyOpen"
               checked={formData.isNewlyOpen}
-              onCheckedChange={(checked) => handleChange("isNewlyOpen", checked)}
+              onCheckedChange={(checked) =>
+                handleChange("isNewlyOpen", checked)
+              }
             />
             <Label htmlFor="isNewlyOpen " className="text-gray-700">
               Newly Open
@@ -417,8 +416,6 @@ const OfficeSpaceForm = () => {
           </Button>
         </form>
       </main>
-
-
     </div>
   );
 };

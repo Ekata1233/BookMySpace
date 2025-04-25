@@ -24,24 +24,24 @@ export async function PUT(request: Request, context: any) {
     const updatedOfficeSpaces = await officeSpaces.findByIdAndUpdate(
       id,
       { isAdminApprove: true },
-      { new: true }
+      { new: true },
     );
 
     if (!updatedOfficeSpaces) {
       return NextResponse.json(
         { success: false, message: "OfficeSpaces not found" },
-        { status: 404, headers: corsHeaders }
+        { status: 404, headers: corsHeaders },
       );
     }
 
     return NextResponse.json(
       { success: true, data: updatedOfficeSpaces },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }
@@ -56,24 +56,24 @@ export async function DELETE(request: Request, context: any) {
     const deletedOfficeSpaces = await officeSpaces.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true }
+      { new: true },
     );
 
     if (!deletedOfficeSpaces) {
       return NextResponse.json(
         { success: false, message: "OfficeSpaces not found" },
-        { status: 404, headers: corsHeaders }
+        { status: 404, headers: corsHeaders },
       );
     }
 
     return NextResponse.json(
       { success: true, data: deletedOfficeSpaces },
-      { status: 200, headers: corsHeaders }
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders }
+      { status: 400, headers: corsHeaders },
     );
   }
 }

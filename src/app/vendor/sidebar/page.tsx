@@ -20,7 +20,7 @@ interface SidebarProps {
   setOpenBookings: (value: boolean) => void;
   openReport: boolean; // ✅ Add this
   setOpenReport: (value: boolean) => void; // ✅ And this
-  openAccount:boolean;
+  openAccount: boolean;
   setOpenAccount: (value: boolean) => void;
 }
 
@@ -33,7 +33,7 @@ const Sidebar = ({
   openReport,
   setOpenReport,
   openAccount,
-  setOpenAccount
+  setOpenAccount,
 }: SidebarProps) => {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
@@ -51,7 +51,7 @@ const Sidebar = ({
       <nav className="space-y-4">
         {/* Dashboard */}
         <Link
-          href="/dashboard"
+          href="/vendor/dashboard"
           className={`flex items-center gap-4 px-5 py-4 rounded-none text-lg font-bold tracking-wide transition-all duration-300 
             ${
               isActive("/dashboard")
@@ -156,7 +156,7 @@ const Sidebar = ({
             <CalendarDays className="w-6 h-6" />
             Account
             <span className="ml-auto">
-              {openAccount? (
+              {openAccount ? (
                 <ChevronUp className="w-4 h-4" />
               ) : (
                 <ChevronDown className="w-4 h-4" />
@@ -169,7 +169,8 @@ const Sidebar = ({
               <Link
                 href="/vendor/accountManagement/accountInfo"
                 className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
-                  isActive("/dashboard/accountManagement/accountInfo") && "text-[#6bb7be]"
+                  isActive("/dashboard/accountManagement/accountInfo") &&
+                  "text-[#6bb7be]"
                 }`}
               >
                 <CalendarDays className="w-5 h-5" />
@@ -179,7 +180,8 @@ const Sidebar = ({
               <Link
                 href="/vendor/accountManagement/bankInfo"
                 className={`flex items-center gap-3 px-3 py-2 text-base font-semibold text-white transition-all duration-200 ${
-                  isActive("/dashboard/accountManagement/bankInfo") && "text-[#6bb7be]"
+                  isActive("/dashboard/accountManagement/bankInfo") &&
+                  "text-[#6bb7be]"
                 }`}
               >
                 <CalendarDays className="w-5 h-5" />

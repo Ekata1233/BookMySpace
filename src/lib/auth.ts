@@ -1,17 +1,17 @@
 // /lib/auth.ts
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { NextAuthOptions } from 'next-auth';
-import dbConnect from './db';
-import Vendor from '../models/vendor';
-import bcrypt from 'bcryptjs';
+import CredentialsProvider from "next-auth/providers/credentials";
+import { NextAuthOptions } from "next-auth";
+import dbConnect from "./db";
+import Vendor from "../models/vendor";
+import bcrypt from "bcryptjs";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Vendor Credentials',
+      name: "Vendor Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         await dbConnect();
@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
         const vendor = await Vendor.findOne({ workEmail: credentials?.email });
 
         if (!vendor) {
-          throw new Error('No vendor found with this email');
+          throw new Error("No vendor found with this email");
         }
 
         return {
@@ -31,10 +31,10 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/vendor/registration',
+    signIn: "/vendor/registration",
   },
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user }) {
