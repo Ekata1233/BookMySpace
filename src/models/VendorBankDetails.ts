@@ -49,11 +49,11 @@ const VendorBankDetailsSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    // verification: {
-    //   type: String,
-    //   enum: ["Pending", "Verified", "Rejected"],
-    //   default: "Pending",
-    // },
+    verification: {
+      type: String,
+      enum: ["Pending", "Verified", "Rejected"],
+      default: "Pending",
+    },
     isDeleted: {
       type: Boolean,
       default: false, // default is false, indicating the record is not deleted

@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const accountType = formData.get("accountType") as string;
     const phone = formData.get("phone") as string;
     const upiId = formData.get("upiId") as string;
-    const verification = formData.get("verification") === "true";
+    const verification = formData.get("verification") as string;
     const vendorId = formData.get("vendorId") as string;
 
     // Validate required fields
