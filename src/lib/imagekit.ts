@@ -1,10 +1,9 @@
-// lib/imagekit.ts
 import ImageKit from "imagekit";
 
 const imagekit = new ImageKit({
-  publicKey: process.env.IMAGEKIT_PUBLIC_KEY || "",
-  privateKey: process.env.IMAGEKIT_PRIVATE_KEY || "",
-  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT || "",
+  publicKey: "public_snLOVXlg2xzC7+UqSI8i8ZkW488=",
+  privateKey: "private_JIg2ar8TzquKqrG4oSnSUUnNteE=",
+  urlEndpoint: "https://ik.imagekit.io/bq9ym6nknj",
 });
 
 export default imagekit;

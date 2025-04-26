@@ -1,116 +1,71 @@
-import { NextResponse, NextRequest } from "next/server";
-import testConnection from "@/lib/db";
-import VendorBankDetails from "@/models/VendorBankDetails";
-import vendor from "@/models/vendor";
+import { NextRequest, NextResponse } from "next/server";
+import { connectDB } from "@/lib/config";
+import VendorBank from "@/models/VendorBank";
+import formidable from "formidable";
+import fs from "fs";
 
-testConnection();
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+export const config = {
+  api: {
+    bodyParser: false,
+  },
 };
 
-export async function OPTIONS() {
-  return NextResponse.json({}, { headers: corsHeaders });
-}
+async function parseForm(req: NextRequest): Promise<{ fields: any; files: any }> {
+  return new Promise((resolve, reject) => {
+    const form = formidable({ multiples: false });
 
-export async function GET() {
-  try {
-    const bankDetails = await VendorBankDetails.find({});
-    return NextResponse.json(
-      { success: true, data: bankDetails },
-      { status: 200, headers: corsHeaders }
-    );
-  } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500, headers: corsHeaders }
-    );
-  }
+    form.parse(req as any, (err, fields, files) => {
+      if (err) reject(err);
+      resolve({ fields, files });
+    });
+  });
 }
 
 export async function POST(req: NextRequest) {
+  await connectDB();
+
   try {
-    const body = await req.json();
+    const { fields, files } = await parseForm(req);
 
     const {
-      bankName,
+      vendorId,
       accountHolder,
       accountNumber,
       ifscCode,
-      branchName,
-      accountType,
-      phone,
-      upiId,
-      bankProof,
-      verification,
-      vendorId,
-    } = body;
-
-    const missingFields = [];
-    if (!bankName) missingFields.push("bankName");
-    if (!accountHolder) missingFields.push("accountHolder");
-    if (!accountNumber) missingFields.push("accountNumber");
-    if (!ifscCode) missingFields.push("ifscCode");
-    if (!accountType) missingFields.push("accountType");
-    if (!vendorId) missingFields.push("vendorId");
-    if (!upiId) missingFields.push("upiId");
-    if (!bankProof) missingFields.push("bankProof");
-
-    if (missingFields.length > 0) {
-      return NextResponse.json(
-        { success: false, message: `Missing required fields: ${missingFields.join(", ")}` },
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    if (phone && !/^\d{10}$/.test(phone)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid phone number format" },
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    const upiIdRegex = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+$/;
-    if (upiId && !upiIdRegex.test(upiId)) {
-      return NextResponse.json(
-        { success: false, message: "Invalid UPI ID format" },
-        { status: 400, headers: corsHeaders }
-      );
-    }
-
-    const vendorExists = await vendor.findById(vendorId);
-    if (!vendorExists) {
-      return NextResponse.json(
-        { success: false, message: "Vendor does not exist" },
-        { status: 404, headers: corsHeaders }
-      );
-    }
-
-    const newBankDetails = await VendorBankDetails.create({
       bankName,
-      accountHolder,
-      accountNumber,
-      ifscCode,
       branchName,
-      accountType,
-      phone,
-      upiId,
-      bankProof,
-      verification,
-      vendorId,
+    } = fields;
+
+    const file = files.bankDocument;
+
+    if (!file || Array.isArray(file)) {
+      return NextResponse.json({ error: "Invalid or missing bank document." }, { status: 400 });
+    }
+
+    const fileBuffer = fs.readFileSync(file.filepath);
+    const uploaded = await imagekit.upload({
+      file: fileBuffer,
+      fileName: file.originalFilename || "bank-doc",
     });
 
+    const newDetail = new VendorBank({
+      vendorId,
+      accountHolder,
+      accountNumber,
+      ifscCode,
+      bankName,
+      branchName,
+      bankDocument: uploaded.url,
+    });
+
+    await newDetail.save();
+
     return NextResponse.json(
-      { success: true, data: newBankDetails },
-      { status: 201, headers: corsHeaders }
+      { message: "Vendor bank detail added successfully", data: newDetail },
+      { status: 201 }
     );
-  } catch (error: any) {
-    console.error("BankDetails POST Error:", error);
-    return NextResponse.json(
-      { success: false, message: "Error creating vendor bank details: " + error.message },
-      { status: 500, headers: corsHeaders }
-    );
+  } catch (error) {
+    console.error("Error uploading bank detail:", error);
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
