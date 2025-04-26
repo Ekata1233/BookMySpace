@@ -6,11 +6,12 @@ export async function POST(req: Request) {
   await connectToDatabase();
 
   try {
-    const { userId, officeId, date, startTime, duration, totalPay } = await req.json();
+    const { userId, officeId,vendorId, date, startTime, duration, totalPay } = await req.json();
 
     const newBooking = new Booking({
       userId,
       officeId,
+      vendorId,
       date,
       startTime,
       duration,

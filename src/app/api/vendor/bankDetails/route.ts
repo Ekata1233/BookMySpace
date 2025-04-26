@@ -1,71 +1,120 @@
-import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/config";
-import VendorBank from "@/models/VendorBank";
-import formidable from "formidable";
-import fs from "fs";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
+import { NextResponse } from "next/server";
+import path from "path";
+import { writeFile, mkdir } from "fs/promises";
+import testConnection from "@/lib/db";
+import VendorBankDetails from "@/models/VendorBankDetails";
+import vendor from "@/models/vendor";
+import { existsSync } from "fs";
+
+// Connect to MongoDB
+testConnection();
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-async function parseForm(req: NextRequest): Promise<{ fields: any; files: any }> {
-  return new Promise((resolve, reject) => {
-    const form = formidable({ multiples: false });
-
-    form.parse(req as any, (err, fields, files) => {
-      if (err) reject(err);
-      resolve({ fields, files });
-    });
-  });
+// ✅ Handle preflight requests
+export async function OPTIONS() {
+  return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(req: NextRequest) {
-  await connectDB();
+export async function POST(req: Request) {
+  await testConnection();
 
   try {
-    const { fields, files } = await parseForm(req);
+    const formData = await req.formData();
 
-    const {
-      vendorId,
-      accountHolder,
-      accountNumber,
-      ifscCode,
-      bankName,
-      branchName,
-    } = fields;
+    const bankName = formData.get("bankName") as string;
+    const accountHolder = formData.get("accountHolder") as string;
+    const accountNumber = formData.get("accountNumber") as string;
+    const ifscCode = formData.get("ifscCode") as string;
+    const branchName = formData.get("branchName") as string;
+    const accountType = formData.get("accountType") as string;
+    const phone = formData.get("phone") as string;
+    const upiId = formData.get("upiId") as string;
+    const verification = formData.get("verification") as string;
+    const vendorId = formData.get("vendorId") as string;
 
-    const file = files.bankDocument;
-
-    if (!file || Array.isArray(file)) {
-      return NextResponse.json({ error: "Invalid or missing bank document." }, { status: 400 });
+    // Validate required fields
+    if (!bankName || !accountHolder || !accountNumber || !ifscCode || !accountType || !vendorId) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400, headers: corsHeaders },
+      );
     }
 
-    const fileBuffer = fs.readFileSync(file.filepath);
-    const uploaded = await imagekit.upload({
-      file: fileBuffer,
-      fileName: file.originalFilename || "bank-doc",
-    });
+    // Ensure 'public/uploads' directory exists
+    const uploadDir = path.join(process.cwd(), "public/uploads");
+    if (!existsSync(uploadDir)) {
+      await mkdir(uploadDir, { recursive: true });
+    }
 
-    const newDetail = new VendorBank({
-      vendorId,
+    // Handle file upload for bankProof
+    let bankProofUrl = "";
+    const file = formData.get("bankProof") as File | null;
+
+    if (file) {
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+      const filePath = path.join(uploadDir, file.name);
+
+      await writeFile(filePath, buffer);
+      bankProofUrl = `/uploads/${file.name}`;
+    }
+
+    // Check if vendor exists
+    const vendorExists = await vendor.findById(vendorId);
+    if (!vendorExists) {
+      return NextResponse.json(
+        { success: false, message: "Vendor does not exist" },
+        { status: 404, headers: corsHeaders },
+      );
+    }
+
+    // Create new vendor bank details entry
+    const newBankDetails = await VendorBankDetails.create({
+      bankName,
       accountHolder,
       accountNumber,
       ifscCode,
-      bankName,
       branchName,
-      bankDocument: uploaded.url,
+      accountType,
+      phone,
+      upiId,
+      bankProof: bankProofUrl,
+      verification,
+      vendorId,
     });
 
-    await newDetail.save();
+   
 
     return NextResponse.json(
-      { message: "Vendor bank detail added successfully", data: newDetail },
-      { status: 201 }
+      { success: true, data: newBankDetails },
+      { status: 201, headers: corsHeaders },
     );
-  } catch (error) {
-    console.error("Error uploading bank detail:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 400, headers: corsHeaders },
+    );
+  }
+}
+
+export async function GET() {
+  try {
+    const bankDetails = await VendorBankDetails.find({});
+    return NextResponse.json(
+      { success: true, data: bankDetails },
+      { status: 200, headers: corsHeaders },
+    );
+  } catch (error: any) {
+    console.error("Error:", error.message);
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500, headers: corsHeaders },
+    );
   }
 }

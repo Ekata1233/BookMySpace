@@ -19,6 +19,7 @@ import axios from "axios";
 
 export interface OfficeSpace {
   _id: string;
+  vendorId:string;
   name: string;
   location: string;
   startTime: string;
@@ -50,6 +51,7 @@ const TimeCalendar = () => {
 
   interface OfficeSpace {
     _id: string;
+    vendorId:string;
     startTime: string;
     endTime: string;
     rate: number;
@@ -61,12 +63,13 @@ const TimeCalendar = () => {
 
   const fallback: OfficeSpace = {
     _id: "",
+    vendorId:"",
     startTime: "",
     endTime: "",
     rate: 0,
   };
 
-  const { _id: officeId, startTime, endTime, rate } = office ?? fallback;
+  const { _id: officeId,vendorId, startTime, endTime, rate } = office ?? fallback;
 
 
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -144,6 +147,7 @@ const TimeCalendar = () => {
     const bookingData = {
       userId,
       officeId,
+      vendorId,
       date: bookingDate,
       startTime: startTimeFormatted,
       duration: parseInt(selectedDuration),
@@ -167,6 +171,7 @@ const TimeCalendar = () => {
         name: "Office Booking",
         description: "Booking Office Slot",
         order_id: orderId,
+        vendorId:vendorId,
         handler: async function (response: any) {
 
           // Save Booking to DB

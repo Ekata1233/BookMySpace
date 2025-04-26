@@ -46,7 +46,7 @@ const VendorBankDetailsSchema = new mongoose.Schema(
      
     },
     bankProof: {
-      type: String, // path or URL of uploaded file
+      type: String,
       default: "",
     },
     verification: {
