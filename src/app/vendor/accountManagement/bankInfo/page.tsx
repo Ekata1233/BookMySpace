@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useBankDetails } from "@/app/context/BankDetailsContext";
+import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
 
 const BankInfo = () => {
-  const { addVendorBankDetail, updateVendorBankDetail, bankDetails } = useBankDetails();  // Corrected context import
+  const { addVendorBankDetail, updateVendorBankDetail, vendorBankDetails } =
+    useVendorBankDetails();
 
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
@@ -38,8 +39,8 @@ const BankInfo = () => {
   }, []);
 
   useEffect(() => {
-    if (vendorId && bankDetails?.length) {
-      const match = bankDetails.find(
+    if (vendorId && vendorBankDetails?.length) {
+      const match = vendorBankDetails.find(
         (detail) => detail.vendorId === vendorId
       );
       if (match) {
@@ -50,16 +51,15 @@ const BankInfo = () => {
           accountNumber: match.accountNumber || "",
           ifscCode: match.ifscCode || "",
           branchName: match.branchName || "",
-          accountType: match.accountType as "Savings" | "Current" || "Savings", // Type cast to ensure it's one of the allowed values
+          accountType: match.accountType || "Savings",
           phone: match.phone || "",
           upiId: match.upiId || "",
           bankProof: null,
-          verification: match.verification as "Pending" | "Verified" | "Rejected" || "Pending", // Type cast to ensure it's one of the allowed values
+          verification: match.verification || "Pending",
         });
       }
-      
     }
-  }, [bankDetails, vendorId]);
+  }, [vendorBankDetails, vendorId]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -251,25 +251,23 @@ const BankInfo = () => {
                   value={form.branchName}
                   onChange={handleChange}
                   placeholder="Branch Name"
-                  required
                   className="border border-[#6BB7BE] p-2 rounded"
                 />
                 <select
                   name="accountType"
                   value={form.accountType}
                   onChange={handleChange}
-                  required
                   className="border border-[#6BB7BE] p-2 rounded"
                 >
                   <option value="Savings">Savings</option>
                   <option value="Current">Current</option>
                 </select>
                 <input
-                  type="tel"
+                  type="text"
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  placeholder="Phone Number"
+                  placeholder="Linked Phone (optional)"
                   className="border border-[#6BB7BE] p-2 rounded"
                 />
                 <input
@@ -284,17 +282,23 @@ const BankInfo = () => {
                   type="file"
                   name="bankProof"
                   onChange={handleChange}
-                  accept="image/*"
                   className="border border-[#6BB7BE] p-2 rounded"
                 />
               </div>
 
-              <div className="mt-4 flex justify-center">
+              <div className="flex justify-end gap-4">
                 <button
                   type="submit"
-                  className="bg-[#6BB7BE] text-white px-6 py-2 rounded hover:bg-[#5ea5a5]"
+                  className="bg-[#6BB7BE] text-white px-6 py-2 rounded hover:opacity-90"
                 >
-                  {existingDetails ? "Save Changes" : "Submit Details"}
+                  💾 Save
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600"
+                >
+                  Cancel
                 </button>
               </div>
             </form>

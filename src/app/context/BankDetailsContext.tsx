@@ -1,95 +1,154 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
+"use client";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import axios from "axios";
 
-// Define the VendorBankContext
-const VendorBankContext = createContext<any>(null);
+interface VendorBankDetails {
+  _id: string;
+  bankName: string;
+  accountHolder: string;
+  accountNumber: string;
+  ifscCode: string;
+  branchName?: string;
+  accountType: "Savings" | "Current";
+  phone?: string;
+  bankProof?: string | null;
+  upiId?: string | null;
+  verification: "Pending" | "Verified";
+  vendorId: string;
+  isDeleted?: boolean;
+}
 
-// Create the provider component
-export const VendorBankProvider = ({ children }: { children: React.ReactNode }) => {
-  const [vendorBankDetails, setVendorBankDetails] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+interface VendorBankDetailsContextType {
+  vendorBankDetails: VendorBankDetails[];
+  addVendorBankDetail: (
+    newBankDetail: Omit<VendorBankDetails, "_id">,
+  ) => Promise<void>;
+  updateVendorBankDetail: (
+    id: string,
+    updateData: Partial<VendorBankDetails>,
+  ) => Promise<void>;
+  deleteVendorBankDetail: (id: string) => Promise<void>;
+  refreshVendorBankDetails: () => Promise<void>;
+}
 
-  // Function to fetch all vendor bank details
+const VendorBankDetailsContext = createContext<
+  VendorBankDetailsContextType | undefined
+>(undefined);
+
+export const VendorBankDetailsProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
+  const [vendorBankDetails, setVendorBankDetails] = useState<
+    VendorBankDetails[]
+  >([]);
+
   const fetchVendorBankDetails = async () => {
-    setLoading(true);
     try {
-      const response = await axios.get("/api/vendor/bankdetails");
-      setVendorBankDetails(response.data);
-    } catch (err: any) {
-      setError("Error fetching bank details");
-    } finally {
-      setLoading(false);
+      const response = await axios.get<{
+        success: boolean;
+        data: VendorBankDetails[];
+      }>("/api/vendor/bankDetails");
+      setVendorBankDetails(response.data.data);
+    } catch (error) {
+      console.error("Error fetching vendor bank details:", error);
     }
   };
 
-  // Function to create new vendor bank details
-  const addVendorBankDetails = async (data: any) => {
-    setLoading(true);
-    try {
-      const response = await axios.post("/api/vendor/bankdetails", data);
-      setVendorBankDetails((prevState) => [...prevState, response.data]);
-    } catch (err: any) {
-      setError("Error adding bank details");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const addVendorBankDetail = async (
+    newBankDetail: Omit<VendorBankDetails, "_id">,
+  ) => {
+    // Optimistic UI update
+    setVendorBankDetails((prev) => [
+      ...prev,
+      { ...newBankDetail, _id: "optimistic-id" },
+    ]);
 
-  // Function to update existing vendor bank details
-  const updateVendorBankDetails = async (id: string, data: any) => {
-    setLoading(true);
     try {
-      const response = await axios.put(`/api/vendor/bankdetails/${id}`, data);
-      setVendorBankDetails((prevState) =>
-        prevState.map((item) =>
-          item._id === id ? { ...item, ...response.data } : item
-        )
+      const response = await axios.post<{
+        success: boolean;
+        data: VendorBankDetails;
+      }>("/api/vendor/bankDetails", newBankDetail);
+      setVendorBankDetails((prev) =>
+        prev.map((vendorBankDetail) =>
+          vendorBankDetail._id === "optimistic-id"
+            ? response.data.data
+            : vendorBankDetail,
+        ),
       );
-    } catch (err: any) {
-      setError("Error updating bank details");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Function to delete vendor bank details (soft delete)
-  const deleteVendorBankDetails = async (id: string) => {
-    setLoading(true);
-    try {
-      await axios.delete(`/api/vendor/bankdetails/${id}`);
-      setVendorBankDetails((prevState) =>
-        prevState.filter((item) => item._id !== id)
+    } catch (error) {
+      console.error("Error adding vendor bank detail:", error);
+      // Rollback the optimistic update on error
+      setVendorBankDetails((prev) =>
+        prev.filter(
+          (vendorBankDetail) => vendorBankDetail._id !== "optimistic-id",
+        ),
       );
-    } catch (err: any) {
-      setError("Error deleting bank details");
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Fetch vendor bank details when the component mounts
+  const updateVendorBankDetail = async (
+    id: string,
+    updateData: Partial<VendorBankDetails>,
+  ) => {
+    try {
+      const response = await axios.put<{
+        success: boolean;
+        data: VendorBankDetails;
+      }>("/api/vendor/bankDetails", { _id: id, ...updateData });
+      setVendorBankDetails((prev) =>
+        prev.map((vendorBankDetail) =>
+          vendorBankDetail._id === id ? response.data.data : vendorBankDetail,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating vendor bank detail:", error);
+    }
+  };
+
+  const deleteVendorBankDetail = async (id: string) => {
+    try {
+      await axios.delete("/api/vendor/bankDetails", { data: { _id: id } });
+      setVendorBankDetails((prev) =>
+        prev.filter((vendorBankDetail) => vendorBankDetail._id !== id),
+      );
+    } catch (error) {
+      console.error("Error deleting vendor bank detail:", error);
+    }
+  };
+
   useEffect(() => {
     fetchVendorBankDetails();
   }, []);
 
   return (
-    <VendorBankContext.Provider
+    <VendorBankDetailsContext.Provider
       value={{
         vendorBankDetails,
-        loading,
-        error,
-        addVendorBankDetails,
-        updateVendorBankDetails,
-        deleteVendorBankDetails,
+        addVendorBankDetail,
+        updateVendorBankDetail,
+        deleteVendorBankDetail,
+        refreshVendorBankDetails: fetchVendorBankDetails,
       }}
     >
       {children}
-    </VendorBankContext.Provider>
+    </VendorBankDetailsContext.Provider>
   );
 };
 
-// Custom hook to use the context
-export const useVendorBank = () => {
-  return useContext(VendorBankContext);
+export const useVendorBankDetails = (): VendorBankDetailsContextType => {
+  const context = useContext(VendorBankDetailsContext);
+  if (!context) {
+    throw new Error(
+      "useVendorBankDetails must be used within a VendorBankDetailsProvider",
+    );
+  }
+  return context;
 };
