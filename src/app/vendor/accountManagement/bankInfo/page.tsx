@@ -6,6 +6,7 @@ import Sidebar from "@/app/componants/sidebar/Sidebar";
 const BankInfo = () => {
   const { addVendorBankDetail, updateVendorBankDetail, vendorBankDetails } =
     useVendorBankDetails();
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
@@ -40,7 +41,7 @@ const BankInfo = () => {
   useEffect(() => {
     if (vendorId && vendorBankDetails?.length) {
       const match = vendorBankDetails.find(
-        (detail) => detail.vendorId === vendorId,
+        (detail) => detail.vendorId === vendorId
       );
       if (match) {
         setExistingDetails(match);
@@ -61,7 +62,7 @@ const BankInfo = () => {
   }, [vendorBankDetails, vendorId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, files } = e.target as any;
     if (name === "bankProof") {
@@ -89,17 +90,26 @@ const BankInfo = () => {
       return;
     }
 
-    try {
-      const data = {
-        ...form,
-        vendorId,
-        bankProof: form.bankProof,
-      };
+    const formData = new FormData();
+    formData.append("bankName", form.bankName);
+    formData.append("accountHolder", form.accountHolder);
+    formData.append("accountNumber", form.accountNumber);
+    formData.append("ifscCode", form.ifscCode);
+    formData.append("branchName", form.branchName);
+    formData.append("accountType", form.accountType);
+    formData.append("phone", form.phone);
+    formData.append("upiId", form.upiId);
+    formData.append("verification", form.verification);
+    formData.append("vendorId", vendorId);
+    if (form.bankProof) {
+      formData.append("bankProof", form.bankProof);
+    }
 
+    try {
       if (existingDetails) {
-        await updateVendorBankDetail(existingDetails._id, data);
+        await updateVendorBankDetail(existingDetails._id, formData);
       } else {
-        await addVendorBankDetail(data);
+        await addVendorBankDetail(formData);
       }
 
       setShowForm(false);
@@ -116,13 +126,13 @@ const BankInfo = () => {
         setOpenSpaces={setOpenSpaces}
         openBookings={openBookings}
         setOpenBookings={setOpenBookings}
-        openReport={openReport} // ✅ Pass this
+        openReport={openReport}
         setOpenReport={setOpenReport}
-        openAccount={openAccount} // ✅ Add this
-        setOpenAccount={setOpenAccount} // ✅ Add this
+        openAccount={openAccount}
+        setOpenAccount={setOpenAccount}
       />
       <main className="flex-1 max-w-4xl mx-auto p-6">
-        <div className="my-10 f p-6 max-w-4xl mx-auto bg-white shadow-xl rounded-md border border-[#6BB7BE]">
+        <div className="my-10 p-6 max-w-4xl mx-auto bg-white shadow-xl rounded-md border border-[#6BB7BE]">
           <h2 className="text-3xl font-bold text-[#6BB7BE] mb-6 text-center tracking-wide">
             🏦 Bank Information
           </h2>
@@ -134,12 +144,10 @@ const BankInfo = () => {
                   <strong>Bank Name:</strong> {existingDetails.bankName}
                 </div>
                 <div>
-                  <strong>Account Holder:</strong>{" "}
-                  {existingDetails.accountHolder}
+                  <strong>Account Holder:</strong> {existingDetails.accountHolder}
                 </div>
                 <div>
-                  <strong>Account Number:</strong>{" "}
-                  {existingDetails.accountNumber}
+                  <strong>Account Number:</strong> {existingDetails.accountNumber}
                 </div>
                 <div>
                   <strong>IFSC Code:</strong> {existingDetails.ifscCode}
@@ -151,16 +159,18 @@ const BankInfo = () => {
                   <strong>Account Type:</strong> {existingDetails.accountType}
                 </div>
                 <div>
-                  <strong>Phone Number:</strong>{" "}
-                  {existingDetails.phone || "N/A"}
+                  <strong>Phone Number:</strong> {existingDetails.phone || "N/A"}
                 </div>
                 <div>
-                  <strong>UPI ID:</strong>{" "}
-                  {existingDetails.upiId || "N/A"}
+                  <strong>UPI ID:</strong> {existingDetails.upiId || "N/A"}
                 </div>
                 <div className="flex items-center gap-2">
                   <span
-                    className={`px-3 py-1 text-white rounded-full ${existingDetails.verification === "Verified" ? "bg-green-600" : "bg-yellow-500"}`}
+                    className={`px-3 py-1 text-white rounded-full ${
+                      existingDetails.verification === "Verified"
+                        ? "bg-green-600"
+                        : "bg-yellow-500"
+                    }`}
                   >
                     {existingDetails.verification === "Verified"
                       ? "✅ Verified"
