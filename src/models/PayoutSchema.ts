@@ -32,7 +32,7 @@ const payoutSchema = new mongoose.Schema({
   },
   createdByAdmin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Admin' // Optional
+    ref: 'Admin'
   }
 }, { timestamps: true });
 

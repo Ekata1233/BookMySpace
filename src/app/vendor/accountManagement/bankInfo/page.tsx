@@ -70,10 +70,12 @@ const BankInfo = () => {
         alert("File size exceeds 5MB");
         return;
       }
+      console.log("Selected file:", files[0]);  // Log file to debug
       setForm({ ...form, bankProof: files[0] });
     } else {
       setForm({ ...form, [name]: value });
     }
+
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,11 +168,10 @@ const BankInfo = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <span
-                    className={`px-3 py-1 text-white rounded-full ${
-                      existingDetails.verification === "Verified"
+                    className={`px-3 py-1 text-white rounded-full ${existingDetails.verification === "Verified"
                         ? "bg-green-600"
                         : "bg-yellow-500"
-                    }`}
+                      }`}
                   >
                     {existingDetails.verification === "Verified"
                       ? "✅ Verified"
