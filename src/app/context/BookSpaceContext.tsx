@@ -13,6 +13,7 @@ import axios from "axios";
 interface BookSpace {
   userId: string;
   officeId: string;
+  vendorId: string;
   date: string;
   startTime: string;
   duration: number;

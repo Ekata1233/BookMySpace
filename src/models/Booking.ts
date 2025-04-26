@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const RazorpayBookingSchema = new mongoose.Schema({
   userId: { type: String, required: true },
   officeId: { type: String, required: true },
+  vendorId: { type: String, required: true },
   date: { type: String, required: true },
   startTime: { type: String, required: true },
   duration: { type: Number, required: true },

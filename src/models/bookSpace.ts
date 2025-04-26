@@ -11,6 +11,11 @@ const bookSpaceSchema = new mongoose.Schema({
     ref: "OfficeSpace",
     required: true,
   },
+  vendorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Vendor",
+    required: true,
+  },
   date: {
     type: Date,
     required: true,

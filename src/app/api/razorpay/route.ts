@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   try {
     // Get the data from the request body
-    const { userId, officeId, date, startTime, duration, totalPay } = await req.json();
+    const { userId, officeId,vendorId, date, startTime, duration, totalPay } = await req.json();
 
     // Create Razorpay order
     const orderOptions = {
@@ -29,6 +29,7 @@ export async function POST(req: Request) {
     const newRazorpayBooking = new RazorpayBooking({
       userId,
       officeId,
+      vendorId,
       date,
       startTime,
       duration,
