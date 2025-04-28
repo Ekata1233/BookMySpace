@@ -6,6 +6,7 @@ const VendorBankDetailsSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Vendor",
       required: true,
+      index: true,
     },
     bankName: {
       type: String,

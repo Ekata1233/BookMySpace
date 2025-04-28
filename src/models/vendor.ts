@@ -1,4 +1,3 @@
-// 1. SCHEMA: /models/Vendor.ts
 import mongoose, { Schema, Document } from "mongoose";
 import bcrypt from "bcryptjs";
 
@@ -15,7 +14,7 @@ export interface IVendor extends Document {
   contactMobile: number;
   contactEmail: string;
   documentType: "GST" | "License" | "Other";
-  documentNo: number;
+  documentNo: string;  // Changed from number to string to handle alphanumeric IDs
   documentImage: string;
   password: string;
   agreed: boolean;
@@ -57,7 +56,7 @@ const VendorSchema: Schema = new Schema(
       enum: ["GST", "License", "Other"],
       required: true,
     },
-    documentNo: { type: Number, required: true },
+    documentNo: { type: String, required: true },  // Changed to String for alphanumeric IDs
     documentImage: {
       type: String,
       default: "",

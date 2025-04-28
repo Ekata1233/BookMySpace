@@ -1,9 +1,9 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import axios from "axios";
 import testConnection from "@/lib/db";
 import VendorBankDetails from "@/models/VendorBankDetails";
 import PayoutSchema from "@/models/PayoutSchema";
-import { Types } from "mongoose";
+import mongoose from "mongoose";
 
 testConnection();
 
@@ -18,7 +18,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// GET all vendors for payout listing (you can filter this if needed)
+// GET all vendors for payout listing
 export async function GET() {
   try {
     const vendors = await VendorBankDetails.find({});
@@ -38,6 +38,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const { vendorId, amount, paymentMethod } = await req.json();
+    console.log("Request vendorId:", vendorId);
 
     if (!vendorId || !amount || !paymentMethod) {
       return NextResponse.json(
@@ -46,10 +47,15 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("Received vendorId:", vendorId);
+    if (!mongoose.Types.ObjectId.isValid(vendorId)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid vendorId format" },
+        { status: 400, headers: corsHeaders }
+      );
+    }
 
-    const vendor = await VendorBankDetails.findOne({ _id: new Types.ObjectId(vendorId) });
-    console.log("Vendor result:", vendor);
+    const vendor = await VendorBankDetails.findOne({ vendorId: vendorId });
+    console.log("Fetched vendor:", vendor);
 
     if (!vendor) {
       return NextResponse.json(
@@ -59,37 +65,35 @@ export async function POST(req: Request) {
     }
 
     const payoutData: any = {
-      amount: amount * 100, // convert to paise
+      amount: amount * 100, // Convert to paise
       currency: "INR",
       purpose: "payout",
       mode: paymentMethod,
-      narration: `Payout to vendor ${vendor.name || vendor._id}`,
+      narration: `Payout to vendor ${vendor.accountHolder || vendor._id}`,
     };
 
     if (paymentMethod === "bank_transfer") {
       payoutData.fund_account = {
         account_type: "bank_account",
         bank_account: {
-          name: vendor.accountHolderName || "Vendor",
+          name: vendor.accountHolder || "Vendor",
           ifsc: vendor.ifscCode,
-          account_number: vendor.bankAccount,
+          account_number: vendor.accountNumber,
         },
         contact: {
-          name: vendor.name || "Vendor",
+          name: vendor.accountHolder || "Vendor",
           type: "vendor",
-          email: vendor.email,
+          email: vendor.email || "test@example.com",
         },
       };
     } else if (paymentMethod === "upi") {
       payoutData.fund_account = {
         account_type: "vpa",
-        vpa: {
-          address: vendor.upiId,
-        },
+        vpa: { address: vendor.upiId },
         contact: {
-          name: vendor.name || "Vendor",
+          name: vendor.accountHolder || "Vendor",
           type: "vendor",
-          email: vendor.email,
+          email: vendor.email || "test@example.com",
         },
       };
     } else {
@@ -99,8 +103,11 @@ export async function POST(req: Request) {
       );
     }
 
+    // Log the payout data to verify its structure before sending it
+    console.log("Payout data being sent to Razorpay:", payoutData);
+
     const response = await axios.post(
-      "https://api.razorpay.com/v1/payouts",
+      "https://api.razorpay.com/v1/payouts", // Confirmed correct URL in documentation
       payoutData,
       {
         auth: {
@@ -110,7 +117,8 @@ export async function POST(req: Request) {
       }
     );
 
-    // Save payout in DB
+    console.log("Razorpay response:", response.data);
+
     await PayoutSchema.create({
       vendor: vendorId,
       amount,
@@ -126,9 +134,24 @@ export async function POST(req: Request) {
       { status: 200, headers: corsHeaders }
     );
   } catch (error: any) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500, headers: corsHeaders }
-    );
+    console.error("Error processing payout:", error);
+    
+    if (error.response) {
+      console.error("Razorpay error response data:", error.response.data);
+      return NextResponse.json(
+        { success: false, message: error.response.data.error.description },
+        { status: 500, headers: corsHeaders }
+      );
+    } else {
+      console.error("Error message:", error.message);
+      return NextResponse.json(
+        { success: false, message: error.message },
+        { status: 500, headers: corsHeaders }
+      );
+    }
   }
 }
+
+
+
+
