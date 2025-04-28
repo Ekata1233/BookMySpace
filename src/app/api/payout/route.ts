@@ -46,9 +46,11 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("vendor Id : " , vendorId);
+    console.log("Received vendorId:", vendorId);
 
-    const vendor = await VendorBankDetails.findById(new Types.ObjectId(vendorId));
+    const vendor = await VendorBankDetails.findOne({ _id: new Types.ObjectId(vendorId) });
+    console.log("Vendor result:", vendor);
+
     if (!vendor) {
       return NextResponse.json(
         { success: false, message: "Vendor bank details not found" },
