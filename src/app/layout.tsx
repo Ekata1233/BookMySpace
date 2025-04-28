@@ -11,10 +11,11 @@ import { OfficeTourProvider } from "./context/OfficeTourContext";
 import { ExploreOfficeProvider } from "./context/ExploreOfficeContext";
 import { WorkBusinessProvider } from "./context/WorkBusinessContext";
 import { VendorProvider } from "./context/VendorContext";
-import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 import { CountProvider } from "./context/CountContext";
 import { UserProvider } from "./context/UserContext";
 import { BookingProvider } from "./context/BookingContext";
+import { VendorBankDetailsProvider} from "./context/BankDetailsContext";
+import VendorBankDetails from "@/models/VendorBankDetails";
 
 const poppins = Poppins({
   subsets: ["latin"],

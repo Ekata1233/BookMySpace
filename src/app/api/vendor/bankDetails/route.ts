@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import path from "path";
 import { writeFile, mkdir } from "fs/promises";
@@ -87,6 +88,8 @@ export async function POST(req: Request) {
       verification,
       vendorId,
     });
+
+   
 
     return NextResponse.json(
       { success: true, data: newBankDetails },
