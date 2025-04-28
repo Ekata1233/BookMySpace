@@ -45,10 +45,12 @@ export async function POST(req: Request) {
       );
     }
 
+    console.log("vendor Id : " , vendorId);
+
     const vendor = await VendorBankDetails.findById(vendorId);
     if (!vendor) {
       return NextResponse.json(
-        { success: false, message: "Vendor not found" },
+        { success: false, message: "Vendor bank details not found" },
         { status: 404, headers: corsHeaders }
       );
     }
