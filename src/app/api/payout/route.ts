@@ -3,6 +3,7 @@ import axios from "axios";
 import testConnection from "@/lib/db";
 import VendorBankDetails from "@/models/VendorBankDetails";
 import PayoutSchema from "@/models/PayoutSchema";
+import { Types } from "mongoose";
 
 testConnection();
 
@@ -47,7 +48,7 @@ export async function POST(req: Request) {
 
     console.log("vendor Id : " , vendorId);
 
-    const vendor = await VendorBankDetails.findById(vendorId);
+    const vendor = await VendorBankDetails.findById(new Types.ObjectId(vendorId));
     if (!vendor) {
       return NextResponse.json(
         { success: false, message: "Vendor bank details not found" },
