@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Building2, CalendarClock, DollarSign, MailCheck } from "lucide-react";
 import {
@@ -18,6 +18,8 @@ import {
 import { usePathname } from "next/navigation";
 import { useCounts } from "@/app/context/CountContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
+import { useBookSpaces } from "@/app/context/BookSpaceContext";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -25,11 +27,64 @@ const page = () => {
   const [openBookings, setOpenBookings] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
-
+  const { officeSpaces } = useOfficeSpaces();
+  const { bookings } = useBookSpaces();
+  const [vendorId, setVendorId] = useState<string | null>(null);
+  const { officeSpaceCount, upcomingBookingCount, setOfficeSpaceCount, setUpcomingBookingCount, completedBookingCount, setCompletedBookingCount } = useCounts();
   const pathname = usePathname();
-  const { officeSpaceCount, upcomingBookingCount } = useCounts();
-  console.log("Vendor officeSpaceCount:", officeSpaceCount);
-  console.log("Vendor upcomingBookingCount:", upcomingBookingCount);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const vendorData = localStorage.getItem("vendor");
+
+      if (vendorData) {
+        try {
+          const parsedVendor = JSON.parse(vendorData);
+          setVendorId(parsedVendor._id);
+        } catch (error) {
+          console.error("Error parsing vendor data:", error);
+        }
+      }
+    }
+  }, []);
+
+  const filteredOfficeSpaces = officeSpaces.filter(
+    (space: any) => space.vendorId === vendorId,
+  );
+
+  useEffect(() => {
+    setOfficeSpaceCount(filteredOfficeSpaces.length);
+  }, [filteredOfficeSpaces, setOfficeSpaceCount]);
+
+  const getOfficeDetails = (id: any) => {
+    return filteredOfficeSpaces.find((office) => office._id === id);
+  };
+
+  const today = new Date().setHours(0, 0, 0, 0);
+
+  const futureBookings = bookings.filter(
+    (booking) => new Date(booking.date).getTime() >= today,
+  );
+
+  const validFutureBookings = futureBookings.filter((booking) =>
+    getOfficeDetails(booking.officeId),
+  );
+
+  const pastBookings = bookings.filter(
+    (booking) => new Date(booking.date).getTime() < today
+  );
+
+  const validPastBookings = pastBookings.filter((booking) =>
+    getOfficeDetails(booking.officeId)
+  );
+
+  useEffect(() => {
+    setUpcomingBookingCount(validFutureBookings.length);
+    setCompletedBookingCount(validPastBookings.length);
+  }, [validFutureBookings, validPastBookings, setUpcomingBookingCount, setCompletedBookingCount]);
+
+  console.log("completed booking ; ", completedBookingCount);
+
 
   const isActive = (href: string) => pathname === href;
   const navItems = [
@@ -41,13 +96,13 @@ const page = () => {
   const cardData = [
     {
       title: "Total Spaces",
-      value: "12",
+      value: officeSpaceCount,
       icon: <Building2 className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#58a4ad]",
     },
     {
       title: "Pending Bookings",
-      value: "4",
+      value: upcomingBookingCount,
       icon: <CalendarClock className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#4d9ca2]",
     },
@@ -59,7 +114,7 @@ const page = () => {
     },
     {
       title: "Completed Bookings",
-      value: "7",
+      value: completedBookingCount,
       icon: <MailCheck className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#31878f]",
     },

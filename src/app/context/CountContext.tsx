@@ -7,6 +7,8 @@ type CountContextType = {
   setOfficeSpaceCount: (count: number) => void;
   upcomingBookingCount: number;
   setUpcomingBookingCount: (count: number) => void;
+  completedBookingCount: number;
+  setCompletedBookingCount: (count: number) => void;
   // Add more counts here as needed
 };
 
@@ -15,6 +17,7 @@ const CountContext = createContext<CountContextType | undefined>(undefined);
 export const CountProvider = ({ children }: { children: ReactNode }) => {
   const [officeSpaceCount, setOfficeSpaceCount] = useState(0);
   const [upcomingBookingCount, setUpcomingBookingCount] = useState(0);
+  const [completedBookingCount, setCompletedBookingCount] = useState(0);
 
   return (
     <CountContext.Provider
@@ -23,6 +26,8 @@ export const CountProvider = ({ children }: { children: ReactNode }) => {
         setOfficeSpaceCount,
         upcomingBookingCount,
         setUpcomingBookingCount,
+        completedBookingCount,
+        setCompletedBookingCount
       }}
     >
       {children}
