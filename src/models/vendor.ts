@@ -23,6 +23,9 @@ export interface IVendor extends Document {
   order_id?: string;
   amount?: number;
   status?: string;
+  TotalEarning?: number;
+  ReceivedAmount?: number;
+  PendingAmount?: number;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
@@ -78,7 +81,7 @@ const VendorSchema: Schema = new Schema(
       type: Number,
       default: 0,
     },
-    PeningAmount: {
+    PendingAmount: {
       type: Number,
       default: 0,
     },
@@ -93,6 +96,14 @@ VendorSchema.pre<IVendor>("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+
+VendorSchema.pre<IVendor>("save", function (next) {
+  const total = this.TotalEarning ?? 0;
+  const received = this.ReceivedAmount ?? 0;
+  this.PendingAmount = total - received;
+  next();
+});
+
 
 // Compare password method
 VendorSchema.methods.comparePassword = async function (
