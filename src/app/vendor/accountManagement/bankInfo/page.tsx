@@ -107,17 +107,17 @@ const BankInfo = () => {
       formData.append("bankProof", form.bankProof);
     }
 
-    // try {
-    //   if (existingDetails) {
-    //     await updateVendorBankDetail(existingDetails._id, formData);
-    //   } else {
-    //     await addVendorBankDetail(formData);
-    //   }
+    try {
+      if (existingDetails) {
+        await updateVendorBankDetail(existingDetails._id, formData);
+      } else {
+        await addVendorBankDetail(formData);
+      }
 
-    //   setShowForm(false);
-    // } catch (error) {
-    //   console.error("Error saving bank details:", error);
-    // }
+      setShowForm(false);
+    } catch (error) {
+      console.error("Error saving bank details:", error);
+    }
   };
 
   return (

@@ -1,65 +1,54 @@
 "use client";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import Link from "next/link";
 
-const UpcomingBookings = () => {
+const CompletedBookings = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { bookings } = useBookSpaces();
   const router = useRouter();
+
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
-
   const [vendorId, setVendorId] = useState<string | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const vendorData = localStorage.getItem("vendor");
-
-      let vendorId = null;
-
       if (vendorData) {
         try {
           const parsedVendor = JSON.parse(vendorData);
-          vendorId = parsedVendor._id;
-          console.log("Vendor ID:", vendorId);
-          setVendorId(vendorId); // Set vendorId in state
+          setVendorId(parsedVendor._id);
         } catch (error) {
           console.error("Error parsing vendor data:", error);
         }
       }
     }
-  }, []); // Only runs on the client side
+  }, []);
 
   const filteredOfficeSpaces = officeSpaces.filter(
-    (space: any) => space.vendorId === vendorId,
-  );
-
-  console.log(
-    "filteredOfficeSpaces officeSpaces booking : ",
-    filteredOfficeSpaces,
+    (space: any) => space.vendorId === vendorId
   );
 
   const getOfficeDetails = (id: any) => {
     return filteredOfficeSpaces.find((office) => office._id === id);
   };
 
-  // Get today's date
-  const today = new Date().setHours(0, 0, 0, 0); // To compare only the date part, ignoring time
+  const today = new Date().setHours(0, 0, 0, 0);
 
-  // Filter bookings to only include upcoming ones (after today)
-  const upcomingBookings = bookings.filter(
-    (booking) => new Date(booking.date).getTime() >= today,
+  const pastBookings = bookings.filter(
+    (booking) => new Date(booking.date).getTime() < today
   );
 
-  console.log("upcoming booking : ", upcomingBookings);
+  const validPastBookings = pastBookings.filter((booking) =>
+    getOfficeDetails(booking.officeId)
+  );
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42">
@@ -69,22 +58,29 @@ const UpcomingBookings = () => {
         setOpenSpaces={setOpenSpaces}
         openBookings={openBookings}
         setOpenBookings={setOpenBookings}
-        openAccount={openAccount} // ✅ Add this
-        setOpenAccount={setOpenAccount} // ✅ Add this
-        openReport={openReport} // ✅ Pass this
+        openReport={openReport}
         setOpenReport={setOpenReport}
+        openAccount={openAccount}
+        setOpenAccount={setOpenAccount}
       />
-      {/* Back Button */}
       <main className="flex-1 max-w-4xl mx-auto p-6">
-        <div className="mb-2"></div>
+        {/* Back Button */}
+        <div className="mb-2">
+          <Link
+            href="/vendor/dashboard"
+            className="inline-flex items-center gap-2 text-[#6BB7BE] hover:text-[#5AA4A9] text-sm font-medium"
+          >
+            <span className="text-xl">←</span> Back to Dashboard
+          </Link>
+        </div>
 
         {/* Heading */}
         <h1 className="text-2xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">
-          Upcoming Bookings
+          Completed Bookings
         </h1>
 
         {/* Bookings Table */}
-        {upcomingBookings.length > 0 ? (
+        {validPastBookings.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-300 text-sm text-left text-gray-700">
               <thead className="bg-gray-100 text-gray-900 uppercase tracking-wider">
@@ -102,7 +98,7 @@ const UpcomingBookings = () => {
                 </tr>
               </thead>
               <tbody>
-                {upcomingBookings.map((booking) => {
+                {validPastBookings.map((booking) => {
                   const office = getOfficeDetails(booking.officeId);
                   if (!office) return null;
 
@@ -134,7 +130,7 @@ const UpcomingBookings = () => {
           </div>
         ) : (
           <p className="text-center text-gray-500 mt-10 text-base">
-            No upcoming bookings available at the moment.
+            No completed bookings available at the moment.
           </p>
         )}
       </main>
@@ -142,4 +138,4 @@ const UpcomingBookings = () => {
   );
 };
 
-export default UpcomingBookings;
+export default CompletedBookings;
