@@ -9,6 +9,17 @@ import bcrypt from "bcryptjs";
 import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
 
+// Define valid business types
+const validBusinessTypes = [
+  "individual",
+  "sole_proprietorship",
+  "partnership",
+  "corporation",
+  "llc",
+  "non_profit",
+  "government_entity"
+];
+
 export async function GET() {
   await testConnection();
   try {
@@ -32,37 +43,67 @@ export async function POST(req: NextRequest) {
     const logo = formData.get("logo") as File | null;
     const documentImage = formData.get("documentImage") as File | null;
 
+    // Validate business type
+    const businessType = getValue("businessType").toLowerCase();
+    if (!validBusinessTypes.includes(businessType)) {
+      return NextResponse.json(
+        { error: "Invalid business type provided. Valid types are: " + validBusinessTypes.join(", ") },
+        { status: 400 }
+      );
+    }
+
     // Save logo
     let logoUrl = "";
     if (logo) {
+      const uniqueLogoName = `${uuidv4()}${path.extname(logo.name)}`;
       const buffer = Buffer.from(await logo.arrayBuffer());
-      const filePath = path.join(uploadDir, logo.name);
+      const filePath = path.join(uploadDir, uniqueLogoName);
       await writeFile(filePath, buffer);
-      logoUrl = `/uploads/${logo.name}`;
+      logoUrl = `/uploads/${uniqueLogoName}`;
     }
 
     // Save document image
     let documentImageUrl = "";
     if (documentImage) {
+      const uniqueDocName = `${uuidv4()}${path.extname(documentImage.name)}`;
       const buffer = Buffer.from(await documentImage.arrayBuffer());
-      const filePath = path.join(uploadDir, documentImage.name);
+      const filePath = path.join(uploadDir, uniqueDocName);
       await writeFile(filePath, buffer);
-      documentImageUrl = `/uploads/${documentImage.name}`;
+      documentImageUrl = `/uploads/${uniqueDocName}`;
     }
 
+    // Check for existing vendor
     const existingVendor = await Vendor.findOne({ workEmail: getValue("workEmail") });
     if (existingVendor) {
-      return NextResponse.json({ error: "Vendor already exists" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Vendor already exists" },
+        { status: 400 }
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(getValue("password"), 10);
+    // Hash password
+    const password = getValue("password");
+    if (!password || password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters" },
+        { status: 400 }
+      );
+    }
+    const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Generate order ID (format: ORD-YYYYMMDD-XXXXXX)
+    const now = new Date();
+    const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const randomPart = Math.floor(100000 + Math.random() * 900000);
+    const orderId = `ORD-${datePart}-${randomPart}`;
+
+    // Create new vendor
     const newVendor = new Vendor({
       companyName: getValue("companyName"),
       workEmail: getValue("workEmail"),
       phone: getValue("phone"),
       website: getValue("website"),
-      businessType: getValue("businessType"),
+      businessType,
       address: getValue("address"),
       message: getValue("message"),
       logo: logoUrl,
@@ -77,13 +118,32 @@ export async function POST(req: NextRequest) {
       paid: true,
       amount: getValue("amount"),
       status: "pending",
+      order_id: orderId,  // Add the generated order ID
     });
 
     await newVendor.save();
 
-    return NextResponse.json({ message: "Vendor registered successfully" }, { status: 201 });
-  } catch (error) {
+    return NextResponse.json(
+      { 
+        message: "Vendor registered successfully",
+        data: {
+          order_id: orderId,
+          vendor_id: newVendor._id,
+          companyName: newVendor.companyName,
+          status: newVendor.status
+        }
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
     console.error("Signup Error:", error);
-    return NextResponse.json({ error: "Signup failed" }, { status: 500 });
+    return NextResponse.json(
+      { 
+        error: "Signup failed",
+        details: error.message,
+        ...(error.errors && { validationErrors: error.errors })
+      },
+      { status: 500 }
+    );
   }
 }
