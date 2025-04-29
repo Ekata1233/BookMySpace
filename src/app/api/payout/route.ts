@@ -176,7 +176,7 @@ export async function POST(req: NextRequest) {
 
 
     await Vendor.updateOne(
-      { vendorId: vendorId },
+      { _id: vendorId },
       { $inc: { ReceivedAmount: amount } }
     );
 
