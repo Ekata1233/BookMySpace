@@ -74,7 +74,7 @@ const VendorSchema: Schema = new Schema(
       type: Number,
       default: 0,
     },
-    ReceiverAmount: {
+    ReceivedAmount: {
       type: Number,
       default: 0,
     },

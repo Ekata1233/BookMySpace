@@ -153,6 +153,7 @@ export async function POST(req: NextRequest) {
       narration: `Payout to vendor ${vendor.accountHolder || vendor._id}`,
     };
 
+
     const payoutResponse = await axios.post(
       "https://api.razorpay.com/v1/payouts",
       payoutPayload,
@@ -173,9 +174,10 @@ export async function POST(req: NextRequest) {
       paidAt: new Date(),
     });
 
+
     await Vendor.updateOne(
       { vendorId: vendorId },
-      { $inc: { ReceiverAmount: amount } }
+      { $inc: { ReceivedAmount: amount } }
     );
 
     return NextResponse.json(
