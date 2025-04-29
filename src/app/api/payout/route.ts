@@ -6,6 +6,7 @@ import testConnection from "@/lib/db";
 import VendorBankDetails from "@/models/VendorBankDetails";
 import PayoutSchema from "@/models/PayoutSchema";
 import mongoose from "mongoose";
+import Vendor from "@/models/vendor";
 
 testConnection();
 
@@ -172,27 +173,32 @@ export async function POST(req: NextRequest) {
       paidAt: new Date(),
     });
 
+    await Vendor.updateOne(
+      { vendorId: vendorId },
+      { $inc: { ReceiverAmount: amount } }
+    );
+
     return NextResponse.json(
       { success: true, data: payoutResponse.data },
       { status: 200, headers: corsHeaders }
     );
-  } 
+  }
   catch (error: any) {
     console.error("Error occurred:", error);
 
     // Log the complete response for better debugging
     if (error.response && error.response.data) {
-        console.error("Razorpay Error Response:", error.response.data);
-        return NextResponse.json(
-            { success: false, message: error.response.data.error.description || "Razorpay API Error" },
-            { status: 400, headers: corsHeaders }
-        );
+      console.error("Razorpay Error Response:", error.response.data);
+      return NextResponse.json(
+        { success: false, message: error.response.data.error.description || "Razorpay API Error" },
+        { status: 400, headers: corsHeaders }
+      );
     } else {
-        return NextResponse.json(
-            { success: false, message: error.message || "Internal Server Error" },
-            { status: 500, headers: corsHeaders }
-        );
+      return NextResponse.json(
+        { success: false, message: error.message || "Internal Server Error" },
+        { status: 500, headers: corsHeaders }
+      );
     }
-}
+  }
 
 }

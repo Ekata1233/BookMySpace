@@ -56,7 +56,7 @@ const VendorSchema: Schema = new Schema(
       enum: ["GST", "License", "Other"],
       required: true,
     },
-    documentNo: { type: String, required: true },  // Changed to String for alphanumeric IDs
+    documentNo: { type: String, required: true },
     documentImage: {
       type: String,
       default: "",
@@ -66,7 +66,22 @@ const VendorSchema: Schema = new Schema(
     userId: { type: String },
     paid: { type: Boolean, default: false },
     order_id: { type: String },
-    amount: { type: Number },
+    amount: {
+      type: Number,
+      default: 0,
+    },
+    TotalEarning: {
+      type: Number,
+      default: 0,
+    },
+    ReceiverAmount: {
+      type: Number,
+      default: 0,
+    },
+    PeningAmount: {
+      type: Number,
+      default: 0,
+    },
     status: { type: String, default: "pending" },
   },
   { timestamps: true },
