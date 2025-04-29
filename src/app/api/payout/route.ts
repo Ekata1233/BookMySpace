@@ -23,9 +23,9 @@ export async function OPTIONS() {
 // GET all vendors for payout listing
 export async function GET() {
   try {
-    const vendors = await VendorBankDetails.find({});
+    const payout = await PayoutSchema.find({});
     return NextResponse.json(
-      { success: true, data: vendors },
+      { success: true, data: payout },
       { status: 200, headers: corsHeaders }
     );
   } catch (error: any) {
