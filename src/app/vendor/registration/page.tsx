@@ -36,7 +36,7 @@ const VendorRegistration = () => {
     password: "",
     confirmPassword: "",
     agreed: false,
-    amount: 0,
+    amount: 1999,
   });
   const router= useRouter();
 
@@ -108,8 +108,8 @@ const VendorRegistration = () => {
       }
      
       const res = await axios.post("/api/vendor/registration", formPayload);
-      const { id: order_id } = res.data.order_id;
-
+      console.log("res.data:", res.data);
+      const order_id  = res.data.order.id;
       console.log("order id : ", order_id);
 
       const options = {
@@ -144,7 +144,7 @@ const VendorRegistration = () => {
       alert("Registration completed!");
       router.push("/")
     } catch (err) {
-      alert("Registration completed!");
+      alert("Registration not completed!");
     }
   };
   const [step, setStep] = useState(1);

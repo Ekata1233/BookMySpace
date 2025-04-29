@@ -8,6 +8,13 @@ import path from "path";
 import bcrypt from "bcryptjs";
 import { writeFile, mkdir } from "fs/promises";
 import { existsSync } from "fs";
+import Razorpay from "razorpay";
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
+
 
 export async function GET() {
   await testConnection();
@@ -81,7 +88,19 @@ export async function POST(req: NextRequest) {
 
     await newVendor.save();
 
-    return NextResponse.json({ message: "Vendor registered successfully" }, { status: 201 });
+// Create Razorpay Order
+const razorpayOrder = await razorpay.orders.create({
+  amount: Number(getValue("amount")) * 100,
+  currency: "INR",
+  receipt: `rcpt_${Date.now()}`,
+});
+
+// Send back message and order info
+return NextResponse.json({
+  message: "Vendor registered successfully",
+  order: razorpayOrder,
+}, { status: 201 });
+
   } catch (error) {
     console.error("Signup Error:", error);
     return NextResponse.json({ error: "Signup failed" }, { status: 500 });

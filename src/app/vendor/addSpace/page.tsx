@@ -34,6 +34,7 @@ const OfficeSpaceForm = () => {
     description: "",
     extraDescription: "",
     rate: "",
+    ratePerMonth:"",
     startTime: "",
     endTime: "",
     amenities: [] as string[],
@@ -127,6 +128,7 @@ const OfficeSpaceForm = () => {
     formDataToSend.append("description", formData.description);
     formDataToSend.append("extraDescription", formData.extraDescription);
     formDataToSend.append("rate", formData.rate.toString());
+    formDataToSend.append("ratePerMonth", formData.ratePerMonth.toString())
     formDataToSend.append("lat", String(formData.lat ?? ""));
     formDataToSend.append("lng", String(formData.lng ?? ""));
 
@@ -181,6 +183,7 @@ const OfficeSpaceForm = () => {
         description: "",
         extraDescription: "",
         rate: "",
+        ratePerMonth: "",
         lat: null as number | null,
         lng: null as number | null,
         startTime: "",
@@ -342,11 +345,22 @@ const OfficeSpaceForm = () => {
             </div>
           </div>
 
-          <Label className="text-[#6BB7BE] my-2">Price</Label>
+          <Label className="text-[#6BB7BE] my-2">Rate per Hour</Label>
           <Input
             type="number"
             name="rate"
             value={formData.rate}
+            onChange={(e) => handleChange(e.target.name, e.target.value)}
+            placeholder="1500"
+            required
+            className="rounded-none w-full py-5"
+          />
+
+          <Label className="text-[#6BB7BE] my-2">Rate per Month (Optional)</Label>
+          <Input
+            type="number"
+            name="ratePerMonth"
+            value={formData.ratePerMonth}
             onChange={(e) => handleChange(e.target.name, e.target.value)}
             placeholder="1500"
             required
