@@ -34,7 +34,7 @@ const OfficeSpaceForm = () => {
     description: "",
     extraDescription: "",
     rate: "",
-    ratePerMonth:"",
+    ratePerMonth: "",
     startTime: "",
     endTime: "",
     amenities: [] as string[],
@@ -362,7 +362,7 @@ const OfficeSpaceForm = () => {
             name="ratePerMonth"
             value={formData.ratePerMonth}
             onChange={(e) => handleChange(e.target.name, e.target.value)}
-            placeholder="1500"
+            placeholder="25000"
             required
             className="rounded-none w-full py-5"
           />

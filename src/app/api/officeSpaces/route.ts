@@ -42,7 +42,9 @@ export async function POST(req: Request) {
     const endTime = new Date(formData.get("endTime") as string);
     const vendorId = formData.get("vendorId") as string;
 
-    if (!officeSpaceName || !city || !description || isNaN(rate))  {
+    console.log("new office space formData : ", formData)
+
+    if (!officeSpaceName || !city || !description || isNaN(rate) || !ratePerMonth)  {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400, headers: corsHeaders },
@@ -81,7 +83,6 @@ export async function POST(req: Request) {
         multiImages.push(`/uploads/${file.name}`);
       }
     }
-
     // Create new office space entry in the database
     const newOfficeSpace = await officeSpaces.create({
       officeSpaceName,
@@ -103,6 +104,8 @@ export async function POST(req: Request) {
       multiImages,
       vendorId,
     });
+
+    
 
     return NextResponse.json(
       { success: true, data: newOfficeSpace },

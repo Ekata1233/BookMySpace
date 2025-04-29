@@ -209,8 +209,8 @@ export async function POST(req: NextRequest) {
     }
 
     const razorpayAuth = {
-      username: process.env.RAZORPAY_KEY_ID || "rzp_test_4IVVmy5cqABEUR",
-      password: process.env.RAZORPAY_KEY_SECRET || "c8zMe6PuJOhCDgPlh6Jjrc01",
+      username: process.env.PAYOUT_RAZORPAY_KEY_ID || "rzp_test_tcKo6REb3XcVyx",
+      password: process.env.PAYOUT_RAZORPAY_KEY_SECRET || "8aR5rqAJQQi2WGQXz05OYDo3",
     };
 
     // 1. Create Contact
