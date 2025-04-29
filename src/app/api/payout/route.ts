@@ -168,6 +168,7 @@ export async function POST(req: NextRequest) {
       transactionId: payoutResponse.data.id,
       razorpayStatus: payoutResponse.data.status,
       notes: payoutResponse.data.narration || "",
+      razorpayResponse: payoutResponse.data,
       paidAt: new Date(),
     });
 
