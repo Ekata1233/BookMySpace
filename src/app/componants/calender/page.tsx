@@ -255,7 +255,7 @@ const TimeCalendar = () => {
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"
-          tabIndex="-1"
+          tabIndex={-1}
         >
           <div className="py-1" role="none">
             <div className="flex items-center space-x-2 px-4 py-2">
