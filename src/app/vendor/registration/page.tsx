@@ -1059,9 +1059,11 @@ const VendorRegistration = () => {
       if (formData.documentImage) formPayload.append("documentImage", formData.documentImage);
 
       const response = await axios.post("/api/vendor/registration", formPayload);
-      const { orderId } = response.data.vendor._id;
+      const order_id  = response.data.order.id;
 
       console.log("response : ", response)
+
+      console.log("order id : ", order_id);
 
       // if (!order || !order.id) {
       //   setError("Failed to create payment order");
@@ -1074,7 +1076,7 @@ const VendorRegistration = () => {
         currency: "INR",
         name: "Office Registration",
         description: "Office registration slot",
-        order_id: orderId,
+        order_id: order_id,
         handler: async function (razorpayResponse: any) {
           await handlePaymentSuccess(razorpayResponse);
         },
