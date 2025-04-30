@@ -20,6 +20,7 @@ import { useCounts } from "@/app/context/CountContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
+import { useVendor } from "@/app/context/VendorContext";
 
 const page = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -29,6 +30,7 @@ const page = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const { officeSpaces } = useOfficeSpaces();
   const { bookings } = useBookSpaces();
+  const { vendor } = useVendor();
   const [vendorId, setVendorId] = useState<string | null>(null);
   const { officeSpaceCount, upcomingBookingCount, setOfficeSpaceCount, setUpcomingBookingCount, completedBookingCount, setCompletedBookingCount } = useCounts();
   const pathname = usePathname();
@@ -83,8 +85,10 @@ const page = () => {
     setCompletedBookingCount(validPastBookings.length);
   }, [validFutureBookings, validPastBookings, setUpcomingBookingCount, setCompletedBookingCount]);
 
-  console.log("completed booking ; ", completedBookingCount);
-
+  console.log("vendor details ; ", vendor);
+  const revenue = vendor ? vendor.TotalEarning - vendor.TotalEarning * 0.15 : 0;
+  const receivedAmount = vendor ? vendor.ReceivedAmount : 0;
+  const pendingAmount = revenue - receivedAmount;
 
   const isActive = (href: string) => pathname === href;
   const navItems = [
@@ -108,7 +112,7 @@ const page = () => {
     },
     {
       title: "Revenue",
-      value: "$2,300",
+      value: `$${revenue.toFixed(2)}`,
       icon: <DollarSign className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#3e8f96]",
     },
@@ -117,6 +121,18 @@ const page = () => {
       value: completedBookingCount,
       icon: <MailCheck className="w-8 h-8 text-white" />,
       color: "from-[#6bb7be] to-[#31878f]",
+    },
+    {
+      title: "Received Amount",
+      value: `$${receivedAmount.toFixed(2)}`,
+      icon: <DollarSign className="w-8 h-8 text-white" />,
+      color: "from-[#6bb7be] to-[#3e8f96]",
+    },
+    {
+      title: "Pending Amount",
+      value: `$${pendingAmount.toFixed(2)}`,
+      icon: <DollarSign className="w-8 h-8 text-white" />,
+      color: "from-[#6bb7be] to-[#3e8f96]",
     },
   ];
 

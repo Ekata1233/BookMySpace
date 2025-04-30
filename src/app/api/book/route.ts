@@ -55,9 +55,24 @@ export async function POST(req: Request) {
       totalPay,
     });
 
+    // await Vendor.updateOne(
+    //   { _id: vendorId },
+    //   { $inc: { TotalEarning: totalPay } }
+    // );
+
+    const adminCommission = totalPay * 0.15;
+    const vendorShare = totalPay - adminCommission;
+
+    // Update vendor earnings and commissions
     await Vendor.updateOne(
       { _id: vendorId },
-      { $inc: { TotalEarning: totalPay } }
+      {
+        $inc: {
+          TotalEarning: totalPay,
+          adminCummision: adminCommission,
+          TotalEarningCuttingCommision: vendorShare,
+        }
+      }
     );
 
     return NextResponse.json(

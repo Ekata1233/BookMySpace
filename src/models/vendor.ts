@@ -24,6 +24,8 @@ export interface IVendor extends Document {
   amount?: number;
   status?: string;
   TotalEarning?: number;
+  adminCummision?: number;
+  TotalEarningCuttingCommision?: number;
   ReceivedAmount?: number;
   PendingAmount?: number;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
