@@ -2,6 +2,19 @@
 import React, { useState } from "react";
 import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import { useVendor } from "@/app/context/VendorContext";
+import { useNavigation } from "react-day-picker";
+import { useRouter } from "next/navigation";
+import { usePayouts } from "@/app/context/PayoutContext";
+
+interface Payout {
+  vendor: string;
+  amount: number;
+  razorpayStatus?: string;
+  transactionId?: string;
+  createdAt: string; // 👈 add this line
+}
+
 
 const AccountInfo = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -10,17 +23,56 @@ const AccountInfo = () => {
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
   const { vendorBankDetails } = useVendorBankDetails();
+  const { vendor } = useVendor();
+  const { payouts } = usePayouts();
+  const bank = vendorBankDetails?.[0];
+  const router = useRouter();
 
-  console.log("bank details : ", vendorBankDetails);
-
-  const accountStats = {
-    totalEarnings: "₹50,000",
-    withdrawableBalance: "₹12,000",
-    pendingWithdrawals: "₹5,000",
-    alreadyWithdrawn: "₹33,000",
-    commissionDeducted: "₹2,000",
-    totalBookingEarnings: "₹48,000",
+  const handleClick = () => {
+    router.push('/vendor/accountManagement/bankInfo');
   };
+
+
+
+  if (!vendor) {
+    return <p>Loading vendor data...</p>; // or a spinner
+  }
+
+
+  const totalEarnings = vendor.TotalEarning - vendor.TotalEarning * 0.15;
+  const totalCommissionDeducted = vendor.TotalEarning * 0.15;
+  const pendingAmount = totalEarnings - vendor.ReceivedAmount;
+
+  const vendorId = vendor._id;
+  console.log("payout details : ", payouts);
+  console.log("vendorId details : ", vendorId);
+
+  const vendorPayouts = payouts.filter(payout => payout.vendor === vendorId);
+  
+
+  const accountStats = [
+    {
+      title: "Total Earnings",
+      value: `₹${totalEarnings.toLocaleString()}`,
+      description: "Total amount earned from all bookings",
+    },
+    {
+      title: "Received Amount",
+      value: `₹${vendor.ReceivedAmount.toLocaleString()}`,
+      description: "Current balance available",
+    },
+    {
+      title: "Pending Amount",
+      value: `₹${pendingAmount.toLocaleString()}`,
+      description: "Pending Balance",
+    },
+    {
+      title: "Total Commission Deducted",
+      value: `₹${totalCommissionDeducted.toLocaleString()}`,
+      description: "Platform fees deducted from the total",
+    },
+  ];
+
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42 bg-gray-100">
@@ -40,71 +92,19 @@ const AccountInfo = () => {
           <h2 className="text-2xl font-bold mb-6">Financial Overview</h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">Total Earnings</h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.totalEarnings}
-              </p>
-              <p className="text-sm text-gray-500">
-                Total amount earned from all bookings
-              </p>
-            </div>
-
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">Withdraw-able Balance</h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.withdrawableBalance}
-              </p>
-              <p className="text-sm text-gray-500">
-                Current balance available for withdrawal
-              </p>
-            </div>
-
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">Pending Withdrawals</h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.pendingWithdrawals}
-              </p>
-              <p className="text-sm text-gray-500">
-                Withdrawals requested but not yet processed
-              </p>
-            </div>
-
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">Already Withdrawn</h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.alreadyWithdrawn}
-              </p>
-              <p className="text-sm text-gray-500">
-                History of amount already paid out
-              </p>
-            </div>
-
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">
-                Total Commission Deducted
-              </h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.commissionDeducted}
-              </p>
-              <p className="text-sm text-gray-500">
-                Platform fees deducted from the total
-              </p>
-            </div>
-
-            <div className="bg-white shadow-md rounded-none p-4">
-              <h3 className="text-lg font-semibold">Total Booking Earnings</h3>
-              <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
-                {accountStats.totalBookingEarnings}
-              </p>
-              <p className="text-sm text-gray-500">
-                Earnings from completed bookings only
-              </p>
-            </div>
+            {accountStats.map((stat, index) => (
+              <div key={index} className="bg-white shadow-md rounded-none p-4">
+                <h3 className="text-lg font-semibold">{stat.title}</h3>
+                <p className="text-xl font-bold" style={{ color: "#6BB7BE" }}>
+                  {stat.value}
+                </p>
+                <p className="text-sm text-gray-500">{stat.description}</p>
+              </div>
+            ))}
           </div>
 
           <div className="mt-10">
-            <h2 className="text-2xl font-bold mb-4">🧾 Withdrawal Section</h2>
+            {/* <h2 className="text-2xl font-bold mb-4">🧾 Withdrawal Section</h2>
 
             <div className="bg-white shadow-md rounded-none p-4 mb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -121,49 +121,42 @@ const AccountInfo = () => {
                   Request Withdrawal
                 </button>
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="bg-white shadow-md rounded-none p-4">
                 <h3 className="text-lg font-semibold">Linked Account</h3>
-                <p className="text-gray-600">Bank: HDFC Bank</p>
-                <p className="text-gray-600">Account No: XXXX-XXXX-1234</p>
-                <p className="text-gray-600">UPI ID: aniket@upi</p>
+                {bank ? (
+                  <>
+                    <p className="text-gray-600">Bank: {bank.bankName}</p>
+                    <p className="text-gray-600">
+                      Account No: XXXX-XXXX-{bank.accountNumber?.slice(-4)}
+                    </p>
+                    <p className="text-gray-600">UPI ID: {bank.upiId}</p>
+                  </>
+                ) : (
+                  <p className="text-gray-600">No bank details linked yet.</p>
+                )}
               </div>
 
               <div className="bg-white shadow-md rounded-none p-4">
-                <h3 className="text-lg font-semibold">Withdrawal Method</h3>
+                <h3 className="text-lg font-semibold">Update Details</h3>
                 <p className="text-gray-600 mb-2">
-                  You can update your payout method anytime.
+                  You can update your details anytime.
                 </p>
                 <button
                   className="px-4 py-2 text-white rounded-none hover:opacity-90"
                   style={{ backgroundColor: "#6BB7BE" }}
+                  onClick={handleClick}
                 >
                   Update Bank/UPI Details
                 </button>
               </div>
             </div>
 
-            <div className="bg-white shadow-md rounded-none p-4 mb-6">
-              <h3 className="text-lg font-semibold mb-2">
-                Recent Withdrawal Status
-              </h3>
-              <ul className="list-disc list-inside text-gray-700">
-                <li>
-                  ₹5,000 - <span style={{ color: "#6BB7BE" }}>Pending</span>
-                </li>
-                <li>
-                  ₹3,000 - <span style={{ color: "#6BB7BE" }}>Paid</span>
-                </li>
-                <li>
-                  ₹2,000 - <span style={{ color: "#6BB7BE" }}>Rejected</span>
-                </li>
-              </ul>
-            </div>
 
             <div className="bg-white shadow-md rounded-none p-4 overflow-x-auto">
-              <h3 className="text-lg font-semibold mb-4">Withdrawal History</h3>
+              <h3 className="text-lg font-semibold mb-4">Received Payment History</h3>
               <table className="min-w-full text-sm text-left text-gray-600">
                 <thead className="bg-gray-100 text-gray-700">
                   <tr>
@@ -174,30 +167,19 @@ const AccountInfo = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-t">
-                    <td className="px-4 py-2">2025-04-20</td>
-                    <td className="px-4 py-2">₹5,000</td>
-                    <td className="px-4 py-2" style={{ color: "#6BB7BE" }}>
-                      Pending
-                    </td>
-                    <td className="px-4 py-2">TXN12345678</td>
-                  </tr>
-                  <tr className="border-t">
-                    <td className="px-4 py-2">2025-04-10</td>
-                    <td className="px-4 py-2">₹3,000</td>
-                    <td className="px-4 py-2" style={{ color: "#6BB7BE" }}>
-                      Paid
-                    </td>
-                    <td className="px-4 py-2">TXN12345679</td>
-                  </tr>
-                  <tr className="border-t">
-                    <td className="px-4 py-2">2025-04-01</td>
-                    <td className="px-4 py-2">₹2,000</td>
-                    <td className="px-4 py-2" style={{ color: "#6BB7BE" }}>
-                      Rejected
-                    </td>
-                    <td className="px-4 py-2">TXN12345680</td>
-                  </tr>
+                  {vendorPayouts.map((payout, index) => (
+                    <tr className="border-t" key={index}>
+                      <td className="px-4 py-2">
+                        {new Date((payout as any).createdAt
+                        ).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2">₹{payout.amount}</td>
+                      <td className="px-4 py-2" style={{ color: "#6BB7BE" }}>
+                        {payout.razorpayStatus || "Unknown"}
+                      </td>
+                      <td className="px-4 py-2">{payout.transactionId || "N/A"}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import testConnection from "@/lib/db";
 import BookSpace from "@/models/bookSpace";
+import Vendor from "@/models/vendor";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -33,10 +34,10 @@ export async function POST(req: Request) {
 
   try {
     const body = await req.json();
-    const { userId, officeId,vendorId, date, startTime, duration, totalPay } = body;
+    const { userId, officeId, vendorId, date, startTime, duration, totalPay } = body;
 
     // Validate required fields
-    if (!userId || !officeId ||!vendorId|| !date || !startTime || !duration || !totalPay) {
+    if (!userId || !officeId || !vendorId || !date || !startTime || !duration || !totalPay) {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400 },
@@ -54,7 +55,25 @@ export async function POST(req: Request) {
       totalPay,
     });
 
-    console.log("new booking : ", newBooking)
+    // await Vendor.updateOne(
+    //   { _id: vendorId },
+    //   { $inc: { TotalEarning: totalPay } }
+    // );
+
+    const adminCommission = totalPay * 0.15;
+    const vendorShare = totalPay - adminCommission;
+
+    // Update vendor earnings and commissions
+    await Vendor.updateOne(
+      { _id: vendorId },
+      {
+        $inc: {
+          TotalEarning: totalPay,
+          adminCummision: adminCommission,
+          TotalEarningCuttingCommision: vendorShare,
+        }
+      }
+    );
 
     return NextResponse.json(
       { success: true, data: newBooking },

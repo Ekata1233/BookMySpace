@@ -16,6 +16,7 @@ const payoutSchema = new mongoose.Schema({
     enum: ['bank_transfer', 'upi'],
     required: true
   },
+  razorpayResponse: Object,
   transactionId: {
     type: String, // Razorpay payout ID
     required: true

@@ -23,6 +23,11 @@ export interface IVendor extends Document {
   order_id?: string;
   amount?: number;
   status?: string;
+  TotalEarning?: number;
+  adminCummision?: number;
+  TotalEarningCuttingCommision?: number;
+  ReceivedAmount?: number;
+  PendingAmount?: number;
   comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
@@ -56,7 +61,7 @@ const VendorSchema: Schema = new Schema(
       enum: ["GST", "License", "Other"],
       required: true,
     },
-    documentNo: { type: String, required: true },  // Changed to String for alphanumeric IDs
+    documentNo: { type: String, required: true },
     documentImage: {
       type: String,
       default: "",
@@ -66,7 +71,22 @@ const VendorSchema: Schema = new Schema(
     userId: { type: String },
     paid: { type: Boolean, default: false },
     order_id: { type: String },
-    amount: { type: Number },
+    amount: {
+      type: Number,
+      default: 0,
+    },
+    TotalEarning: {
+      type: Number,
+      default: 0,
+    },
+    ReceivedAmount: {
+      type: Number,
+      default: 0,
+    },
+    PendingAmount: {
+      type: Number,
+      default: 0,
+    },
     status: { type: String, default: "pending" },
   },
   { timestamps: true },
@@ -75,6 +95,13 @@ VendorSchema.pre<IVendor>("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
+
+VendorSchema.pre<IVendor>("save", function (next) {
+  const total = this.TotalEarning ?? 0;
+  const received = this.ReceivedAmount ?? 0;
+  this.PendingAmount = total - received;
   next();
 });
 
