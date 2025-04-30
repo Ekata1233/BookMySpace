@@ -1005,10 +1005,10 @@ const VendorRegistration = () => {
     setFormData((prev) => ({ ...prev, logo: file }));
   };
 
-  const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, documentImage: file }));
-  };
+const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0] || null;
+  setFormData((prev) => ({ ...prev, documentImage: file }));
+};
 
   const validateForm = () => {
     if (!formData.agreed) {
@@ -1117,9 +1117,9 @@ const VendorRegistration = () => {
 
 
 
-  const handleBack = () => {
-    if (step > 1) setStep(step - 1);
-  };
+const handleBack = () => {
+  if (step > 1) setStep(step - 1);
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6 mt-40">

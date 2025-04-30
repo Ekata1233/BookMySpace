@@ -91,7 +91,6 @@ const VendorSchema: Schema = new Schema(
   },
   { timestamps: true },
 );
-
 VendorSchema.pre<IVendor>("save", async function (next) {
   if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
