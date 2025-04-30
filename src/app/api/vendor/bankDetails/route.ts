@@ -1,13 +1,10 @@
-
 import { NextResponse } from "next/server";
-import path from "path";
-import { writeFile, mkdir } from "fs/promises";
+import axios from "axios";
 import testConnection from "@/lib/db";
 import VendorBankDetails from "@/models/VendorBankDetails";
-import vendor from "@/models/vendor";
-import { existsSync } from "fs";
+import PayoutSchema from "@/models/PayoutSchema";
+import mongoose from 'mongoose';
 
-// Connect to MongoDB
 testConnection();
 
 const corsHeaders = {
@@ -16,105 +13,153 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
-// ✅ Handle preflight requests
+// Handle preflight requests
 export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-export async function POST(req: Request) {
-  await testConnection();
-
+// GET all vendors for payout listing (you can filter this if needed)
+export async function GET() {
   try {
-    const formData = await req.formData();
-
-    const bankName = formData.get("bankName") as string;
-    const accountHolder = formData.get("accountHolder") as string;
-    const accountNumber = formData.get("accountNumber") as string;
-    const ifscCode = formData.get("ifscCode") as string;
-    const branchName = formData.get("branchName") as string;
-    const accountType = formData.get("accountType") as string;
-    const phone = formData.get("phone") as string;
-    const upiId = formData.get("upiId") as string;
-    const verification = formData.get("verification") as string;
-    const vendorId = formData.get("vendorId") as string;
-
-    // Validate required fields
-    if (!bankName || !accountHolder || !accountNumber || !ifscCode || !accountType || !vendorId) {
-      return NextResponse.json(
-        { success: false, message: "Missing required fields" },
-        { status: 400, headers: corsHeaders },
-      );
-    }
-
-    // Ensure 'public/uploads' directory exists
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    // Handle file upload for bankProof
-    let bankProofUrl = "";
-    const file = formData.get("bankProof") as File | null;
-
-    if (file) {
-      const bytes = await file.arrayBuffer();
-      const buffer = Buffer.from(bytes);
-      const filePath = path.join(uploadDir, file.name);
-
-      await writeFile(filePath, buffer);
-      bankProofUrl = `/uploads/${file.name}`;
-    }
-
-    // Check if vendor exists
-    const vendorExists = await vendor.findById(vendorId);
-    if (!vendorExists) {
-      return NextResponse.json(
-        { success: false, message: "Vendor does not exist" },
-        { status: 404, headers: corsHeaders },
-      );
-    }
-
-    // Create new vendor bank details entry
-    const newBankDetails = await VendorBankDetails.create({
-      bankName,
-      accountHolder,
-      accountNumber,
-      ifscCode,
-      branchName,
-      accountType,
-      phone,
-      upiId,
-      bankProof: bankProofUrl,
-      verification,
-      vendorId,
-    });
-
-   
-
+    const vendors = await VendorBankDetails.find({});
     return NextResponse.json(
-      { success: true, data: newBankDetails },
-      { status: 201, headers: corsHeaders },
+      { success: true, data: vendors },
+      { status: 200, headers: corsHeaders }
     );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 400, headers: corsHeaders },
+      { status: 500, headers: corsHeaders }
     );
   }
 }
 
-export async function GET() {
+// POST: Process payout to vendor
+export async function POST(req: Request) {
   try {
-    const bankDetails = await VendorBankDetails.find({});
-    return NextResponse.json(
-      { success: true, data: bankDetails },
-      { status: 200, headers: corsHeaders },
-    );
+    const { vendorId, amount, paymentMethod } = await req.json();
+
+    // Check for missing required fields
+    if (!vendorId || !amount || !paymentMethod) {
+      return NextResponse.json(
+        { success: false, message: "Missing required fields" },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Validate vendorId format (MongoDB ObjectId)
+    if (!mongoose.Types.ObjectId.isValid(vendorId)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid vendorId format" },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Log the vendorId to verify the value
+    console.log("Looking for vendor with ID:", vendorId); // Add this log for debugging
+
+    // Check if vendor exists
+    const vendor = await VendorBankDetails.findById(vendorId);
+
+    // Log the fetched vendor details to verify if it's found
+    console.log("Fetched vendor from DB:", vendor); // Add this log for debugging
+
+    if (!vendor) {
+      return NextResponse.json(
+        { success: false, message: "Vendor bank details not found" },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    const payoutData: any = {
+      amount: amount * 100, // Convert to paise
+      currency: "INR",
+      purpose: "payout",
+      mode: paymentMethod,
+      narration: `Payout to vendor ${vendor.accountHolder || vendor._id}`,
+    };
+
+    // If payment method is bank transfer
+    if (paymentMethod === "bank_transfer") {
+      payoutData.fund_account = {
+        account_type: "bank_account",
+        bank_account: {
+          name: vendor.accountHolder || "Vendor",       // ✅ correct field
+          ifsc: vendor.ifscCode,                        // ✅ correct field
+          account_number: vendor.accountNumber,         // ✅ correct field
+        },
+        contact: {
+          name: vendor.accountHolder || "Vendor",       // ✅ fallback
+          type: "vendor",
+          email: vendor.email || "test@example.com",    // ✅ fallback dummy email
+        },
+      };
+    }
+    
+    // If payment method is UPI
+    else if (paymentMethod === "upi") {
+      payoutData.fund_account = {
+        account_type: "vpa",
+        vpa: {
+          address: vendor.upiId,
+        },
+        contact: {
+          name: vendor.name || "Vendor",
+          type: "vendor",
+          email: vendor.email,
+        },
+      };
+    } 
+    // Invalid payment method
+    else {
+      return NextResponse.json(
+        { success: false, message: "Invalid payment method" },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Send payout request to Razorpay API
+    try {
+      const response = await axios.post(
+        "https://api.razorpay.com/v1/payouts",
+        payoutData,
+        {
+          auth: {
+            username: process.env.RAZORPAY_KEY_ID!,
+            password: process.env.RAZORPAY_KEY_SECRET!,
+          },
+        }
+      );
+      console.log("Razorpay response:", response.data);
+
+      // Save payout details in the database
+      await PayoutSchema.create({
+        vendor: vendorId,
+        amount,
+        paymentMethod,
+        transactionId: response.data.id,
+        razorpayStatus: response.data.status,
+        notes: response.data.narration || "",
+        paidAt: new Date(),
+      });
+
+      return NextResponse.json(
+        { success: true, data: response.data },
+        { status: 200, headers: corsHeaders }
+      );
+    } catch (error: any) {
+      console.error("Error from Razorpay:", error.response?.data || error.message);
+      return NextResponse.json(
+        { success: false, message: error.response?.data?.error?.description || error.message },
+        { status: 500, headers: corsHeaders }
+      );
+    }
+
   } catch (error: any) {
-    console.error("Error:", error.message);
+    console.error("Error processing payout:", error); // Log for debugging
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500, headers: corsHeaders },
+      { status: 500, headers: corsHeaders }
     );
   }
 }

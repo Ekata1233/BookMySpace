@@ -146,7 +146,7 @@ import axios from "axios";
 import testConnection from "@/lib/db";
 import VendorBankDetails from "@/models/VendorBankDetails";
 import PayoutSchema from "@/models/PayoutSchema";
-import { Types } from "mongoose";
+import mongoose from "mongoose";
 
 testConnection();
 
@@ -161,7 +161,7 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// GET all vendors for payout listing (you can filter this if needed)
+// GET all vendors for payout listing
 export async function GET() {
   try {
     const vendors = await VendorBankDetails.find({});
@@ -181,6 +181,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const { vendorId, amount, paymentMethod } = await req.json();
+    console.log("Request vendorId:", vendorId);
 
     if (!vendorId || !amount || !paymentMethod) {
       return NextResponse.json(
@@ -189,7 +190,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    console.log("Received vendorId:", vendorId);
+    if (!mongoose.Types.ObjectId.isValid(vendorId)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid vendorId format" },
+        { status: 400, headers: corsHeaders }
+      );
+    }
 
     const vendor = await VendorBankDetails.findOne({ vendorId: vendorId });
 

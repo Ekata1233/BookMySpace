@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const payoutSchema = new mongoose.Schema({
   vendor: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'VendorBankDetails', // or 'User' if you're using that model
+    ref: 'VendorBankDetails',
     required: true
   },
   amount: {
@@ -36,6 +36,4 @@ const payoutSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-
-export default mongoose.models.PayoutSchema ||
-  mongoose.model("PayoutSchema", payoutSchema);
+export default mongoose.models.PayoutSchema || mongoose.model('PayoutSchema', payoutSchema);

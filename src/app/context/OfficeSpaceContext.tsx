@@ -17,6 +17,7 @@ interface OfficeSpace {
   lng: number;
   description: string;
   rate: number;
+  ratePerMonth: number;
   amenities: string[];
   isNewlyOpen: boolean;
   category: string;

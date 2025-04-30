@@ -34,6 +34,7 @@ export async function POST(req: Request) {
     const description = formData.get("description") as string;
     const extraDescription = formData.get("extraDescription") as string;
     const rate = Number(formData.get("rate"));
+    const ratePerMonth = Number(formData.get("ratePerMonth"));
     const isNewlyOpen = formData.get("isNewlyOpen") === "true";
     const category = formData.get("category") as string;
     const amenities = JSON.parse(formData.get("amenities") as string);
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
     const endTime = new Date(formData.get("endTime") as string);
     const vendorId = formData.get("vendorId") as string;
 
-    if (!officeSpaceName || !city || !description || isNaN(rate)) {
+    if (!officeSpaceName || !city || !description || isNaN(rate))  {
       return NextResponse.json(
         { success: false, message: "Missing required fields" },
         { status: 400, headers: corsHeaders },
@@ -92,6 +93,7 @@ export async function POST(req: Request) {
       description,
       extraDescription,
       rate,
+      ratePerMonth,
       startTime,
       endTime,
       isNewlyOpen,

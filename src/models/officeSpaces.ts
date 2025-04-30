@@ -62,6 +62,9 @@ const OfficeSpaceSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    ratePerMonth: {
+      type: Number,
+    },
     lat: {
       type: Number,
     },

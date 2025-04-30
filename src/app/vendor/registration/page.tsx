@@ -18,143 +18,163 @@ import { useRouter } from "next/navigation";
 
 const VendorRegistration = () => {
   const { submitVendor } = useVendor();
-  const [formData, setFormData] = useState({
-    companyName: "",
-    workEmail: "",
-    phone: "",
-    website: "",
-    businessType: "",
-    address: "",
-    message: "",
-    logo: null as File | null,
-    contactName: "",
-    contactMobile: "",
-    contactEmail: "",
-    documentType: "",
-    documentNo: "",
-    documentImage: null as File | null,
-    password: "",
-    confirmPassword: "",
-    agreed: false,
-    amount: 0,
+const router = useRouter();
+
+const [formData, setFormData] = useState({
+  companyName: "",
+  workEmail: "",
+  phone: "",
+  website: "",
+  businessType: "",
+  address: "",
+  message: "",
+  logo: null as File | null,
+  contactName: "",
+  contactMobile: "",
+  contactEmail: "",
+  documentType: "",
+  documentNo: "",
+  documentImage: null as File | null,
+  password: "",
+  confirmPassword: "",
+  agreed: false,
+  amount: 1999,
+});
+
+const [step, setStep] = useState(1);
+const [isLoading, setIsLoading] = useState(false);
+const [error, setError] = useState("");
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const { name, value, type } = e.target;
+  const checked = (e.target as HTMLInputElement).checked;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: type === "checkbox" ? checked : value,
+  }));
+};
+
+const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0] || null;
+  setFormData((prev) => ({ ...prev, logo: file }));
+};
+
+const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0] || null;
+  setFormData((prev) => ({ ...prev, documentImage: file }));
+};
+
+const validateForm = () => {
+  if (!formData.agreed) {
+    setError("Please agree to terms and conditions");
+    return false;
+  }
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match");
+    return false;
+  }
+  setError("");
+  return true;
+};
+
+const loadRazorpayScript = () => {
+  return new Promise((resolve) => {
+    const existingScript = document.querySelector("script[src='https://checkout.razorpay.com/v1/checkout.js']");
+    if (existingScript) return resolve(true);
+
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
   });
-  const router= useRouter();
+};
 
-  const handlelogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, logo: file }));
-  };
+const handlePayment = async () => {
+  if (!validateForm()) return;
 
-  const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, documentImage: file }));
-  };
+  setIsLoading(true);
+  const scriptLoaded = await loadRazorpayScript();
+  if (!scriptLoaded) {
+    setError("Failed to load Razorpay SDK");
+    setIsLoading(false);
+    return;
+  }
 
-  const handleChange = (e: any) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
+  try {
+    const formPayload = new FormData();
+    Object.keys(formData).forEach((key) => {
+      const value = formData[key as keyof typeof formData];
+      if (value !== null && value !== undefined && key !== "confirmPassword") {
+        if (key === "logo" || key === "documentImage") {
+          if (value instanceof File) {
+            formPayload.append(key, value);
+          }
+        } else {
+          formPayload.append(key, String(value));
+        }
+      }
     });
-  };
 
-  const handlePayment = async () => {
-    if (!formData.agreed) {
-      alert("Please agree to terms and conditions");
+    // 1. Call your backend to create registration + order
+    const response = await axios.post("/api/vendor/registration", formPayload);
+    const { order, vendorId } = response.data;
+
+    if (!order || !order.id) {
+      setError("Failed to create payment order");
+      setIsLoading(false);
       return;
     }
 
-    const res = await loadRazorpayScript();
-    if (!res) {
-      alert("Failed to load Razorpay SDK");
-      return;
-    }
+    // 2. Razorpay options
+    const options = {
+      key: "rzp_test_4IVVmy5cqABEUR", // 🔁 Replace with your actual public Razorpay key
+      amount: formData.amount * 100,
+      currency: "INR",
+      name: "Office Registration",
+      description: "Office registration slot payment",
+      order_id: order.id, // ✅ Order ID from backend
+      handler: async function (razorpayResponse: any) {
+        console.log("✅ Razorpay Success Response:", razorpayResponse);
 
-    try {
-      const formPayload = new FormData();
-    
-      formPayload.append("companyName", formData.companyName);
-      formPayload.append("workEmail", formData.workEmail);
-      formPayload.append("phone", formData.phone);
-      formPayload.append("website", formData.website);
-      formPayload.append("businessType", formData.businessType);
-      formPayload.append("address", formData.address);
-      formPayload.append("message", formData.message);
-      formPayload.append("contactName", formData.contactName);
-      formPayload.append("contactMobile", formData.contactMobile);
-      formPayload.append("contactEmail", formData.contactEmail);
-      formPayload.append("documentType", formData.documentType);
-      formPayload.append("documentNo", formData.documentNo);
-      formPayload.append("password", formData.password);
-      formPayload.append("confirmPassword", formData.confirmPassword);
-      formPayload.append("agreed", formData.agreed ? "true" : "false");
-      formPayload.append("amount", formData.amount.toString());
-  
-      if (formData.logo) {
-        formPayload.append("logo", formData.logo);
-      }
-      if (formData.documentImage) {
-        formPayload.append("documentImage", formData.documentImage);
-      }
-     
-      const res = await axios.post("/api/vendor/registration", formPayload);
-      const { id: order_id } = res.data.order_id;
+        // 3. OPTIONAL: Send Razorpay response to your backend for verification/logging
+        await axios.post("/api/vendor/verify-payment", {
+          vendorId,
+          razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+          razorpayOrderId: razorpayResponse.razorpay_order_id,
+          razorpaySignature: razorpayResponse.razorpay_signature,
+        });
 
-      console.log("order id : ", order_id);
+        alert("Registration and payment successful!");
+        router.push("/");
+      },
+      prefill: {
+        name: formData.companyName,
+        email: formData.workEmail,
+        contact: formData.phone,
+      },
+      theme: {
+        color: "#6BB7BE",
+      },
+    };
 
-      const options = {
-        key: "rzp_test_4IVVmy5cqABEUR",
-        amount: 1999 * 100,
-        currency: "INR",
-        name: "office registration",
-        description: "office registration slot",
-        order_id: order_id,
-        handler: async function (response: any) {
-          await handlePaymentSuccess();
-        },
-        prefill: {
-          name: formData.companyName,
-          email: formData.workEmail,
-          contact: formData.phone,
-        },
-        theme: {
-          color: "#6BB7BE",
-        },
-      };
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  } catch (err: any) {
+    console.error("Error during Razorpay payment:", err);
+    setError(err.response?.data?.message || "Registration or payment failed.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.open();
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+const handleNext = () => {
+  if (step < 3) setStep(step + 1);
+};
 
-  const handlePaymentSuccess = async () => {
-    try {
-      alert("Registration completed!");
-      router.push("/")
-    } catch (err) {
-      alert("Registration completed!");
-    }
-  };
-  const [step, setStep] = useState(1);
-  const handleNext = () => {
-    if (step < 3) setStep(step + 1);
-  };
-
-  const handleBack = () => {
-    if (step > 1) setStep(step - 1);
-  };
+const handleBack = () => {
+  if (step > 1) setStep(step - 1);
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6 mt-40">
@@ -291,7 +311,7 @@ const VendorRegistration = () => {
               <Input
                 type="file"
                 name="logo"
-                onChange={handlelogoChange}
+                onChange={handleLogoChange}
                 className="rounded-none w-full py-1"
               />
             </div>
@@ -443,12 +463,13 @@ const VendorRegistration = () => {
             </Button>
           ) : (
             <Button
-              onClick={handlePayment}
-              type="button"
-              className="ml-auto rounded-none px-8 py-2 border border-[#6BB7BE] bg-[#6BB7BE] text-white font-bold hover:bg-[#FAFAFA] hover:text-[#6BB7BE]"
-            >
-              Register
-            </Button>
+        onClick={handlePayment}
+        type="button"
+        disabled={isLoading}
+        className="ml-auto rounded-none px-8 py-2 border border-[#6BB7BE] bg-[#6BB7BE] text-white font-bold hover:bg-[#FAFAFA] hover:text-[#6BB7BE]"
+      >
+        {isLoading ? "Processing..." : "Register"}
+      </Button>
           )}
         </div>
       </form>

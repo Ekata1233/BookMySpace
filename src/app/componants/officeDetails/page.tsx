@@ -84,6 +84,7 @@ const OfficeDetails = () => {
     description,
     extraDescription,
     amenities,
+    ratePerMonth,
     thumbnailImage,
     multiImages,
     startTime,
@@ -106,9 +107,19 @@ const OfficeDetails = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
         {officeSpaceName}
       </h1>
-      <h1 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start py-2">
-        {rate} / Hour
-      </h1>
+      <div className="w-fit flex items-center gap-2 p-3 bg-[#e6f7f9] shadow-md">
+        <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
+        <p className="text-lg sm:text-xl text-gray-800">
+          <span className="text-[#6BB7BE] font-semibold">{rate}</span> / Hour
+          {ratePerMonth ? (
+            <>
+              <span className="mx-2 text-[#6BB7BE] font-bold">|</span>
+              <span className="text-[#6BB7BE] font-semibold">{ratePerMonth}</span> / Month
+            </>
+          ) : null}
+        </p>
+      </div>
+
       <div className="">
         <p className="text-sm sm:text-base text-gray-700 ">
           {city}, {state}, {pincode}
@@ -206,18 +217,18 @@ const OfficeDetails = () => {
             <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
               {startTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(startTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
                 : "10:00 AM"}{" "}
               -{" "}
               {endTime !== "1970-01-01T00:00:00.000Z"
                 ? new Date(endTime).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
                 : "10:00 PM"}{" "}
               PM
             </p>

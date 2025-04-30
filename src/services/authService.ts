@@ -36,7 +36,7 @@ export class AuthService {
 
       const isValidPassword = await user.comparePassword(password);
       if (!isValidPassword)
-        return { error: "Invalid credentials", status: 401 };
+        return { error: "Invalid credentials2", status: 401 };
 
       const token = jwt.sign(
         { id: user._id, email: user.email, role: user.role },

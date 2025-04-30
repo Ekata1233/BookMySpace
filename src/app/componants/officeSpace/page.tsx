@@ -42,14 +42,14 @@ const OfficeSpaces: React.FC = () => {
   const pageFilteredSpaces = !normalizedPageCategory
     ? officeSpaces
     : officeSpaces.filter((space) => {
-        if (!space.category) return false;
+      if (!space.category) return false;
 
-        const spaceCategory = Array.isArray(space.category)
-          ? space.category.map((cat) => cat.toLowerCase())
-          : [space.category.toLowerCase()];
+      const spaceCategory = Array.isArray(space.category)
+        ? space.category.map((cat) => cat.toLowerCase())
+        : [space.category.toLowerCase()];
 
-        return spaceCategory.includes(normalizedPageCategory);
-      });
+      return spaceCategory.includes(normalizedPageCategory);
+    });
 
   const cities = [
     "Mumbai",
@@ -250,23 +250,30 @@ const OfficeSpaces: React.FC = () => {
                     </div>
 
                     <div className="mt-auto flex justify-between items-center mb-2">
-                      <div className="flex items-center space-x-1">
-                        <h4 className="text-lg font-medium">₹</h4>
-                        <h5 className="text-lg sm:text-xl">
-                          {space.rate} / Hour
-                        </h5>
+                      <div className="flex items-center gap-2 p-3 bg-[#e6f7f9]  shadow-md">
+                        <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
+                        <p className="text-lg sm:text-xl text-gray-800">
+                          <span className="text-[#6BB7BE] font-semibold">{space.rate}</span> / Hour
+                          {space.ratePerMonth ? (
+                            <>
+                              <span className="mx-2 text-[#6BB7BE] font-bold">|</span>
+                              <span className="text-[#6BB7BE] font-semibold">{space.ratePerMonth}</span> / Month
+                            </>
+                          ) : null}
+                        </p>
                       </div>
+
+
                       <Link
                         // href={`/${pageName}/${space._id}`}
-                        href={`/${
-                          pageName ||
+                        href={`/${pageName ||
                           (Array.isArray(space.category)
                             ? space.category[0]
                             : space.category
                           )
                             ?.toLowerCase()
                             .replace(/\s+/g, "-")
-                        }/${space._id}`}
+                          }/${space._id}`}
                         className="text-sm sm:text-base text-white hover:text-[#6BB7BE] border border-[#6BB7BE] bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium rounded-none py-2 px-4"
                       >
                         View Details

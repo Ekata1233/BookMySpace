@@ -108,11 +108,11 @@ const BankInfo = () => {
     }
 
     try {
-      if (existingDetails) {
-        await updateVendorBankDetail(existingDetails._id, formData);
-      } else {
-        await addVendorBankDetail(formData);
-      }
+      // if (existingDetails) {
+      //   await updateVendorBankDetail(existingDetails._id, formData);
+      // } else {
+      //   await addVendorBankDetail(formData);
+      // }
 
       setShowForm(false);
     } catch (error) {
