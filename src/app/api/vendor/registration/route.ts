@@ -114,6 +114,7 @@ import path from 'path';
 import jwt from 'jsonwebtoken';
 import Vendor from '@/models/vendor';
 import testConnection from '@/lib/db';
+import Razorpay from 'razorpay';
 
 export const config = {
   api: {
@@ -122,6 +123,11 @@ export const config = {
 };
 
 const JWT_SECRET = process.env.JWT_SECRET || '$ecretKey123';
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
 
 export async function POST(req: Request) {
   try {
@@ -206,7 +212,13 @@ export async function POST(req: Request) {
 
     const { password: _, ...vendorData } = savedVendor.toObject();
 
-    return NextResponse.json({ token, vendor: vendorData }, { status: 201 });
+    const razorpayOrder = await razorpay.orders.create({
+            amount: 1999 * 100,
+            currency: "INR",
+            receipt: `rcpt_${Date.now()}`,
+          });
+
+    return NextResponse.json({ token, order: razorpayOrder, }, { status: 201 });
   } catch (error: any) {
     console.error('Registration error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
