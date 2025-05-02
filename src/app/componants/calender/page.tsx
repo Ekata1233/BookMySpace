@@ -34,17 +34,6 @@ const TimeCalendar = () => {
   const router = useRouter();
 
 
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedRate, setSelectedRate] = useState<string | null>(null);
-
-
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
-
-  const handleSelectRate = (rate: string) => {
-    setSelectedRate(rate);
-    setIsOpen(false); // Close the dropdown after selection
-  };
-
 
   const params = useParams();
   const id = params.id;
@@ -67,7 +56,6 @@ const TimeCalendar = () => {
     startTime: string;
     endTime: string;
     rate: number;
-    ratePerMonth: number;
   }
 
   const office = officeSpaces.find((item) => item._id === id) as
@@ -80,10 +68,9 @@ const TimeCalendar = () => {
     startTime: "",
     endTime: "",
     rate: 0,
-    ratePerMonth: 0,
   };
 
-  const { _id: officeId, vendorId, startTime, endTime, rate, ratePerMonth } = office ?? fallback;
+  const { _id: officeId, vendorId, startTime, endTime, rate } = office ?? fallback;
 
 
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -92,6 +79,7 @@ const TimeCalendar = () => {
   const [selectedDuration, setSelectedDuration] = useState("1");
 
   const totalPay = rate * Number(selectedDuration);
+
   // Generate time slots
   const timeOptions: string[] = [];
 
@@ -169,13 +157,14 @@ const TimeCalendar = () => {
 
     const res = await loadRazorpayScript();
     if (!res) {
-      toast.error("Failed to load Razorpay SDK");
+      toast.error("Failed to load Razorpay SDK.");
       return;
     }
 
     try {
       const { data } = await axios.post("/api/razorpay", bookingData);
-      const { id: orderId } = data;
+      console.log("data : ", data)
+      const { razorpayOrderId: orderId } = data;
 
       const options = {
         key: "rzp_test_4IVVmy5cqABEUR",
@@ -192,7 +181,7 @@ const TimeCalendar = () => {
             await addBooking(bookingData);
             router.push("/booking-confirmed");
           } catch (err) {
-            toast.error("Payment done but failded to save the booking");
+            toast.error("Payment done but failed to save booking.");
             console.error(err);
           }
         },
@@ -208,7 +197,7 @@ const TimeCalendar = () => {
       const razorpay = new (window as any).Razorpay(options);
       razorpay.open();
     } catch (error) {
-      toast.error("Failed to initiate Razorpay payment");
+      toast.error("Failed to initiate Razorpay payment.");
     }
   };
 
@@ -221,64 +210,9 @@ const TimeCalendar = () => {
             <h1 className="text-3xl font-bold text-gray-700 text-start pb-5">
               BOOK YOUR SLOT
             </h1>
-            <div className="relative inline-block text-left">
-              <div>
-                <button
-                  type="button"
-                  onClick={toggleDropdown}
-                  className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-                  id="menu-button"
-                  aria-expanded={isOpen ? 'true' : 'false'}
-                  aria-haspopup="true"
-                >
-                  {selectedRate || 'Rate'} Rs
-                  <svg
-                    className="-mr-1 size-5 text-gray-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                    data-slot="icon"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-      {/* Dropdown menu */}
-      {isOpen && (
-        <div
-          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-          tabIndex={-1}
-        >
-          <div className="py-1" role="none">
-            <div className="flex items-center space-x-2 px-4 py-2">
-              <button
-                className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
-                onClick={() => handleSelectRate(`${rate}`)}
-              >
-                {rate} / Hour
-              </button>
-            </div>
-
-                    <div className="flex items-center space-x-2 px-4 py-2">
-                      <button
-                        className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleSelectRate(`${ratePerMonth} `)}
-                      >
-                        {ratePerMonth} / Month
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <h1 className="text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
+              Rate : <span className="text-gray-500">{rate} / Hour</span>
+            </h1>
           </div>
           <Calendar
             mode="single"
@@ -314,7 +248,7 @@ const TimeCalendar = () => {
             {date ? date.toDateString() : "No date selected"}
           </div>
 
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <h2 className="font-medium mb-3 text-center text-gray-700">
               Select Duration
             </h2>
@@ -338,7 +272,6 @@ const TimeCalendar = () => {
               </SelectContent>
             </Select>
 
-            {/* Time Slot Selection */}
             <div className="mt-4">
               <h3 className="font-medium mb-2 text-gray-700">
                 Available Slots
@@ -353,12 +286,13 @@ const TimeCalendar = () => {
                     <button
                       key={time}
                       disabled={isBooked}
-                      className={`p-2 border rounded-none text-sm ${isBooked
-                        ? "bg-red-400 text-white cursor-not-allowed"
-                        : time.startsWith(selectedHour)
-                          ? "bg-[#6BB7BE] text-white cursor-pointer"
-                          : "hover:bg-gray-100"
-                        }`}
+                      className={`p-2 border rounded-none text-sm ${
+                        isBooked
+                          ? "bg-red-400 text-white cursor-not-allowed"
+                          : time.startsWith(selectedHour)
+                            ? "bg-[#6BB7BE] text-white cursor-pointer"
+                            : "hover:bg-gray-100"
+                      }`}
                       onClick={() => {
                         if (!isBooked) {
                           setSelectedHour(hourStr);
@@ -372,14 +306,100 @@ const TimeCalendar = () => {
                 })}
               </div>
             </div>
+          </div> */}
+
+          <div className="space-y-4">
+            <h2 className="font-medium mb-3 text-center text-gray-700">
+              Select Duration
+            </h2>
+
+            <Select
+              value={selectedDuration}
+              onValueChange={setSelectedDuration}
+            >
+              <SelectTrigger className="h-12 w-full rounded-none">
+                <SelectValue placeholder="Select duration" />
+              </SelectTrigger>
+              <SelectContent>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((hour) => (
+                  <SelectItem
+                    key={hour}
+                    value={hour.toString()}
+                    className="text-center"
+                  >
+                    {hour} {hour === 1 ? "hour" : "hours"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <div className="mt-4">
+              <h3 className="font-medium mb-2 text-gray-700">
+                Available Slots
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+                {timeOptions.map((time, index) => {
+                  const [hourStr, minuteStr] = time.split(":");
+                  const hour = parseInt(hourStr);
+                  const minute = parseInt(minuteStr);
+                  const duration = parseInt(selectedDuration);
+
+                  // Check if the full block (e.g., 2 hours) starting at this index is available
+                  let isRangeAvailable = true;
+                  for (let i = 0; i < duration; i++) {
+                    const nextTime = timeOptions[index + i];
+                    if (!nextTime) {
+                      isRangeAvailable = false;
+                      break;
+                    }
+                    const [h] = nextTime.split(":");
+                    if (bookedHours.includes(parseInt(h))) {
+                      isRangeAvailable = false;
+                      break;
+                    }
+                  }
+
+                  // Check if this time is part of the selected group
+                  const selectedStartIndex = timeOptions.findIndex(
+                    (t) => t === `${selectedHour}:${selectedMinute}`
+                  );
+                  const isSelected =
+                    selectedStartIndex !== -1 &&
+                    index >= selectedStartIndex &&
+                    index < selectedStartIndex + duration;
+
+                  return (
+                    <button
+                      key={time}
+                      disabled={!isRangeAvailable}
+                      className={`p-2 border rounded-none text-sm ${!isRangeAvailable
+                        ? "bg-red-400 text-white cursor-not-allowed"
+                        : isSelected
+                          ? "bg-[#6BB7BE] text-white cursor-pointer"
+                          : "hover:bg-gray-100"
+                        }`}
+                      onClick={() => {
+                        if (isRangeAvailable) {
+                          setSelectedHour(hourStr);
+                          setSelectedMinute(minuteStr);
+                        }
+                      }}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
+
         </div>
       </div>
       {/* CALCULATION */}
 
       <div>
         <h4 className="p-4 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
-          Total Pay : {selectedRate}
+          Total Pay : {totalPay} Rs
         </h4>
       </div>
       {/* BOOK NOW BUTTON */}
