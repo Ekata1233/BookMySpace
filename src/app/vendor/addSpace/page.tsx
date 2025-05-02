@@ -17,6 +17,7 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import Link from "next/link";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import { toast } from "sonner";
 
 const OfficeSpaceForm = () => {
   const { addOfficeSpace } = useOfficeSpaces();
@@ -173,8 +174,8 @@ const OfficeSpaceForm = () => {
     });
 
     try {
-      await addOfficeSpace(formDataToSend); // Make sure your function handles FormData
-      alert("Office space added successfully!");
+      await addOfficeSpace(formDataToSend);
+      toast.success("Office space added successful!");
       setFormData({
         officeSpaceName: "",
         city: "",

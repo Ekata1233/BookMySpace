@@ -16,6 +16,7 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 
 export interface OfficeSpace {
   _id: string;
@@ -31,11 +32,11 @@ const TimeCalendar = () => {
   const { bookings } = useBookSpaces();
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
-  
-  
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRate, setSelectedRate] = useState<string | null>(null);
- 
+
 
   const toggleDropdown = () => setIsOpen((prev) => !prev);
 
@@ -168,7 +169,7 @@ const TimeCalendar = () => {
 
     const res = await loadRazorpayScript();
     if (!res) {
-      alert("Failed to load Razorpay SDK");
+      toast.error("Failed to load Razorpay SDK");
       return;
     }
 
@@ -191,7 +192,7 @@ const TimeCalendar = () => {
             await addBooking(bookingData);
             router.push("/booking-confirmed");
           } catch (err) {
-            alert("Payment done but failed to save booking.");
+            toast.error("Payment done but failded to save the booking");
             console.error(err);
           }
         },
@@ -207,8 +208,7 @@ const TimeCalendar = () => {
       const razorpay = new (window as any).Razorpay(options);
       razorpay.open();
     } catch (error) {
-      console.error("Error creating Razorpay order:", error);
-      alert("Failed to initiate Razorpay payment.");
+      toast.error("Failed to initiate Razorpay payment");
     }
   };
 
@@ -222,63 +222,63 @@ const TimeCalendar = () => {
               BOOK YOUR SLOT
             </h1>
             <div className="relative inline-block text-left">
-      <div>
-        <button
-          type="button"
-          onClick={toggleDropdown}
-          className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
-          id="menu-button"
-          aria-expanded={isOpen ? 'true' : 'false'}
-          aria-haspopup="true"
-        >
-          {selectedRate || 'Rate'} Rs
-          <svg
-            className="-mr-1 size-5 text-gray-400"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-            data-slot="icon"
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </button>
-      </div>
+              <div>
+                <button
+                  type="button"
+                  onClick={toggleDropdown}
+                  className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
+                  id="menu-button"
+                  aria-expanded={isOpen ? 'true' : 'false'}
+                  aria-haspopup="true"
+                >
+                  {selectedRate || 'Rate'} Rs
+                  <svg
+                    className="-mr-1 size-5 text-gray-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    data-slot="icon"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </div>
 
-      {/* Dropdown menu */}
-      {isOpen && (
-        <div
-          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-          tabIndex="-1"
-        >
-          <div className="py-1" role="none">
-            <div className="flex items-center space-x-2 px-4 py-2">
-              <button
-                className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
-                onClick={() => handleSelectRate(`${rate}`)}
-              >
-                {rate} / Hour
-              </button>
-            </div>
+              {/* Dropdown menu */}
+              {isOpen && (
+                <div
+                  className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="menu-button"
+                  tabIndex="-1"
+                >
+                  <div className="py-1" role="none">
+                    <div className="flex items-center space-x-2 px-4 py-2">
+                      <button
+                        className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleSelectRate(`${rate}`)}
+                      >
+                        {rate} / Hour
+                      </button>
+                    </div>
 
-            <div className="flex items-center space-x-2 px-4 py-2">
-              <button
-                className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
-                onClick={() => handleSelectRate(`${ratePerMonth} `)}
-              >
-                {ratePerMonth} / Month
-              </button>
+                    <div className="flex items-center space-x-2 px-4 py-2">
+                      <button
+                        className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
+                        onClick={() => handleSelectRate(`${ratePerMonth} `)}
+                      >
+                        {ratePerMonth} / Month
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        </div>
-      )}
-    </div>
           </div>
           <Calendar
             mode="single"
@@ -354,10 +354,10 @@ const TimeCalendar = () => {
                       key={time}
                       disabled={isBooked}
                       className={`p-2 border rounded-none text-sm ${isBooked
-                          ? "bg-red-400 text-white cursor-not-allowed"
-                          : time.startsWith(selectedHour)
-                            ? "bg-[#6BB7BE] text-white cursor-pointer"
-                            : "hover:bg-gray-100"
+                        ? "bg-red-400 text-white cursor-not-allowed"
+                        : time.startsWith(selectedHour)
+                          ? "bg-[#6BB7BE] text-white cursor-pointer"
+                          : "hover:bg-gray-100"
                         }`}
                       onClick={() => {
                         if (!isBooked) {
@@ -379,7 +379,7 @@ const TimeCalendar = () => {
 
       <div>
         <h4 className="p-4 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium text-gray-700 text-start pb-5">
-          Total Pay : {selectedRate} 
+          Total Pay : {selectedRate}
         </h4>
       </div>
       {/* BOOK NOW BUTTON */}

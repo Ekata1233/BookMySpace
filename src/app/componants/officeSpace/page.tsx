@@ -250,7 +250,7 @@ const OfficeSpaces: React.FC = () => {
                     </div>
 
                     <div className="mt-auto flex justify-between items-center mb-2">
-                      <div className="flex items-center gap-2 p-3 bg-[#e6f7f9]  shadow-md">
+                      <div className="flex items-center gap-2 px-3 py-1 bg-[#e6f7f9]  shadow-md">
                         <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
                         <p className="text-lg sm:text-xl text-gray-800">
                           <span className="text-[#6BB7BE] font-semibold">{space.rate}</span> / Hour

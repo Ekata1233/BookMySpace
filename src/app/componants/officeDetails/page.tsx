@@ -107,7 +107,7 @@ const OfficeDetails = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
         {officeSpaceName}
       </h1>
-      <div className="w-fit flex items-center gap-2 p-3 bg-[#e6f7f9] shadow-md">
+      <div className="w-fit flex items-center gap-2 px-3 py-1 my-2 bg-[#e6f7f9] shadow-md">
         <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
         <p className="text-lg sm:text-xl text-gray-800">
           <span className="text-[#6BB7BE] font-semibold">{rate}</span> / Hour

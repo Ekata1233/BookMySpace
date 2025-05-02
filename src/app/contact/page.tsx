@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useContacts } from "../context/ContactContex";
+import { toast } from "sonner";
 
 const Contact = () => {
   const { addContact } = useContacts(); // Get addContact from context
@@ -30,8 +31,8 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      await addContact(formData); // Save contact to the database
-      alert("Contact saved successfully!");
+      await addContact(formData);
+      toast.success("Contact Saved Successful!");
       setFormData({
         name: "",
         email: "",
@@ -41,8 +42,7 @@ const Contact = () => {
         inquiry: "",
       });
     } catch (error) {
-      console.error("Error saving contact:", error);
-      alert("Failed to save contact.");
+      toast.error("Failed to save contact.");
     }
   };
 

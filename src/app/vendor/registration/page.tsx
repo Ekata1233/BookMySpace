@@ -961,6 +961,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useVendor } from "@/app/context/VendorContext";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const VendorRegistration = () => {
   const { submitVendor } = useVendor();
@@ -1005,10 +1006,10 @@ const VendorRegistration = () => {
     setFormData((prev) => ({ ...prev, logo: file }));
   };
 
-const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0] || null;
-  setFormData((prev) => ({ ...prev, documentImage: file }));
-};
+  const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData((prev) => ({ ...prev, documentImage: file }));
+  };
 
   const validateForm = () => {
     if (!formData.agreed) {
@@ -1024,14 +1025,14 @@ const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   };
 
   const loadRazorpayScript = () => {
-        return new Promise((resolve) => {
-          const script = document.createElement("script");
-          script.src = "https://checkout.razorpay.com/v1/checkout.js";
-          script.onload = () => resolve(true);
-          script.onerror = () => resolve(false);
-          document.body.appendChild(script);
-        });
-      };
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handlePayment = async () => {
     if (!validateForm()) return;
@@ -1059,7 +1060,7 @@ const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (formData.documentImage) formPayload.append("documentImage", formData.documentImage);
 
       const response = await axios.post("/api/vendor/registration", formPayload);
-      const order_id  = response.data.order.id;
+      const order_id = response.data.order.id;
 
       console.log("response : ", response)
 
@@ -1103,11 +1104,10 @@ const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const handlePaymentSuccess = async (razorpayResponse: any) => {
     try {
       console.log("Razorpay success:", razorpayResponse);
-      alert("Registration and payment successful!");
+      toast.success("Registration and payment successful!");
       router.push("/");
     } catch (err) {
-      console.error("Payment verification failed:", err);
-      setError("Payment success but verification failed.");
+      toast.error("Payment success but verification failed.");
     }
   };
 
@@ -1117,9 +1117,9 @@ const handleDocumentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 
 
-const handleBack = () => {
-  if (step > 1) setStep(step - 1);
-};
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6 mt-40">

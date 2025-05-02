@@ -40,7 +40,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/services"
+                  href="/privacy-policy"
                   className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2"
                 >
                   Privacy Policy
@@ -48,7 +48,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/pricing"
+                  href="/terms-of-service"
                   className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2"
                 >
                   Terms of Service
@@ -56,10 +56,10 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/blog"
+                  href="/refund-policy"
                   className="text-sm sm:text-base md:text-lg leading-relaxed text-white py-2"
                 >
-                  Retun and Refund Policy
+                  Refund Policy
                 </Link>
               </li>
             </ul>

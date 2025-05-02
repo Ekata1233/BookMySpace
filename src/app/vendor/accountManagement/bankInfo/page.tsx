@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useVendorBankDetails } from "@/app/context/BankDetailsContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import { toast } from "sonner";
 
 const BankInfo = () => {
   const { addVendorBankDetail, updateVendorBankDetail, vendorBankDetails } =
@@ -67,7 +68,7 @@ const BankInfo = () => {
     const { name, value, files } = e.target as any;
     if (name === "bankProof") {
       if (files[0]?.size > 5 * 1024 * 1024) {
-        alert("File size exceeds 5MB");
+        toast.error("File size exceeds 5MB");
         return;
       }
       console.log("Selected file:", files[0]);  // Log file to debug
@@ -82,13 +83,13 @@ const BankInfo = () => {
     e.preventDefault();
 
     if (!vendorId) {
-      alert("Vendor ID not found!");
+      toast.error("Vendor Not Found!");
       return;
     }
 
     const upiIdRegex = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9.-]+$/;
     if (form.upiId && !upiIdRegex.test(form.upiId)) {
-      alert("Please enter a valid UPI ID.");
+      toast.error("Please enter a valid UPI Id");
       return;
     }
 
@@ -169,8 +170,8 @@ const BankInfo = () => {
                 <div className="flex items-center gap-2">
                   <span
                     className={`px-3 py-1 text-white rounded-full ${existingDetails.verification === "Verified"
-                        ? "bg-green-600"
-                        : "bg-yellow-500"
+                      ? "bg-green-600"
+                      : "bg-yellow-500"
                       }`}
                   >
                     {existingDetails.verification === "Verified"

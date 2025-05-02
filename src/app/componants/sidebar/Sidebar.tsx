@@ -159,7 +159,7 @@ const Sidebar = ({
               ) : (
                 <ChevronDown className="w-4 h-4" />
               )}
-              {openAccount ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+              {/* {openAccount ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />} */}
             </span>
           </button>
 
