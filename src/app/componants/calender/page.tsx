@@ -248,24 +248,24 @@ const TimeCalendar = () => {
                 </button>
               </div>
 
-              {/* Dropdown menu */}
-              {isOpen && (
-                <div
-                  className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
-                  role="menu"
-                  aria-orientation="vertical"
-                  aria-labelledby="menu-button"
-                  tabIndex="-1"
-                >
-                  <div className="py-1" role="none">
-                    <div className="flex items-center space-x-2 px-4 py-2">
-                      <button
-                        className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
-                        onClick={() => handleSelectRate(`${rate}`)}
-                      >
-                        {rate} / Hour
-                      </button>
-                    </div>
+      {/* Dropdown menu */}
+      {isOpen && (
+        <div
+          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabIndex={-1}
+        >
+          <div className="py-1" role="none">
+            <div className="flex items-center space-x-2 px-4 py-2">
+              <button
+                className="text-[#6bb7be] hover:bg-gray-100 w-full text-left"
+                onClick={() => handleSelectRate(`${rate}`)}
+              >
+                {rate} / Hour
+              </button>
+            </div>
 
                     <div className="flex items-center space-x-2 px-4 py-2">
                       <button
