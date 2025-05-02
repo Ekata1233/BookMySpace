@@ -2,6 +2,7 @@
 import { useAuth } from "@/app/context/authContext";
 import { useBookSpaces } from "@/app/context/BookSpaceContext";
 import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
+import Link from "next/link";
 import React from "react";
 import {
   FaClock,
@@ -18,7 +19,7 @@ const MyBooking = () => {
   console.log("Users : ", user)
   console.log("officeSpaces : ", officeSpaces)
   console.log("bookings : ", bookings)
-
+ 
   const formatTimeRange = (
     date: string,
     startTime: string,
@@ -54,77 +55,95 @@ const MyBooking = () => {
         </div>
 
         {/* Bookings Grid */}
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {bookings?.filter((booking) => booking.userId === user?._id).length >
-          0 ? (
-            bookings
-              .filter((booking) => booking.userId === user?._id)
-              .map((booking, index) => {
-                const matchedOffice = officeSpaces.find(
-                  (office) => office._id === booking.officeId,
-                );
+        <div className="p-6">
+  {bookings?.filter((booking) => booking.userId === user?._id).length > 0 ? (
+    <div className="overflow-x-auto">
+      <table className="min-w-full border border-gray-200 bg-white text-left text-sm text-gray-700">
+        <thead className="bg-[#6BB7BE] text-white">
+          <tr>
+            <th className="px-4 py-2">Office</th>
+            <th className="px-4 py-2">Date</th>
+            <th className="px-4 py-2">Time</th>
+            <th className="px-4 py-2">Payment</th>
+            <th className="px-4 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bookings
+            .filter((booking) => booking.userId === user?._id)
+            .map((booking, index) => {
+              const matchedOffice = officeSpaces.find(
+                (office) => office._id === booking.officeId
+              );
 
-                return (
-                  <div
-                    key={index}
-                    className="border border-gray-100 shadow-sm p-4 bg-white rounded-none flex flex-col gap-3"
-                  >
-                    {/* Office Info */}
-                    <div className="flex items-start gap-3">
+              return (
+                <tr key={index} className="border-t border-gray-100">
+                  <td className="px-4 py-3">
+                    <div className="flex items-start gap-2">
                       <FaMapMarkerAlt className="text-[#6BB7BE] mt-1" />
                       <div>
-                        <p className="text-gray-500 text-sm">Office</p>
-                        <p className="font-semibold text-gray-800">
+                        <p className="text-gray-500 text-xs">Office</p>
+                        <p className="font-medium text-gray-800">
                           {matchedOffice
                             ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
                             : "Office not found"}
                         </p>
                       </div>
                     </div>
-
-                    {/* Date */}
-                    <div className="flex items-start gap-3">
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-start gap-2">
                       <FaCalendarAlt className="text-[#6BB7BE] mt-1" />
                       <div>
-                        <p className="text-gray-500 text-sm">Date</p>
-                        <p className="font-semibold text-gray-800">
+                        <p className="text-gray-500 text-xs">Date</p>
+                        <p className="font-medium text-gray-800">
                           {new Date(booking.date).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
-
-                    {/* Time Slot */}
-                    <div className="flex items-start gap-3">
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-start gap-2">
                       <FaClock className="text-[#6BB7BE] mt-1" />
                       <div>
-                        <p className="text-gray-500 text-sm">Time</p>
-                        <p className="font-semibold text-gray-800">
+                        <p className="text-gray-500 text-xs">Time</p>
+                        <p className="font-medium text-gray-800">
                           {formatTimeRange(
                             booking.date,
                             booking.startTime,
-                            booking.duration,
+                            booking.duration
                           )}
                         </p>
                       </div>
                     </div>
-
-                    {/* Payment */}
-                    <div className="flex items-start gap-3">
+                  </td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-start gap-2">
                       <FaMoneyBillWave className="text-[#6BB7BE] mt-1" />
                       <div>
-                        <p className="text-gray-500 text-sm">Total Payment</p>
-                        <p className="font-semibold text-gray-800">
+                        <p className="text-gray-500 text-xs">Total</p>
+                        <p className="font-medium text-gray-800">
                           ₹ {booking.totalPay}
                         </p>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-          ) : (
-            <p className="text-gray-500 text-sm">You have no bookings yet.</p>
-          )}
-        </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <Link  href={`/office-space/${booking.officeId}`} className="bg-[#6BB7BE] hover:bg-[#5aa5ae] text-white px-4 py-1 rounded" >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p className="text-gray-500 text-sm">You have no bookings yet.</p>
+  )}
+</div>
+
       </div>
     </div>
   );
