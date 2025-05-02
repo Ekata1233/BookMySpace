@@ -1,4 +1,5 @@
-import React from "react";
+"use client"
+import React, { useEffect, useState } from "react";
 import {
   FaPhoneAlt,
   FaFacebook,
@@ -13,6 +14,15 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 
 const Footer = () => {
+  const [vendorToken, setVendorToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      // Only access localStorage on the client side
+      const token = localStorage.getItem('vendorToken');
+      setVendorToken(token);
+    }
+  }, []);
   return (
     <div className="bg-[#6BB7BE] text-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -137,7 +147,7 @@ const Footer = () => {
               Become a Partner
             </h2>
             <Link
-              href="/vendor/registration"
+              href={vendorToken ? "/vendor/dashboard" : "/vendor/registration"}
               className="flex items-center gap-2 text-base sm:text-md md:text-lg lg:text-lg text-[#6BB7BE] hover:text-[#FAFAFA] border border-[#FAFAFA] px-4 py-3 bg-[#FAFAFA] hover:bg-[#6BB7BE] font-medium rounded-none mt-6 w-fit"
             >
               Apply for Partnership
