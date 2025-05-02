@@ -107,7 +107,6 @@ const OfficeDetails = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
         {officeSpaceName}
       </h1>
-<<<<<<< HEAD
       <div>
       {/* Pricing and Toggle Buttons in One Box */}
       <div className="w-fit flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 ">
@@ -146,18 +145,6 @@ const OfficeDetails = () => {
         </p>
         <p className="text-red-500 text-sm sm:text-base flex items-center">
           <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly Open
-=======
-      <div className="w-fit flex items-center gap-2 px-3 py-1 my-2 bg-[#e6f7f9] shadow-md">
-        <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
-        <p className="text-lg sm:text-xl text-gray-800">
-          <span className="text-[#6BB7BE] font-semibold">{rate}</span> / Hour
-          {ratePerMonth ? (
-            <>
-              <span className="mx-2 text-[#6BB7BE] font-bold">|</span>
-              <span className="text-[#6BB7BE] font-semibold">{ratePerMonth}</span> / Month
-            </>
-          ) : null}
->>>>>>> f17c5b79e78eb6cee2caa482491363dab8ba9ec0
         </p>
       </div>
 
