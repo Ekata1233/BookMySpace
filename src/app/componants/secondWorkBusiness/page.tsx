@@ -3,8 +3,14 @@ import React from "react";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LuLaptopMinimalCheck } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const SecondWorkBusiness = () => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/contact');
+  };
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12  my-28 sm:my-0">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
@@ -35,7 +41,7 @@ const SecondWorkBusiness = () => {
           </div>
 
           <div className="flex my-4 sm:my-6 text-sm sm:text-base md:text-lg text-[#6BB7BE]">
-            <p className="border-b-2 border-[#6BB7BE] leading-relaxed">
+            <p className="border-b-2 border-[#6BB7BE] leading-relaxed" onClick={handleClick}>
               Contact Us
             </p>
             <FaArrowRight className="m-2" />{" "}

@@ -6,6 +6,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 import { LuLaptopMinimalCheck } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
 import { useWorkBusiness } from "@/app/context/WorkBusinessContext"; // ✅ Correct import
+import { useRouter } from "next/navigation";
 
 const WorkBusiness = () => {
   const { workBusinessData, fetchWorkBusiness } = useWorkBusiness(); // ✅ Using custom hook
@@ -13,6 +14,12 @@ const WorkBusiness = () => {
   useEffect(() => {
     fetchWorkBusiness();
   }, []);
+
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/contact');
+  };
 
   return (
     <div>
@@ -72,7 +79,7 @@ const WorkBusiness = () => {
                     </p>
                   </div>
                   <div className="flex my-4 text-sm text-[#6BB7BE]">
-                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">
+                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed" onClick={handleClick}>
                       Contact Us
                     </p>
                     <FaArrowRight className="m-2" />
@@ -118,7 +125,7 @@ const WorkBusiness = () => {
                     </p>
                   </div>
                   <div className="flex my-4 text-sm text-[#6BB7BE]">
-                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed">
+                    <p className="border-b-2 border-[#6BB7BE] leading-relaxed" onClick={handleClick}>
                       Contact Us
                     </p>
                     <FaArrowRight className="m-2" />

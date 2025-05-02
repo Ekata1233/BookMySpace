@@ -16,6 +16,9 @@ import { Button } from "@/components/ui/button";
 const Footer = () => {
   const [vendorToken, setVendorToken] = useState<string | null>(null);
 
+
+  console.log("vednor token : ", vendorToken)
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       // Only access localStorage on the client side

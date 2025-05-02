@@ -102,6 +102,11 @@ const OfficeDetails = () => {
     }
   };
 
+
+  const handleClick = () => {
+    router.push('/contact');
+  };
+
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
@@ -158,7 +163,7 @@ const OfficeDetails = () => {
         </Button>
       ) : (
         <Button
-          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
+          onClick={handleClick} // Replace with actual logic
           className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
         >
           ENQUIRE NOW
@@ -274,7 +279,7 @@ const OfficeDetails = () => {
         </Button>
       ) : (
         <Button
-          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
+          onClick={handleClick} // Replace with actual logic
           className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
         >
           ENQUIRE NOW
