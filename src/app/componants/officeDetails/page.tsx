@@ -3,7 +3,7 @@ import { useOfficeSpaces } from "@/app/context/OfficeSpaceContext";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { FaWifi } from "react-icons/fa";
 import { LuAlarmClock } from "react-icons/lu";
 import { PiOfficeChair } from "react-icons/pi";
@@ -61,7 +61,7 @@ const OfficeDetails = () => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const mainSlug = pathSegments[0] || "";
   const pageName = pathSegments[pathSegments.length - 1] || "";
-
+  const [selectedTab, setSelectedTab] = useState("day");
   // console.log("pathe name : ", mainSlug);
   console.log("Path Name : ", pathname);
 
@@ -107,34 +107,64 @@ const OfficeDetails = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
         {officeSpaceName}
       </h1>
-      <div className="w-fit flex items-center gap-2 p-3 bg-[#e6f7f9] shadow-md">
-        <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
-        <p className="text-lg sm:text-xl text-gray-800">
-          <span className="text-[#6BB7BE] font-semibold">{rate}</span> / Hour
-          {ratePerMonth ? (
-            <>
-              <span className="mx-2 text-[#6BB7BE] font-bold">|</span>
-              <span className="text-[#6BB7BE] font-semibold">{ratePerMonth}</span> / Month
-            </>
-          ) : null}
+      <div>
+      {/* Pricing and Toggle Buttons in One Box */}
+      <div className="w-fit flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 ">
+        {/* ₹ Symbol and Price Info */}
+       
+
+        {/* Toggle Buttons */}
+        <div className="flex gap-2">
+          <button
+            className={`px-4 py-1 border  ${
+              selectedTab === "day"
+                ? "bg-[#6BB7BE] text-white"
+                : "bg-white text-[#6BB7BE] border-[#6BB7BE]"
+            }`}
+            onClick={() => setSelectedTab("day")}
+          >
+            ₹ {rate} / Day
+          </button>
+          <button
+            className={`px-4 py-1 border  ${
+              selectedTab === "month"
+                ? "bg-[#6BB7BE] text-white"
+                : "bg-white text-[#6BB7BE] border-[#6BB7BE]"
+            }`}
+            onClick={() => setSelectedTab("month")}
+          >
+            ₹ {ratePerMonth} / Month
+          </button>
+        </div>
+      </div>
+
+      {/* Address and Status */}
+      <div className="mt-2">
+        <p className="text-sm sm:text-base text-gray-700">
+          {city}, {state}, {pincode}
+        </p>
+        <p className="text-red-500 text-sm sm:text-base flex items-center">
+          <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly Open
         </p>
       </div>
 
-      <div className="">
-        <p className="text-sm sm:text-base text-gray-700 ">
-          {city}, {state}, {pincode}
-        </p>
-        <p className="text-red-500 text-sm sm:text-base flex items-center ">
-          <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly
-          Open
-        </p>
-      </div>
-      <Button
-        onClick={handleBookNow}
-        className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-      >
-        BOOK NOW
-      </Button>
+      {/* Conditional Button */}
+      {selectedTab === "day" ? (
+        <Button
+          onClick={handleBookNow}
+          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+        >
+          BOOK NOW
+        </Button>
+      ) : (
+        <Button
+          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
+          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+        >
+          ENQUIRE NOW
+        </Button>
+      )}
+    </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-10">
         {/* First Column */}
@@ -235,12 +265,21 @@ const OfficeDetails = () => {
           </div>
 
           <div>
-            <Button
-              onClick={handleBookNow}
-              className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-            >
-              BOOK NOW
-            </Button>
+          {selectedTab === "day" ? (
+        <Button
+          onClick={handleBookNow}
+          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+        >
+          BOOK NOW
+        </Button>
+      ) : (
+        <Button
+          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
+          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+        >
+          ENQUIRE NOW
+        </Button>
+      )}
           </div>
         </div>
 
