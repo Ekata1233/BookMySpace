@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
+
 type VendorData = {
   name: string;
   companyName: string;
@@ -111,15 +112,20 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        // 👇 Custom message instead of backend message
+        toast.error("Username and password do not match");
+        return;
+      }
 
       if (res.ok) {
         setVendor(data.vendor);
         localStorage.setItem("vendor", JSON.stringify(data.vendor));
         localStorage.setItem("vendorToken", data.token);
-        alert("Login successful!");
+        toast.success("Login successful!");
         router.push("/vendor/dashboard");
       } else {
-        // alert("Vendor Login Failed!");
+        
       }
     } catch (error) {
       console.error("Login error:", error);

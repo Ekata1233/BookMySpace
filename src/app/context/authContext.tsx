@@ -45,11 +45,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     if (res.ok) {
-      alert("Signup successful! You can log in now.");
+      toast.success("Signup Successful! You can log in now.");
       router.push("/auth");
     } else {
       const data = await res.json();
-      alert(data.error);
+      toast.error("Signup Failed!");
     }
   };
 
@@ -67,9 +67,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
+      toast.success("Login successful!");
       router.push("/");
     } else {
-      alert(data.error);
+      toast.error("Login Failed!");
     }
   };
 

@@ -17,6 +17,8 @@ import { BookingProvider } from "./context/BookingContext";
 import { VendorBankDetailsProvider } from "./context/BankDetailsContext";
 import VendorBankDetails from "@/models/VendorBankDetails";
 import { PayoutProvider } from "./context/PayoutContext";
+import { Toaster } from "sonner";
+
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -49,6 +51,7 @@ export default function RootLayout({
                             <UserProvider>
                               <PayoutProvider>
                                 <Header />
+                                <Toaster richColors position="top-center" />
                                 {children}
                                 <Footer />
                               </PayoutProvider>
