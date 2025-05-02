@@ -20,13 +20,13 @@ export async function GET() {
     const contacts = await Contact.find({});
     return NextResponse.json(
       { success: true, data: contacts },
-      { status: 200 },
+      { status: 200, headers: corsHeaders },
     );
   } catch (error: any) {
     console.error("Error:", error.message);
     return NextResponse.json(
       { success: false, message: error.message },
-      { status: 500 },
+      { status: 500, headers: corsHeaders },
     );
   }
 }
