@@ -11,7 +11,7 @@ import { RiHomeOfficeFill } from "react-icons/ri";
 import { FiUsers } from "react-icons/fi";
 import { TiMessages } from "react-icons/ti";
 import { IoWomanOutline } from "react-icons/io5";
-import { FaUsersViewfinder } from "react-icons/fa6";
+import { FaLocationDot, FaUsersViewfinder } from "react-icons/fa6";
 import { LuCable } from "react-icons/lu";
 import { TbToolsKitchen2 } from "react-icons/tb";
 import { LiaBroomSolid } from "react-icons/lia";
@@ -104,79 +104,24 @@ const OfficeDetails = () => {
 
   return (
     <div className=" my-12 mx-2 sm:mx-6 md:mx-8 lg:mx-12 xl:mx-16">
-      <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
-        {officeSpaceName}
-      </h1>
+
       <div>
-      {/* Pricing and Toggle Buttons in One Box */}
-      <div className="w-fit flex flex-col sm:flex-row items-start sm:items-center gap-4 p-3 ">
-        {/* ₹ Symbol and Price Info */}
-       
+        {/* Pricing and Toggle Buttons in One Box */}
+      
 
-        {/* Toggle Buttons */}
-        <div className="flex gap-2">
-          <button
-            className={`px-4 py-1 border  ${
-              selectedTab === "day"
-                ? "bg-[#6BB7BE] text-white"
-                : "bg-white text-[#6BB7BE] border-[#6BB7BE]"
-            }`}
-            onClick={() => setSelectedTab("day")}
-          >
-            ₹ {rate} / Day
-          </button>
-          <button
-            className={`px-4 py-1 border  ${
-              selectedTab === "month"
-                ? "bg-[#6BB7BE] text-white"
-                : "bg-white text-[#6BB7BE] border-[#6BB7BE]"
-            }`}
-            onClick={() => setSelectedTab("month")}
-          >
-            ₹ {ratePerMonth} / Month
-          </button>
+        {/* Address and Status */}
+        <div className="mb-2">
+
+          <p className="text-red-500 text-sm sm:text-base flex items-center">
+            <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly Open
+          </p>
         </div>
+
+        {/* Conditional Button */}
+
       </div>
 
-      {/* Address and Status */}
-      <div className="mt-2">
-        <p className="text-sm sm:text-base text-gray-700">
-          {city}, {state}, {pincode}
-        </p>
-        <p className="text-red-500 text-sm sm:text-base flex items-center">
-          <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Newly Open
-      <div className="w-fit flex items-center gap-2 px-3 py-1 my-2 bg-[#e6f7f9] shadow-md">
-        <h4 className="text-lg font-semibold text-[#6BB7BE]">₹</h4>
-        <p className="text-lg sm:text-xl text-gray-800">
-          <span className="text-[#6BB7BE] font-semibold">{rate}</span> / Hour
-          {ratePerMonth ? (
-            <>
-              <span className="mx-2 text-[#6BB7BE] font-bold">|</span>
-              <span className="text-[#6BB7BE] font-semibold">{ratePerMonth}</span> / Month
-            </>
-          ) : null}
-        </p>
-      </div>
-
-      {/* Conditional Button */}
-      {selectedTab === "day" ? (
-        <Button
-          onClick={handleBookNow}
-          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-        >
-          BOOK NOW
-        </Button>
-      ) : (
-        <Button
-          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
-          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-        >
-          ENQUIRE NOW
-        </Button>
-      )}
-    </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4   mb-10">
         {/* First Column */}
         <div className="">
           <Image
@@ -237,10 +182,21 @@ const OfficeDetails = () => {
       </div>
       <div className="flex flex-col md:flex-row gap-4 w-full">
         {/* First Column (1/2 Width) */}
+
         <div className="w-full md:w-1/2 border-b-2 p-4 overflow-hidden">
           <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-700 text-start py-2">
-            About {officeSpaceName}
+            {officeSpaceName}
           </h1>
+          <h5 className="text-xl sm:text-xl md:text-2xl lg:text-xl font-bold text-gray-700 text-start py-2">
+            About {officeSpaceName}
+          </h5>
+          <div className="mt-2">
+            <p className="text-sm sm:text-base text-gray-700 flex items-center">
+              <FaLocationDot className="mr-2  text-gray-700" />
+              {city}, {state}, {pincode}
+            </p>
+
+          </div>
           <p className="text-md sm:text-base md:text-xl font-semibold my-2 text-gray-700 break-words">
             Find a new way of working in {city}
           </p>
@@ -248,48 +204,90 @@ const OfficeDetails = () => {
           <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
             {extraDescription}
           </p>
+          <div>
+            {/* Pricing and Toggle Buttons in One Box */}
+            <div className="w-fit flex flex-col sm:flex-row items-start sm:items-center">
+              {/* ₹ Symbol and Price Info */}
 
-          <div className="mt-5">
-            <p className="text-md sm:text-base md:text-xl font-semibold my-2 text-gray-700">
-              Opening Hours
-            </p>
+              {/* Toggle Buttons */}
+              <div className="flex gap-2">
+                <button
+                  className={`px-4 py-1 border  ${selectedTab === "day"
+                    ? "bg-[#6BB7BE] text-white"
+                    : "bg-white text-[#6BB7BE] border-[#6BB7BE]"}`
+                  }
+                  onClick={() => {
+                    setSelectedTab("day");
+                  }}
+                >
+                  ₹ {rate} / Day
+                </button>
+                <button
+                  className={`px-4 py-1 border  ${selectedTab === "month"
+                    ? "bg-[#6BB7BE] text-white"
+                    : "bg-white text-[#6BB7BE] border-[#6BB7BE]"}`
+                  }
+                  onClick={() => {
+                    setSelectedTab("month");
+                  }}
+                >
+                  ₹ {ratePerMonth} / Month
+                </button>
+              </div>
+            </div>
 
-            <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
-              {startTime !== "1970-01-01T00:00:00.000Z"
-                ? new Date(startTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: true,
-                })
-                : "10:00 AM"}{" "}
-              -{" "}
-              {endTime !== "1970-01-01T00:00:00.000Z"
-                ? new Date(endTime).toLocaleTimeString([], {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  hour12: false,
-                })
-                : "10:00 PM"}{" "}
-              PM
-            </p>
+            {/* Address and Status */}
+
+            {/* Conditional Button */}
+
+          </div>
+          <div className="mt-2">
+
+
+            {/* Conditionally render Opening Hours based on selectedTab */}
+            {selectedTab === "day" && (
+
+              <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-600 my-2 break-words">
+                <p className="text-md sm:text-base md:text-xl font-semibold my-2 text-gray-700">
+                  Opening Hours
+                </p>
+                {startTime !== "1970-01-01T00:00:00.000Z"
+                  ? new Date(startTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })
+                  : "10:00 AM"}{" "}
+                -{" "}
+                {endTime !== "1970-01-01T00:00:00.000Z"
+                  ? new Date(endTime).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
+                  : "10:00 PM"}{" "}
+                PM
+              </p>
+            )}
           </div>
 
+
           <div>
-          {selectedTab === "day" ? (
-        <Button
-          onClick={handleBookNow}
-          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-        >
-          BOOK NOW
-        </Button>
-      ) : (
-        <Button
-          onClick={() => alert("Enquiry sent!")} // Replace with actual logic
-          className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
-        >
-          ENQUIRE NOW
-        </Button>
-      )}
+            {selectedTab === "day" ? (
+              <Button
+                onClick={handleBookNow}
+                className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+              >
+                BOOK NOW
+              </Button>
+            ) : (
+              <Button
+                onClick={() => alert("Enquiry sent!")} // Replace with actual logic
+                className="h-12 w-full sm:w-auto flex rounded-none items-center justify-center text-white hover:text-[#6BB7BE] border border-[#6BB7BE] px-10 font-bold bg-[#6BB7BE] hover:bg-[#FAFAFA] font-medium my-4"
+              >
+                ENQUIRE NOW
+              </Button>
+            )}
           </div>
         </div>
 

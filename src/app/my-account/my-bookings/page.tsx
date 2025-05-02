@@ -15,6 +15,10 @@ const MyBooking = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { bookings } = useBookSpaces();
 
+  console.log("Users : ", user)
+  console.log("officeSpaces : ", officeSpaces)
+  console.log("bookings : ", bookings)
+
   const formatTimeRange = (
     date: string,
     startTime: string,

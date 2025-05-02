@@ -18,7 +18,7 @@ const PaymentHistory = () => {
   const formatTimeRange = (
     date: string,
     startTime: string,
-    duration: number,
+    duration: number
   ) => {
     const [hours, minutes] = startTime.split(":").map(Number);
     const start = new Date(date);
@@ -41,96 +41,86 @@ const PaymentHistory = () => {
 
   const getPastBookings = () => {
     const now = new Date();
-
     return bookings
       ?.filter((booking) => booking.userId === user?._id)
       ?.filter((booking) => {
         const [hours, minutes] = booking.startTime.split(":").map(Number);
         const bookingDateTime = new Date(booking.date);
         bookingDateTime.setHours(hours, minutes, 0, 0);
-
         return bookingDateTime < now;
       });
   };
 
   const pastBookings = getPastBookings();
+
   return (
-    <div className="px-3">
-      <div className="w-full bg-white border border-gray-200 rounded-none shadow-md overflow-hidden">
+    <div className="px-4 py-6 max-w-7xl mx-auto">
+      <div className="bg-white border border-gray-200 rounded-none shadow-sm">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#6BB7BE] to-[#58a6ac] px-6 py-3">
-          <h2 className="text-white text-lg sm:text-xl font-semibold">
-            Payment History
-          </h2>
+        <div className="bg-gradient-to-r from-[#6BB7BE] to-[#58a6ac] px-6 py-4 rounded-none">
+          <h2 className="text-white text-xl font-bold">Payment History</h2>
         </div>
 
-        {/* Past Bookings Grid */}
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Table */}
+        <div className="overflow-x-auto">
           {pastBookings.length > 0 ? (
-            pastBookings.map((booking, index) => {
-              const matchedOffice = officeSpaces.find(
-                (office) => office._id === booking.officeId,
-              );
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-100 rounded-none">
+                <tr className="rounded-none">
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                    <FaMapMarkerAlt className="inline mr-1 text-[#6BB7BE]" />
+                    Office
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                    <FaCalendarAlt className="inline mr-1 text-[#6BB7BE]" />
+                    Date
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                    <FaClock className="inline mr-1 text-[#6BB7BE]" />
+                    Time
+                  </th>
+                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                    <FaMoneyBillWave className="inline mr-1 text-[#6BB7BE]" />
+                    Amount Paid
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100 rounded-none">
+                {pastBookings.map((booking, index) => {
+                  const matchedOffice = officeSpaces.find(
+                    (office) => office._id === booking.officeId
+                  );
 
-              return (
-                <div
-                  key={index}
-                  className="border border-gray-100 shadow-sm p-4 bg-white rounded-none flex flex-col gap-3"
-                >
-                  {/* Office Info */}
-                  <div className="flex items-start gap-3">
-                    <FaMapMarkerAlt className="text-[#6BB7BE] mt-1" />
-                    <div>
-                      <p className="text-gray-500 text-sm">Office</p>
-                      <p className="font-semibold text-gray-800">
+                  return (
+                    <tr
+                      key={index}
+                      className="hover:bg-gray-50 rounded-none"
+                    >
+                      <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
                         {matchedOffice
                           ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
                           : "Office not found"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Date */}
-                  <div className="flex items-start gap-3">
-                    <FaCalendarAlt className="text-[#6BB7BE] mt-1" />
-                    <div>
-                      <p className="text-gray-500 text-sm">Date</p>
-                      <p className="font-semibold text-gray-800">
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
                         {new Date(booking.date).toLocaleDateString()}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Time Slot */}
-                  <div className="flex items-start gap-3">
-                    <FaClock className="text-[#6BB7BE] mt-1" />
-                    <div>
-                      <p className="text-gray-500 text-sm">Time</p>
-                      <p className="font-semibold text-gray-800">
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
                         {formatTimeRange(
                           booking.date,
                           booking.startTime,
-                          booking.duration,
+                          booking.duration
                         )}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Payment */}
-                  <div className="flex items-start gap-3">
-                    <FaMoneyBillWave className="text-[#6BB7BE] mt-1" />
-                    <div>
-                      <p className="text-gray-500 text-sm">Amount Paid</p>
-                      <p className="font-semibold text-gray-800">
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold text-green-600 rounded-none">
                         ₹ {booking.totalPay}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           ) : (
-            <p className="text-gray-500 text-sm">
+            <p className="text-center text-gray-500 text-sm px-6 py-10">
               You have no completed bookings.
             </p>
           )}

@@ -16,6 +16,8 @@ export async function POST(req: Request) {
     // Get the data from the request body
     const { userId, officeId,vendorId, date, startTime, duration, totalPay } = await req.json();
 
+    console.log("totalPay type:", typeof totalPay, "value:", totalPay);
+
     // Create Razorpay order
     const orderOptions = {
       amount: totalPay * 100, // Razorpay uses paise
