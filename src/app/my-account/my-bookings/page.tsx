@@ -55,20 +55,38 @@ const MyBooking = () => {
         </div>
 
         {/* Bookings Grid */}
-        <div className="p-6">
+        <div className="">
           {bookings?.filter((booking) => booking.userId === user?._id).length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="min-w-full border border-gray-200 bg-white text-left text-sm text-gray-700">
-                <thead className="bg-[#6BB7BE] text-white">
-                  <tr>
-                    <th className="px-4 py-2">Office</th>
-                    <th className="px-4 py-2">Date</th>
-                    <th className="px-4 py-2">Time</th>
-                    <th className="px-4 py-2">Payment</th>
-                    <th className="px-4 py-2">Action</th>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100 rounded-none">
+                  <tr className="rounded-none">
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaMapMarkerAlt className="inline mr-1 text-[#6BB7BE]" />
+                      Office
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaCalendarAlt className="inline mr-1 text-[#6BB7BE]" />
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaClock className="inline mr-1 text-[#6BB7BE]" />
+                      Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaMoneyBillWave className="inline mr-1 text-[#6BB7BE]" />
+                      Payment
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaCalendarAlt className="inline mr-1 text-[#6BB7BE]" />
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      Action
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-100 rounded-none">
                   {bookings
                     .filter((booking) => booking.userId === user?._id)
                     .map((booking, index) => {
@@ -77,59 +95,40 @@ const MyBooking = () => {
                       );
 
                       return (
-                        <tr key={index} className="border-t border-gray-100">
-                          <td className="px-4 py-3">
-                            <div className="flex items-start gap-2">
-                              <FaMapMarkerAlt className="text-[#6BB7BE] mt-1" />
-                              <div>
-                                <p className="text-gray-500 text-xs">Office</p>
-                                <p className="font-medium text-gray-800">
-                                  {matchedOffice
-                                    ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
-                                    : "Office not found"}
-                                </p>
-                              </div>
-                            </div>
+                        <tr key={index} className="hover:bg-gray-50 rounded-none">
+                          <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                            {matchedOffice
+                              ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
+                              : "Office not found"}
                           </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-start gap-2">
-                              <FaCalendarAlt className="text-[#6BB7BE] mt-1" />
-                              <div>
-                                <p className="text-gray-500 text-xs">Date</p>
-                                <p className="font-medium text-gray-800">
-                                  {new Date(booking.date).toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
+                          <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                            {new Date(booking.date).toLocaleDateString()}
                           </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-start gap-2">
-                              <FaClock className="text-[#6BB7BE] mt-1" />
-                              <div>
-                                <p className="text-gray-500 text-xs">Time</p>
-                                <p className="font-medium text-gray-800">
-                                  {formatTimeRange(
-                                    booking.date,
-                                    booking.startTime,
-                                    booking.duration
-                                  )}
-                                </p>
-                              </div>
-                            </div>
+                          <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                            {formatTimeRange(
+                              booking.date,
+                              booking.startTime,
+                              booking.duration
+                            )}
                           </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-start gap-2">
-                              <FaMoneyBillWave className="text-[#6BB7BE] mt-1" />
-                              <div>
-                                <p className="text-gray-500 text-xs">Total</p>
-                                <p className="font-medium text-gray-800">
-                                  ₹ {booking.totalPay}
-                                </p>
-                              </div>
-                            </div>
+                          <td className="px-6 py-4 text-sm font-semibold text-green-600 rounded-none">
+                            ₹ {booking.totalPay}
                           </td>
-                          <td className="px-4 py-3">
-                            <Link href={`/office-space/${booking.officeId}`} className="bg-[#6BB7BE] hover:bg-[#5aa5ae] text-white px-4 py-1 rounded" >
+                          <td className="px-6 py-4 text-sm font-semibold rounded-none">
+                            {booking.isCancel ? (
+                              <span className="text-red-600">Cancelled</span>
+                            ) : new Date(booking.date) < new Date(new Date().toDateString()) ? (
+                              <span className="text-yellow-600">Completed</span>
+                            ) : (
+                              <span className="text-blue-600">Upcoming </span>
+                            )}
+                          </td>
+
+                          <td className="px-6 py-4 text-sm rounded-none">
+                            <Link
+                              href={`/office-space/${booking.officeId}`}
+                              className="text-[#6BB7BE] hover:underline"
+                            >
                               View
                             </Link>
                           </td>
@@ -140,9 +139,12 @@ const MyBooking = () => {
               </table>
             </div>
           ) : (
-            <p className="text-gray-500 text-sm">You have no bookings yet.</p>
+            <p className="text-center text-gray-500 text-sm px-6 py-10">
+              You have no bookings yet.
+            </p>
           )}
         </div>
+
 
       </div>
     </div>

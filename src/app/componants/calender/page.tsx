@@ -33,7 +33,8 @@ const TimeCalendar = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
 
-
+ console.log("bookings : ", bookings);
+ 
 
   const params = useParams();
   const id = params.id;
@@ -114,7 +115,8 @@ const TimeCalendar = () => {
   bookings.forEach((booking) => {
     if (
       booking.officeId === id &&
-      booking.date.split("T")[0] === selectedDateISO
+      booking.date.split("T")[0] === selectedDateISO &&
+      booking.isCancel === false
     ) {
       const startHour = getHourInt(booking.startTime);
       const duration = booking.duration;
@@ -124,6 +126,8 @@ const TimeCalendar = () => {
       }
     }
   });
+
+  
 
   // BOOK NOW logic
   const loadRazorpayScript = () => {

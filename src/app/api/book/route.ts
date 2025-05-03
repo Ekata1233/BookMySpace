@@ -15,7 +15,7 @@ export async function OPTIONS() {
 export async function GET() {
   await testConnection();
   try {
-    const bookings = await BookSpace.find({});
+    const bookings = await BookSpace.find();
     return NextResponse.json(
       { success: true, data: bookings },
       { status: 200, headers: corsHeaders },

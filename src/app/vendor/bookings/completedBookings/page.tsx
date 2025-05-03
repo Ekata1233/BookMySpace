@@ -65,14 +65,14 @@ const CompletedBookings = () => {
       />
       <main className="flex-1 max-w-4xl mx-auto p-6">
         {/* Back Button */}
-        <div className="mb-2">
+        {/* <div className="mb-2">
           <Link
             href="/vendor/dashboard"
             className="inline-flex items-center gap-2 text-[#6BB7BE] hover:text-[#5AA4A9] text-sm font-medium"
           >
             <span className="text-xl">←</span> Back to Dashboard
           </Link>
-        </div>
+        </div> */}
 
         {/* Heading */}
         <h1 className="text-2xl font-bold text-gray-800 mb-6 border-b border-gray-300 pb-2">
@@ -94,6 +94,9 @@ const CompletedBookings = () => {
                   <th className="px-4 py-3 border border-gray-300">Duration</th>
                   <th className="px-4 py-3 border border-gray-300">
                     Amount Paid
+                  </th>
+                  <th className="px-4 py-3 border border-gray-300">
+                    Status
                   </th>
                 </tr>
               </thead>
@@ -121,6 +124,15 @@ const CompletedBookings = () => {
                       </td>
                       <td className="px-4 py-3 border border-gray-300 text-green-700 font-semibold">
                         ₹{booking.totalPay}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-semibold rounded-none">
+                        {booking.isCancel ? (
+                          <span className="text-red-600">Cancelled</span>
+                        ) : new Date(booking.date) < new Date(new Date().toDateString()) ? (
+                          <span className="text-yellow-600">Completed</span>
+                        ) : (
+                          <span className="text-blue-600">Upcoming </span>
+                        )}
                       </td>
                     </tr>
                   );

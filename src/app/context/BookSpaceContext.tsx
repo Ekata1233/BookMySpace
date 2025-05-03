@@ -20,12 +20,15 @@ interface BookSpace {
   totalPay: number;
   createdAt?: string;
   _id?: string;
+  isCancel?: boolean;
 }
 
 // Define the context type
 interface BookSpaceContextType {
   bookings: BookSpace[];
   addBooking: (newBooking: BookSpace) => Promise<void>;
+  updateBooking: (id: string, updateData: Partial<BookSpace>) => Promise<void>;
+  deleteBooking: (id: string) => Promise<void>;
   refreshBookings: () => Promise<void>;
 }
 
@@ -63,13 +66,44 @@ export const BookSpaceProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const updateBooking = async (id: string, updateData: Partial<BookSpace>) => {
+    try {
+      const response = await axios.put<{ success: boolean; data: BookSpace }>(
+        `/api/book/${id}`,
+        updateData,
+      );
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === id ? response.data.data : booking,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating booking:", error);
+    }
+  };
+
+  // Soft delete a booking
+  const deleteBooking = async (id: string) => {
+    try {
+      await axios.delete(`/api/book/${id}`);
+      setBookings((prev) =>
+        prev.filter((booking) => booking._id !== id),
+      );
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+    }
+  };
+
   useEffect(() => {
     fetchBookings();
   }, []);
 
   return (
     <BookSpaceContext.Provider
-      value={{ bookings, addBooking, refreshBookings: fetchBookings }}
+      value={{
+        bookings, addBooking, updateBooking,
+        deleteBooking, refreshBookings: fetchBookings
+      }}
     >
       {children}
     </BookSpaceContext.Provider>

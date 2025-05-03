@@ -34,6 +34,10 @@ const bookSpaceSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  isCancel: {
+    type: Boolean,
+    default: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

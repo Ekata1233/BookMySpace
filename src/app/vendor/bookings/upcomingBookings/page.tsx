@@ -7,10 +7,11 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useCounts } from "@/app/context/CountContext";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
+import { toast } from "sonner";
 
 const UpcomingBookings = () => {
   const { officeSpaces } = useOfficeSpaces();
-  const { bookings } = useBookSpaces();
+  const { bookings, updateBooking, refreshBookings } = useBookSpaces();
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
@@ -57,13 +58,22 @@ const UpcomingBookings = () => {
     (booking) => new Date(booking.date).getTime() >= today,
   );
 
-  const validFutureBookings = futureBookings.filter((booking) =>
-    getOfficeDetails(booking.officeId),
+  const validFutureBookings = futureBookings.filter((booking) => 
+    !booking.isCancel && getOfficeDetails(booking.officeId),
   );
 
   useEffect(() => {
     setUpcomingBookingCount(validFutureBookings.length);
   }, [validFutureBookings, setUpcomingBookingCount]);
+
+  const handleCancelBooking = (bookingId: string) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirmCancel) return;
+
+    updateBooking(bookingId, { isCancel: true });
+    toast.success("Booking Cancel successfully!");
+    refreshBookings();
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42">
@@ -103,6 +113,9 @@ const UpcomingBookings = () => {
                   <th className="px-4 py-3 border border-gray-300">
                     Amount Paid
                   </th>
+                  <th className="px-4 py-3 border border-gray-300">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -129,6 +142,20 @@ const UpcomingBookings = () => {
                       </td>
                       <td className="px-4 py-3 border border-gray-300 text-green-700 font-semibold">
                         ₹{booking.totalPay}
+                      </td>
+                      <td className="px-4 py-3 border border-gray-300 text-green-700 font-semibold space-x-3">
+                        <Link
+                          href={`/office-space/${booking.officeId}`}
+                          className="text-[#6BB7BE] hover:underline"
+                        >
+                          View
+                        </Link>
+                        <button
+                          onClick={() => handleCancelBooking(booking._id!)}
+                          className="text-red-500 hover:underline"
+                        >
+                          Cancel
+                        </button>
                       </td>
                     </tr>
                   );

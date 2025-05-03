@@ -10,20 +10,21 @@ import {
   FaMapMarkerAlt,
   FaMoneyBillWave,
 } from "react-icons/fa";
+import { toast } from "sonner";
 
 const UpcomingAppointments = () => {
   const { user } = useAuth();
   const { officeSpaces } = useOfficeSpaces();
-  const { bookings } = useBookSpaces();
+  const { bookings, updateBooking, refreshBookings } = useBookSpaces();
 
-  console.log("Users : ", user);
-  console.log("officeSpaces : ", officeSpaces);
-  console.log("bookings : ", bookings);
+  console.log("Users : ", user)
+  console.log("officeSpaces : ", officeSpaces)
+  console.log("bookings : ", bookings)
 
   const formatTimeRange = (
     date: string,
     startTime: string,
-    duration: number
+    duration: number,
   ) => {
     const [hours, minutes] = startTime.split(":").map(Number);
     const start = new Date(date);
@@ -44,108 +45,119 @@ const UpcomingAppointments = () => {
     return `${formattedStart} - ${formattedEnd}`;
   };
 
-  // Filter only today's and future bookings
+  // Get today's date at midnight for accurate comparison
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const filteredBookings = bookings
-    ?.filter((booking) => booking.userId === user?._id)
-    .filter((booking) => {
+  // Filter only future or today’s bookings for the current user
+  const upcomingBookings = bookings
+    ?.filter((booking) => {
       const bookingDate = new Date(booking.date);
       bookingDate.setHours(0, 0, 0, 0);
-      return bookingDate >= today;
+      return (
+        booking.userId === user?._id &&
+        bookingDate >= today &&
+        booking.isCancel === false
+      );
+    })
+    .sort((a, b) => {
+      const dateA = new Date(`${a.date}T${a.startTime}`);
+      const dateB = new Date(`${b.date}T${b.startTime}`);
+      return dateA.getTime() - dateB.getTime();
     });
+
+
+  console.log("upcoming bookings : ", upcomingBookings)
+
+  const handleCancelBooking = (bookingId: string) => {
+    const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");
+    if (!confirmCancel) return;
+
+    updateBooking(bookingId, { isCancel: true });
+    toast.success("Booking Cancel successfully!");
+    refreshBookings();
+  };
+
 
   return (
     <div className="px-3">
       <div className="w-full bg-white  rounded-none  overflow-hidden">
         {/* Header */}
         <div className="bg-gradient-to-r from-[#6BB7BE] to-[#58a6ac] px-6 py-3">
-          <h2 className="text-[#6BB7BE] text-lg sm:text-xl font-semibold">
+          <h2 className="text-white text-lg sm:text-xl font-semibold">
             Upcoming Bookings
           </h2>
         </div>
 
         {/* Bookings Grid */}
-        <div className="p-6">
-          {filteredBookings?.length > 0 ? (
+        <div className="">
+          {upcomingBookings?.length > 0 ? (
             <div className="overflow-x-auto">
-              <table className="min-w-full border border-gray-200 bg-white text-left text-sm text-gray-700">
-                <thead className="bg-[#6BB7BE] text-white">
-                  <tr>
-                    <th className="px-4 py-2">Office</th>
-                    <th className="px-4 py-2">Date</th>
-                    <th className="px-4 py-2">Time</th>
-                    <th className="px-4 py-2">Payment</th>
-                    <th className="px-4 py-2">Action</th>
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100 rounded-none">
+                  <tr className="rounded-none">
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaMapMarkerAlt className="inline mr-1 text-[#6BB7BE]" />
+                      Office
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaCalendarAlt className="inline mr-1 text-[#6BB7BE]" />
+                      Date
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaClock className="inline mr-1 text-[#6BB7BE]" />
+                      Time
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      <FaMoneyBillWave className="inline mr-1 text-[#6BB7BE]" />
+                      Payment
+                    </th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-600 rounded-none">
+                      Action
+                    </th>
                   </tr>
                 </thead>
-                <tbody>
-                  {filteredBookings.map((booking, index) => {
+                <tbody className="bg-white divide-y divide-gray-100 rounded-none">
+                  {upcomingBookings.map((booking, index) => {
                     const matchedOffice = officeSpaces.find(
                       (office) => office._id === booking.officeId
                     );
 
                     return (
-                      <tr key={index} className="border-t border-gray-100">
-                        <td className="px-4 py-3">
-                          <div className="flex items-start gap-2">
-                            <FaMapMarkerAlt className="text-[#6BB7BE] mt-1" />
-                            <div>
-                              <p className="text-gray-500 text-xs">Office</p>
-                              <p className="font-medium text-gray-800">
-                                {matchedOffice
-                                  ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
-                                  : "Office not found"}
-                              </p>
-                            </div>
-                          </div>
+                      <tr key={index} className="hover:bg-gray-50 rounded-none">
+                        <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                          {matchedOffice
+                            ? `${matchedOffice.officeSpaceName}, ${matchedOffice.city}`
+                            : "Office not found"}
                         </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-start gap-2">
-                            <FaCalendarAlt className="text-[#6BB7BE] mt-1" />
-                            <div>
-                              <p className="text-gray-500 text-xs">Date</p>
-                              <p className="font-medium text-gray-800">
-                                {new Date(booking.date).toLocaleDateString()}
-                              </p>
-                            </div>
-                          </div>
+                        <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                          {new Date(booking.date).toLocaleDateString()}
                         </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-start gap-2">
-                            <FaClock className="text-[#6BB7BE] mt-1" />
-                            <div>
-                              <p className="text-gray-500 text-xs">Time</p>
-                              <p className="font-medium text-gray-800">
-                                {formatTimeRange(
-                                  booking.date,
-                                  booking.startTime,
-                                  booking.duration
-                                )}
-                              </p>
-                            </div>
-                          </div>
+                        <td className="px-6 py-4 text-sm text-gray-800 rounded-none">
+                          {formatTimeRange(
+                            booking.date,
+                            booking.startTime,
+                            booking.duration
+                          )}
                         </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-start gap-2">
-                            <FaMoneyBillWave className="text-[#6BB7BE] mt-1" />
-                            <div>
-                              <p className="text-gray-500 text-xs">Total</p>
-                              <p className="font-medium text-gray-800">
-                                ₹ {booking.totalPay}
-                              </p>
-                            </div>
-                          </div>
+                        <td className="px-6 py-4 text-sm font-semibold text-green-600 rounded-none">
+                          ₹ {booking.totalPay}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-6 py-4 text-sm rounded-none space-x-3">
                           <Link
                             href={`/office-space/${booking.officeId}`}
-                            className="bg-[#6BB7BE] hover:bg-[#5aa5ae] text-white px-4 py-1 rounded"
+                            className="text-[#6BB7BE] hover:underline"
                           >
                             View
                           </Link>
+                          <button
+                            onClick={() => handleCancelBooking(booking._id!)}
+                            className="text-red-500 hover:underline"
+                          >
+                            Cancel
+                          </button>
                         </td>
+
                       </tr>
                     );
                   })}
@@ -153,7 +165,9 @@ const UpcomingAppointments = () => {
               </table>
             </div>
           ) : (
-            <p className="text-gray-500 text-sm">You have no bookings yet.</p>
+            <p className="text-center text-gray-500 text-sm px-6 py-10">
+              You have no bookings yet.
+            </p>
           )}
         </div>
       </div>

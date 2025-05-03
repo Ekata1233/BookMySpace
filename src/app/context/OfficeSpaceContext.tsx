@@ -100,9 +100,12 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
     id: string,
     updateData: Partial<OfficeSpace>,
   ) => {
+    console.log("Updating office space with ID:", id);
+    console.log("Data being sent:", updateData);
+
     try {
       const response = await axios.put<{ success: boolean; data: OfficeSpace }>(
-        "/api/officeSpaces",
+        `/api/officeSpaces/${id}`,
         { _id: id, ...updateData },
       );
       setOfficeSpaces((prev) =>
@@ -117,7 +120,7 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteOfficeSpace = async (id: string) => {
     try {
-      await axios.delete("/api/officeSpaces", { data: { _id: id } });
+      await axios.delete(`/api/officeSpaces/${id}`, { data: { _id: id } });
       setOfficeSpaces((prev) =>
         prev.filter((officeSpaces) => officeSpaces._id !== id),
       );

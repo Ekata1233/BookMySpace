@@ -8,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
 
 import { useCounts } from "@/app/context/CountContext";
+import { useRouter } from "next/navigation";
 
 const OfficeSpaces = () => {
   const { officeSpaces } = useOfficeSpaces();
@@ -17,7 +18,7 @@ const OfficeSpaces = () => {
   const [openReport, setOpenReport] = useState(false);
   const [openAccount, setOpenAccount] = useState(false);
   const { setOfficeSpaceCount } = useCounts();
-
+  const router = useRouter();
   const [vendorId, setVendorId] = useState<string | null>(null);
 
   // Use useEffect to get vendor ID from localStorage on the client side
@@ -130,7 +131,8 @@ const OfficeSpaces = () => {
                       >
                         <FaEye />
                       </Link>
-                      <button className="text-sm p-2 bg-yellow-400 text-white hover:bg-yellow-500 rounded-none">
+                      <button aria-label="Edit office space" className="text-sm p-2 bg-yellow-400 text-white hover:bg-yellow-500 rounded-none"
+                        onClick={() => router.push(`/vendor/mySpaces/edit/${space._id}`)}>
                         <FaEdit />
                       </button>
                       <button className="text-sm p-2 bg-red-500 text-white hover:bg-red-600 rounded-none">

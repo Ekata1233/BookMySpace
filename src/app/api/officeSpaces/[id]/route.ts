@@ -13,17 +13,47 @@ export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
 
-// ✅ PUT - Update Box
-export async function PUT(request: Request, context: any) {
+// ✅ GET - Get specific office space by ID
+export async function GET(request: Request, context: any) {
   await connectToDatabase();
 
   try {
     const { id } = context.params;
+
+    const officeSpace = await officeSpaces.findById(id);
+
+    if (!officeSpace || officeSpace.isDeleted) {
+      return NextResponse.json(
+        { success: false, message: "Office space not found" },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, data: officeSpace },
+      { status: 200, headers: corsHeaders }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 400, headers: corsHeaders }
+    );
+  }
+}
+
+
+// ✅ PUT - Update Box
+export async function PUT(request: Request, context: any) {
+  await connectToDatabase();
+
+  const { id } = await context.params;  // This needs to be awaited
+  console.log("Updating office space with ID:", id);
+  try {
     const updateData = await request.json();
 
     const updatedOfficeSpaces = await officeSpaces.findByIdAndUpdate(
       id,
-      { isAdminApprove: true },
+      { ...updateData,isAdminApprove: true },
       { new: true },
     );
 
