@@ -11,7 +11,7 @@ import { useCounts } from "@/app/context/CountContext";
 import { useRouter } from "next/navigation";
 
 const OfficeSpaces = () => {
-  const { officeSpaces } = useOfficeSpaces();
+  const { officeSpaces, deleteOfficeSpace } = useOfficeSpaces();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [openSpaces, setOpenSpaces] = useState(false);
   const [openBookings, setOpenBookings] = useState(false);
@@ -135,7 +135,13 @@ const OfficeSpaces = () => {
                         onClick={() => router.push(`/vendor/mySpaces/edit/${space._id}`)}>
                         <FaEdit />
                       </button>
-                      <button className="text-sm p-2 bg-red-500 text-white hover:bg-red-600 rounded-none">
+                      <button className="text-sm p-2 bg-red-500 text-white hover:bg-red-600 rounded-none"
+                        onClick={() => {
+                          const confirmDelete = window.confirm("Are you sure you want to delete this office space?");
+                          if (confirmDelete) {
+                            deleteOfficeSpace(space._id);
+                          }
+                        }}>
                         <FaTrash />
                       </button>
                     </div>
