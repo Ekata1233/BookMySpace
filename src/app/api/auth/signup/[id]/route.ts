@@ -1,21 +1,26 @@
 import { AuthService } from "@/services/authService";
 import { NextRequest, NextResponse } from "next/server";
 
-// Helper to add CORS headers
+// CORS helper
 function withCors(response: NextResponse) {
   response.headers.set("Access-Control-Allow-Origin", "*");
   response.headers.set("Access-Control-Allow-Methods", "GET, PUT, DELETE, OPTIONS");
-  response.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
-  );
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
   return response;
 }
 
-// GET: Get a particular user by ID
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+// Extract ID from URL
+function getIdFromUrl(req: NextRequest): string | null {
+  const id = req.nextUrl.pathname.split("/").pop();
+  return id || null;
+}
+
+export async function GET(req: NextRequest) {
+  const id = getIdFromUrl(req);
+  if (!id) return withCors(NextResponse.json({ error: "ID not found" }, { status: 400 }));
+
   try {
-    const user = await AuthService.getUserById(params.id);
+    const user = await AuthService.getUserById(id);
     if (!user) {
       return withCors(NextResponse.json({ error: "User not found" }, { status: 404 }));
     }
@@ -26,11 +31,13 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-// PUT: Update a user by ID
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest) {
+  const id = getIdFromUrl(req);
+  if (!id) return withCors(NextResponse.json({ error: "ID not found" }, { status: 400 }));
+
   try {
     const updatedData = await req.json();
-    const updatedUser = await AuthService.updateUser(params.id, updatedData);
+    const updatedUser = await AuthService.updateUser(id, updatedData);
     return withCors(NextResponse.json(updatedUser, { status: 200 }));
   } catch (error) {
     console.error("Update User Error:", error);
@@ -38,10 +45,12 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 }
 
-// DELETE: Delete a user by ID
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest) {
+  const id = getIdFromUrl(req);
+  if (!id) return withCors(NextResponse.json({ error: "ID not found" }, { status: 400 }));
+
   try {
-    const deletedUser = await AuthService.deleteUser(params.id);
+    const deletedUser = await AuthService.deleteUser(id);
     return withCors(NextResponse.json({ message: "User deleted", deletedUser }, { status: 200 }));
   } catch (error) {
     console.error("Delete User Error:", error);
@@ -49,7 +58,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   }
 }
 
-// OPTIONS: Preflight for CORS
 export async function OPTIONS() {
   return withCors(new NextResponse(null, { status: 204 }));
 }
