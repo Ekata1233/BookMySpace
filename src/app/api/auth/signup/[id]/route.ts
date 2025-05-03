@@ -31,8 +31,11 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PUT(req: NextRequest) {
-  const id = getIdFromUrl(req);
+export async function PUT(req: NextRequest, context: any) {
+    const { id } = await context.params;  
+
+    console.log("id of user : ",id);
+  
   if (!id) return withCors(NextResponse.json({ error: "ID not found" }, { status: 400 }));
 
   try {
