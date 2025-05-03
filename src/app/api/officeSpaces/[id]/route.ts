@@ -46,8 +46,7 @@ export async function GET(request: Request, context: any) {
 export async function PUT(request: Request, context: any) {
   await connectToDatabase();
 
-  const { id } = await context.params;  // This needs to be awaited
-  console.log("Updating office space with ID:", id);
+  const { id } = await context.params;  
   try {
     const updateData = await request.json();
 
@@ -79,8 +78,7 @@ export async function PUT(request: Request, context: any) {
 // ✅ DELETE - Soft Delete Box
 // export async function DELETE(request: Request, context: any) {
 //   await connectToDatabase();
-//   const { id } = await context.params;  // This needs to be awaited
-//   console.log("Updating office space with ID:", id);
+//   const { id } = await context.params;  
 //   try {
 
 //     const deletedOfficeSpaces = await officeSpaces.findByIdAndUpdate(
@@ -111,8 +109,7 @@ export async function PUT(request: Request, context: any) {
 
 export async function DELETE(request: Request, context: any) {
   await connectToDatabase();
-  const { id } = context.params;  // No need to await this line
-  console.log("Deleting office space with ID:", id);
+  const { id } = context.params;  
   
   try {
     const deletedOfficeSpace = await officeSpaces.findByIdAndDelete(id);

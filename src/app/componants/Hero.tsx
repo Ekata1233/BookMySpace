@@ -24,7 +24,7 @@ const Hero = () => {
 
   };
 
-  console.log("office spaces : ", officeSpaces);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {

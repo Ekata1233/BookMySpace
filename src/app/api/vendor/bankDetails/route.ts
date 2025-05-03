@@ -56,13 +56,11 @@ export async function POST(req: Request) {
     }
 
     // Log the vendorId to verify the value
-    console.log("Looking for vendor with ID:", vendorId); // Add this log for debugging
 
     // Check if vendor exists
     const vendor = await VendorBankDetails.findById(vendorId);
 
     // Log the fetched vendor details to verify if it's found
-    console.log("Fetched vendor from DB:", vendor); // Add this log for debugging
 
     if (!vendor) {
       return NextResponse.json(
@@ -130,7 +128,6 @@ export async function POST(req: Request) {
           },
         }
       );
-      console.log("Razorpay response:", response.data);
 
       // Save payout details in the database
       await PayoutSchema.create({

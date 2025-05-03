@@ -33,7 +33,6 @@ const TimeCalendar = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
   const router = useRouter();
 
- console.log("bookings : ", bookings);
  
 
   const params = useParams();
@@ -167,7 +166,7 @@ const TimeCalendar = () => {
 
     try {
       const { data } = await axios.post("/api/razorpay", bookingData);
-      console.log("data : ", data)
+ 
       const { razorpayOrderId: orderId } = data;
 
       const options = {

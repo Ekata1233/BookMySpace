@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 const PersonalInfo = () => {
   const { user, updateUser } = useAuth();
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -20,7 +21,7 @@ const PersonalInfo = () => {
 
   const handleSave = async () => {
     try {
-      await updateUser(user?.id, formData);
+      await updateUser(user?._id, formData);
       toast.success("User information updated!");
       setIsEditing(false);
       user();
@@ -39,6 +40,7 @@ const PersonalInfo = () => {
     });
     setIsEditing(false);
   };
+
 
   return (
     <div className="px-3 ">

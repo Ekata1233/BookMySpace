@@ -155,7 +155,6 @@ export const VendorProvider = ({ children }: { children: React.ReactNode }) => {
       });
   
       const data = await res.json();
-      console.log("Fetch vendor result:", res.status, data);
   
       if (res.ok) {
         setVendor(data.vendor);

@@ -41,7 +41,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const { vendorId, amount, paymentMethod } = await req.json();
-    console.log("Request vendorId:", vendorId);
+    
 
     if (!vendorId || !amount || !paymentMethod) {
       return NextResponse.json(
@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
 
     const vendor = await VendorBankDetails.findOne({ vendorId: vendorId });
 
-    console.log("Vendor result:", vendor);
+   
 
     if (!vendor) {
       return NextResponse.json(
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     };
 
     // 1. Create Contact
-    console.log("Creating Razorpay Contact...");
+
     const contactResponse = await axios.post(
       "https://api.razorpay.com/v1/contacts",
       {
@@ -90,10 +90,8 @@ export async function POST(req: NextRequest) {
     );
 
     const contactId = contactResponse.data.id;
-    console.log("Contact created with ID:", contactId);
 
-    // 2. Create Fund Account
-    console.log("Creating Razorpay Fund Account...");
+
 
     let fundAccountPayload: any = {
       contact_id: contactId,
@@ -138,10 +136,8 @@ export async function POST(req: NextRequest) {
     );
 
     const fundAccountId = fundAccountResponse.data.id;
-    console.log("Fund Account created with ID:", fundAccountId);
 
-    // 3. Create Payout
-    console.log("Creating Razorpay Payout...");
+
     const payoutPayload = {
       account_number: "2323230089134655", // Razorpay test virtual account number
       fund_account_id: fundAccountId,
@@ -160,7 +156,6 @@ export async function POST(req: NextRequest) {
       { auth: razorpayAuth }
     );
 
-    console.log("Razorpay Payout Response:", payoutResponse.data);
 
     // Save payout to database
     await PayoutSchema.create({

@@ -108,9 +108,9 @@
 //       }
 
 //       const res = await axios.post("/api/vendor/registration", formPayload);
-//       console.log("res.data:", res.data);
+//       
 //       const order_id  = res.data.order.id;
-//       console.log("order id : ", order_id);
+//       
 
 //       const options = {
 //         key: "rzp_test_4IVVmy5cqABEUR",
@@ -582,8 +582,7 @@
 // //       // ✅ DO NOT set Content-Type manually!
 // //       const response = await axios.post("/api/vendor/registration", formPayload);
 
-// //       console.log("formdata:", formData);
-// //       console.log("response:", response);
+
 
 // //       if (response.data.order && response.data.order.id) {
 // //         const options = {
@@ -1062,9 +1061,7 @@ const VendorRegistration = () => {
       const response = await axios.post("/api/vendor/registration", formPayload);
       const order_id = response.data.order.id;
 
-      console.log("response : ", response)
 
-      console.log("order id : ", order_id);
 
       // if (!order || !order.id) {
       //   setError("Failed to create payment order");
@@ -1103,7 +1100,7 @@ const VendorRegistration = () => {
 
   const handlePaymentSuccess = async (razorpayResponse: any) => {
     try {
-      console.log("Razorpay success:", razorpayResponse);
+      
       toast.success("Registration and payment successful!");
       router.push("/");
     } catch (err) {

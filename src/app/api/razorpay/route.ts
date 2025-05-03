@@ -16,7 +16,6 @@ export async function POST(req: Request) {
     // Get the data from the request body
     const { userId, officeId,vendorId, date, startTime, duration, totalPay } = await req.json();
 
-    console.log("totalPay type:", typeof totalPay, "value:", totalPay);
 
     // Create Razorpay order
     const orderOptions = {
@@ -38,7 +37,6 @@ export async function POST(req: Request) {
       totalPay,
       razorpayOrderId: razorpayOrder.id, // Save Razorpay order ID only
     });
-    console.log("Booking saved:", newRazorpayBooking);
     await newRazorpayBooking.save();
 
     // Return the Razorpay order ID in the response

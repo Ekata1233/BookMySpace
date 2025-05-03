@@ -70,8 +70,7 @@ const BankInfo = () => {
       if (files[0]?.size > 5 * 1024 * 1024) {
         toast.error("File size exceeds 5MB");
         return;
-      }
-      console.log("Selected file:", files[0]);  // Log file to debug
+      } // Log file to debug
       setForm({ ...form, bankProof: files[0] });
     } else {
       setForm({ ...form, [name]: value });

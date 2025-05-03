@@ -85,7 +85,7 @@ const page = () => {
     setCompletedBookingCount(validPastBookings.length);
   }, [validFutureBookings, validPastBookings, setUpcomingBookingCount, setCompletedBookingCount]);
 
-  console.log("vendor details ; ", vendor);
+
   const revenue = vendor ? vendor.TotalEarning - vendor.TotalEarning * 0.15 : 0;
   const receivedAmount = vendor ? vendor.ReceivedAmount : 0;
   const pendingAmount = revenue - receivedAmount;

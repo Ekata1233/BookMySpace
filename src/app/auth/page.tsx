@@ -74,8 +74,7 @@ const Auth = () => {
         vendorLogin(email, password),
       ]);
 
-      console.log("User status:", userResult.status);
-      console.log("Vendor status:", vendorResult.status);
+
 
       if (
         vendorResult.status === "fulfilled" &&

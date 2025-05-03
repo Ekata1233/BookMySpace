@@ -62,8 +62,7 @@ const OfficeDetails = () => {
   const mainSlug = pathSegments[0] || "";
   const pageName = pathSegments[pathSegments.length - 1] || "";
   const [selectedTab, setSelectedTab] = useState("day");
-  // console.log("pathe name : ", mainSlug);
-  console.log("Path Name : ", pathname);
+
 
   const MatchedOfficeSpace = officeSpaces.find((space) => space._id === id);
 
@@ -92,7 +91,7 @@ const OfficeDetails = () => {
     rate,
   } = MatchedOfficeSpace as any;
 
-  console.log("rate per month : ", ratePerMonth)
+
 
   const handleBookNow = () => {
     if (!user) {

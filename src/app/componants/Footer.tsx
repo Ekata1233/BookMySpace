@@ -17,7 +17,7 @@ const Footer = () => {
   const [vendorToken, setVendorToken] = useState<string | null>(null);
 
 
-  console.log("vednor token : ", vendorToken)
+
 
   useEffect(() => {
     if (typeof window !== "undefined") {

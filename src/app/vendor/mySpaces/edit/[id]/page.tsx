@@ -44,7 +44,6 @@ const EditSpace = () => {
     const { updateOfficeSpace } = useOfficeSpaces();
     const router = useRouter();
 
-    console.log("office space in id : ", id)
 
 
     useEffect(() => {
@@ -53,7 +52,7 @@ const EditSpace = () => {
             const fetchData = async () => {
                 try {
                     const response = await fetch(`/api/officeSpaces/${id}`)
-                    console.log("response : ", response)
+                  
                     const data = await response.json()
 
                     if (data.success) {
@@ -194,7 +193,6 @@ const EditSpace = () => {
         e.preventDefault();
 
         if (!id) {
-            console.log("Office space ID is missing");
             return;
         }
 

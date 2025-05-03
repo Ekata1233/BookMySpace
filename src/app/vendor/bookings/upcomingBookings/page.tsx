@@ -41,10 +41,7 @@ const UpcomingBookings = () => {
     (space: any) => space.vendorId === vendorId,
   );
 
-  console.log(
-    "filteredOfficeSpaces officeSpaces booking : ",
-    filteredOfficeSpaces,
-  );
+
 
   const getOfficeDetails = (id: any) => {
     return filteredOfficeSpaces.find((office) => office._id === id);

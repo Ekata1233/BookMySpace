@@ -100,8 +100,7 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
     id: string,
     updateData: Partial<OfficeSpace>,
   ) => {
-    console.log("Updating office space with ID:", id);
-    console.log("Data being sent:", updateData);
+
 
     try {
       const response = await axios.put<{ success: boolean; data: OfficeSpace }>(

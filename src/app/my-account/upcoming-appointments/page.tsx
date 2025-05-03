@@ -17,9 +17,6 @@ const UpcomingAppointments = () => {
   const { officeSpaces } = useOfficeSpaces();
   const { bookings, updateBooking, refreshBookings } = useBookSpaces();
 
-  console.log("Users : ", user)
-  console.log("officeSpaces : ", officeSpaces)
-  console.log("bookings : ", bookings)
 
   const formatTimeRange = (
     date: string,
@@ -67,7 +64,6 @@ const UpcomingAppointments = () => {
     });
 
 
-  console.log("upcoming bookings : ", upcomingBookings)
 
   const handleCancelBooking = (bookingId: string) => {
     const confirmCancel = window.confirm("Are you sure you want to cancel this booking?");

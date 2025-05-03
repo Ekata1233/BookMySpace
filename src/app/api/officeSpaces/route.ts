@@ -42,7 +42,6 @@ export async function POST(req: Request) {
     const endTime = new Date(formData.get("endTime") as string);
     const vendorId = formData.get("vendorId") as string;
 
-    console.log("new office space formData : ", formData)
 
     if (!officeSpaceName || !city || !description || isNaN(rate) || !ratePerMonth)  {
       return NextResponse.json(

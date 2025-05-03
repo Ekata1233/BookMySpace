@@ -44,8 +44,6 @@ const AccountInfo = () => {
   const pendingAmount = totalEarnings - vendor.ReceivedAmount;
 
   const vendorId = vendor._id;
-  console.log("payout details : ", payouts);
-  console.log("vendorId details : ", vendorId);
 
   const vendorPayouts = payouts.filter(payout => payout.vendor === vendorId);
   

@@ -19,8 +19,6 @@ export async function PUT(request: Request, context: any) {
         const { id } = await context.params;
         const updateData = await request.json();
 
-        console.log("id : ",id)
-        console.log("updateData : ",updateData)
 
         const updatedBooking = await BookSpace.findByIdAndUpdate(id, updateData, {
             new: true,
