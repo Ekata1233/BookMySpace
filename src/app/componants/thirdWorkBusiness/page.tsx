@@ -1,10 +1,10 @@
-"use client"
+'use client';
 import Image from "next/image";
 import React from "react";
 import { IoCalendarOutline } from "react-icons/io5";
 import { LuLaptopMinimalCheck } from "react-icons/lu";
 import { FaArrowRight } from "react-icons/fa";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const ThirdWorkBusiness = () => {
   const router = useRouter();
