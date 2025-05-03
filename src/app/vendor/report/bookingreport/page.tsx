@@ -21,6 +21,7 @@ const BookingTablePage = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedUser, setSelectedUser] = useState<any | null>(null);  // State for selected user
   const itemsPerPage = 6;
 
   const getOfficeDetails = (id: any) => {
@@ -65,6 +66,15 @@ const BookingTablePage = () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Bookings");
     XLSX.writeFile(wb, "bookings.xlsx");
+  };
+
+  const handleCustomerClick = (userId: string) => {
+    const user = users.find((u) => u._id === userId);
+    setSelectedUser(user || null);  // Set the selected user's details for the modal
+  };
+
+  const closeModal = () => {
+    setSelectedUser(null);  // Close the modal by clearing the selected user
   };
 
   return (
@@ -123,9 +133,14 @@ const BookingTablePage = () => {
                   return (
                     <tr key={booking._id} className="border-t hover:bg-gray-100">
                       <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
-                      <td className="px-6 py-4 rounded-none">{booking._id}</td> {/* Corrected to _id */}
-                      <td className="px-6 py-4 rounded-none">{customerName}</td>
-                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td> {/* Corrected to totalPay */}
+                      <td className="px-6 py-4 rounded-none">{booking._id}</td>
+                      <td
+                        className="px-6 py-4 rounded-none cursor-pointer text-blue-500"
+                        onClick={() => handleCustomerClick(booking.userId)} // Open modal on click
+                      >
+                        {customerName}
+                      </td>
+                      <td className="px-6 py-4 rounded-none">${booking.totalPay}</td>
                       <td className="px-6 py-4 rounded-none">
                         {office ? `${office.officeSpaceName} (${office.category})` : 'N/A'}
                       </td>
@@ -160,6 +175,26 @@ const BookingTablePage = () => {
           </div>
         )}
       </main>
+
+      {/* Modal */}
+      {selectedUser && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-2xl mb-4">Customer Details</h2>
+            <p><strong>Name:</strong> {selectedUser.name}</p>
+            <p><strong>Email:</strong> {selectedUser.email}</p>
+            <p><strong>Phone:</strong> {selectedUser.phone}</p>
+            <p><strong>Address:</strong> {selectedUser.address || 'N/A'}</p>
+            <p><strong>Date & Time:</strong> {new Date(selectedUser.createdAt).toLocaleString()}</p>
+            <button
+              onClick={closeModal}
+              className="mt-4 px-4 py-2 bg-red-500 text-white rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
