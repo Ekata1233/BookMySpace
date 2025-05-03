@@ -2,9 +2,10 @@
 import { useAuth } from "@/app/context/authContext";
 import React, { useState } from "react";
 import { FaUser, FaEnvelope, FaPhone, FaMapMarkerAlt, FaEdit } from "react-icons/fa";
+import { toast } from "sonner";
 
 const PersonalInfo = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -17,11 +18,17 @@ const PersonalInfo = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSave = () => {
-    // TODO: Add API call to save updated data
-    console.log("Saved data:", formData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      await updateUser(user?.id, formData);
+      toast.success("User information updated!");
+      setIsEditing(false);
+      user();
+    } catch (error) {
+      toast.error("Failed to update user information.");
+    }
   };
+
 
   const handleCancel = () => {
     setFormData({
@@ -146,7 +153,7 @@ const PersonalInfo = () => {
               onClick={handleSave}
               className="px-4 py-1 bg-[#6BB7BE] text-white rounded hover:bg-[#58a6ac]"
             >
-              Save
+              Update
             </button>
           </div>
         )}
