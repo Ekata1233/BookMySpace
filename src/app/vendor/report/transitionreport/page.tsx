@@ -1,4 +1,4 @@
-'use client'; // This line marks the file as a client component
+'use client';
 
 import { useEffect, useState } from "react";
 import Sidebar from "@/app/componants/sidebar/Sidebar";
@@ -18,9 +18,11 @@ const TransitionPage = () => {
   const [error, setError] = useState<string | null>(null);
   const { users } = useUsers();
 
+  const [selectedUser, setSelectedUser] = useState<any>(null); // ✅ Added
+  const [isModalOpen, setIsModalOpen] = useState(false); // ✅ Added
+
   const itemsPerPage = 6;
 
-  // Fetch Razorpay bookings
   const fetchBookings = async () => {
     try {
       const response = await fetch('/api/razorpay');
@@ -58,7 +60,7 @@ const TransitionPage = () => {
       filteredBookings.map((booking, index) => ({
         SL: index + 1,
         "Razorpay Order ID": booking.razorpayOrderId,
-        User: booking.userId, // This can be updated as well to show user name
+        User: booking.userId,
         Office: booking.officeId,
         Date: booking.date,
         "Start Time": booking.startTime,
@@ -71,15 +73,24 @@ const TransitionPage = () => {
     XLSX.writeFile(wb, "razorpay_bookings.xlsx");
   };
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading message while fetching data
-  }
-
-  // Function to get the user name by userId
   const getUserName = (userId: string) => {
     const user = users.find(user => user._id === userId);
-    return user ? user.name : "Unknown"; // Return the name if found, else return "Unknown"
+    return user ? user.name : "Unknown";
   };
+
+  const handleUserClick = (userId: string) => { // ✅ Added
+    const user = users.find(u => u._id === userId);
+    if (user) {
+      setSelectedUser(user);
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => setIsModalOpen(false); // ✅ Added
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen mt-42" style={{ backgroundColor: "#f5f5f5" }}>
@@ -122,6 +133,8 @@ const TransitionPage = () => {
                 <th className="px-6 py-3 rounded-none">SL</th>
                 <th className="px-6 py-3 rounded-none">Transition ID</th>
                 <th className="px-6 py-3 rounded-none">User</th>
+                <th className="px-6 py-3 rounded-none">Amount</th>
+                <th className="px-6 py-3 rounded-none">Date</th>
                 <th className="px-6 py-3 rounded-none">Status</th>
               </tr>
             </thead>
@@ -131,7 +144,16 @@ const TransitionPage = () => {
                   <tr key={booking.razorpayOrderId} className="border-t hover:bg-gray-100">
                     <td className="px-6 py-4 rounded-none">{indexOfFirstItem + index + 1}</td>
                     <td className="px-6 py-4 rounded-none">{booking.razorpayOrderId}</td>
-                    <td className="px-6 py-4 rounded-none">{getUserName(booking.userId)}</td>
+
+                    <td
+                      className="px-6 py-4 rounded-none text-blue-600 underline cursor-pointer"
+                      onClick={() => handleUserClick(booking.userId)} // ✅ Added
+                    >
+                      {getUserName(booking.userId)}
+                    </td>
+
+                    <td className="px-6 py-4 rounded-none">{booking.totalPay}</td>
+                    <td className="px-6 py-4 rounded-none">{booking.date}</td>
                     <td className="px-6 py-4 rounded-none blue">Completed</td>
                   </tr>
                 ))
@@ -160,6 +182,29 @@ const TransitionPage = () => {
                   {i + 1}
                 </button>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* ✅ User Info Modal */}
+        {isModalOpen && selectedUser && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded shadow-md w-[90%] max-w-md">
+              <h2 className="text-xl font-bold mb-4">User Info</h2>
+              <p><strong>Name:</strong> {selectedUser.name}</p>
+              <p><strong>Email:</strong> {selectedUser.email}</p>
+              <p><strong>Phone:</strong> {selectedUser.phone}</p>
+              <p><strong>Address:</strong> {selectedUser.address}</p>
+              <p><strong>Date & Time:</strong> {new Date(selectedUser.createdAt).toLocaleString()}</p>
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={closeModal}
+                  className="px-4 py-2 text-white"
+                  style={{ backgroundColor: "#6BB7BE" }}
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         )}
