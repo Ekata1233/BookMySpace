@@ -12,6 +12,7 @@ import TimeCalender from "./componants/calender/page";
 import IndiaMap from "./componants/MapComponent/page";
 import Loader from "./componants/loader/page";
 import FAQs from "./faq/page";
+import ScrollToTopButton from "./componants/ScrollToTopButton";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
 
         <FAQs/>
       </div>
+      <ScrollToTopButton/>
     </main>
   );
 }
