@@ -118,17 +118,29 @@ export const OfficeSpaceProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // const deleteOfficeSpace = async (id: string) => {
+  //   try {
+  //     await axios.delete(`/api/officeSpaces/${id}`, { data: { _id: id } });
+  //     setOfficeSpaces((prev) =>
+  //       prev.filter((officeSpaces) => officeSpaces._id !== id),
+  //     );
+  //   } catch (error) {
+  //     console.error("Error deleting officeSpaces:", error);
+  //   }
+  // };
+
+
   const deleteOfficeSpace = async (id: string) => {
     try {
-      await axios.delete(`/api/officeSpaces/${id}`, { data: { _id: id } });
+      await axios.delete(`/api/officeSpaces/${id}`);
       setOfficeSpaces((prev) =>
-        prev.filter((officeSpaces) => officeSpaces._id !== id),
+        prev.filter((officeSpace) => officeSpace._id !== id),
       );
     } catch (error) {
-      console.error("Error deleting officeSpaces:", error);
+      console.error("Error deleting office space:", error);
     }
   };
-
+  
   useEffect(() => {
     fetchOfficeSpaces();
   }, []);

@@ -53,6 +53,7 @@ export class AuthService {
       // return { error: "Internal Server Error 7", status: 500 };
     }
   }
+
   static async getAllUsers() {
     try {
       await connectToDatabase();
@@ -64,4 +65,57 @@ export class AuthService {
       return { error: "Internal Server Error 8", status: 500 };
     }
   }
+
+  static async getUserById(id: string) {
+    try {
+      await connectToDatabase();
+
+      const user = await User.findById(id, { password: 0 }); // exclude password
+      if (!user) {
+        return { error: "User not found", status: 404 };
+      }
+
+      return { user, status: 200 };
+    } catch (error) {
+      console.error("Get User By ID Error:", error);
+      return { error: "Internal Server Error 9", status: 500 };
+    }
+  }
+
+  static async updateUser(id: string, data: Partial<IUser>) {
+    try {
+      await connectToDatabase();
+
+      const updatedUser = await User.findByIdAndUpdate(id, data, {
+        new: true,
+        select: "-password", // exclude password from response
+      });
+
+      if (!updatedUser) {
+        return { error: "User not found", status: 404 };
+      }
+
+      return { message: "User updated", user: updatedUser, status: 200 };
+    } catch (error) {
+      console.error("Update User Error:", error);
+      return { error: "Internal Server Error 10", status: 500 };
+    }
+  }
+
+  static async deleteUser(id: string) {
+    try {
+      await connectToDatabase();
+
+      const deletedUser = await User.findByIdAndDelete(id, { select: "-password" });
+      if (!deletedUser) {
+        return { error: "User not found", status: 404 };
+      }
+
+      return { message: "User deleted", user: deletedUser, status: 200 };
+    } catch (error) {
+      console.error("Delete User Error:", error);
+      return { error: "Internal Server Error 11", status: 500 };
+    }
+  }
+
 }

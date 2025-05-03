@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useOfficeSpaces } from '@/app/context/OfficeSpaceContext';
 import { toast } from 'sonner';
 
@@ -42,7 +42,7 @@ const EditSpace = () => {
     const [officeSpace, setOfficeSpace] = useState<OfficeSpace | null>(null);
     const { id } = useParams<{ id: string }>();;
     const { updateOfficeSpace } = useOfficeSpaces();
-
+    const router = useRouter();
 
     console.log("office space in id : ", id)
 
@@ -261,6 +261,7 @@ const EditSpace = () => {
                 thumbnailImage: null as File | null,
                 multiImages: [],
               });
+              router.push('/vendor/mySpaces');
         } catch (error) {
             console.error("Failed to update office space:", error);
             toast.error("Failed to update office space");

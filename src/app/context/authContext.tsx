@@ -14,6 +14,9 @@ interface AuthContextType {
   signup: (userData: any) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  getUserById: (id: string) => Promise<any>;
+  updateUser: (id: string, userData: any) => Promise<void>;
+  deleteUser: (id: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -104,12 +107,77 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Get a specific user by ID
+  const getUserById = async (id: string) => {
+    try {
+      const res = await fetch(`/api/auth/signup/${id}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        return data.user;
+      } else {
+        toast.error("Failed to fetch user");
+        return null;
+      }
+    } catch (err) {
+      console.error("Get user error:", err);
+      toast.error("Error fetching user");
+    }
+  };
+
+  // Update a user
+  const updateUser = async (id: string, userData: any) => {
+    try {
+      const res = await fetch(`/api/auth/signup/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      if (res.ok) {
+        toast.success("User updated successfully");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Update failed");
+      }
+    } catch (err) {
+      console.error("Update user error:", err);
+      toast.error("Error updating user");
+    }
+  };
+
+  // Delete a user
+  const deleteUser = async (id: string) => {
+    try {
+      const res = await fetch(`/api/auth/signup/${id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        toast.success("User deleted successfully");
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Delete failed");
+      }
+    } catch (err) {
+      console.error("Delete user error:", err);
+      toast.error("Error deleting user");
+    }
+  };
+
+
   useEffect(() => {
     getUser();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout }}>
+    <AuthContext.Provider value={{
+      user, signup, login, logout, getUserById,
+      updateUser,
+      deleteUser,
+    }}>
       {children}
     </AuthContext.Provider>
   );
